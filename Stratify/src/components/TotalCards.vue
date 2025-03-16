@@ -7,7 +7,7 @@
   </Card>
 </template>
 
-<script>
+<script lang="js">
 import axios from 'axios';
 import Card from 'primevue/card';
 
@@ -38,7 +38,9 @@ export default {
 <style scoped>
 .custom-card {
   background: linear-gradient(135deg, #5aa17e, #468f66);
-  border-radius: 8px;
+  border-radius: 15px;
   color: white;
+  width: 13em;
+  height: 8em;
 }
 </style>

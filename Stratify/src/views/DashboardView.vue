@@ -1,14 +1,18 @@
 <template>
   <div class="card">
     <Menubar :model="items" />
-    <TotalCards />
   </div>
+  <div class="QuantitativeCards"><!-- quando quiser inserir mais cards, poderá adicionar os cards aqui para manter estilização correta. -->
+    <TotalCards />
+    <TotalCards />
+    <TotalCards />
+    </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import Menubar from "primevue/menubar";
-import TotalCards from "@/components/TotalCards.vue"; // Importando o componente do card
+import TotalCards from "@/components/TotalCards.vue";
 
 const items = ref([
   { label: "Home", icon: "pi pi-home" },
@@ -21,6 +25,14 @@ const items = ref([
 <style scoped>
 .card {
   position: relative;
+}
+.QuantitativeCards {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: right; /* horizontal aligment*/
+  align-items: center; /* vertical aligment*/
+  gap: 1.3em;
+  margin-top: 2em;
 }
 
 </style>
