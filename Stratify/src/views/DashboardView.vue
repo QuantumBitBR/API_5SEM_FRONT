@@ -2,12 +2,14 @@
 <template>
     <div class="card">
         <Menubar :model="items"/>
+        <TagTable/>
     </div>
   </template>
   
   <script setup>
   import { ref } from "vue";
   import { Menubar } from "primevue";
+  import TagTable from "../components/TagTable.vue"
   const items = ref([
     {
         label: 'Home',
