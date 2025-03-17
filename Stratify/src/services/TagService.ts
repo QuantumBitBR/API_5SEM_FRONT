@@ -1,7 +1,8 @@
 import api from "./apiConfig";
 
 class TagService{
-    async quantityPerTag(id: number){
+    async quantityPerTag(project_id: any){
+        //acrescentar divisao de acordo com projeto quando endpoint for corrigido
         try{
             const response = await api.get("fatoProgresso/quantidade-por-etiqueta");
             return response.data;

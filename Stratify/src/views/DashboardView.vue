@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <Menubar :model="items" />
-    <SelectProject/>
+    <SelectProject @project-selected="handleProjectSelection"/>
     <div class="QuantitativeCards">
       <!-- quando quiser inserir mais cards, poderá adicionar os cards aqui para manter estilização correta. -->
       <TotalCards />
@@ -9,7 +9,7 @@
       <TotalCards />
     </div>
     <div class="tagDash">
-        <TagTable />
+        <TagTable :selectedProject="selectedProject"/>
     </div>
   </div>
 </template>
@@ -20,6 +20,12 @@ import { Menubar } from "primevue";
 import TagTable from "../components/TagTable.vue";
 import TotalCards from "@/components/TotalCards.vue";
 import SelectProject from "@/components/SelectProject.vue";
+
+const selectedProject = ref(null);
+
+const handleProjectSelection = (project) => {
+    selectedProject.value = project;
+};
 const items = ref([
   {
     label: "Home",

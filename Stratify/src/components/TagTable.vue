@@ -17,23 +17,37 @@ export default {
         DataTable,
         Column,
     },
+    props: {
+        selectedProject: {
+            type: String,
+            default: null,
+        },
+    },
     data() {
         return {
             tags: [],
         };
     },
     methods:{
-        async fetchTags(){
+        async fetchTags(project){
             try{
-                this.tags = await TagService.quantityPerTag();
-                console.log("TAGS:", this.tags)
+                this.tags = await TagService.quantityPerTag(project);
             }catch(error){
                 console.error("Error to find data:", error)
             }
         }
     },
     mounted() {
-        this.fetchTags();
+        if (this.selectedProject) {
+            this.fetchTags(this.selectedProject);
+        }
     },
+    watch:{
+        selectedProject(newProject){
+            if(newProject){
+                this.fetchTags(newProject)
+            }
+        }
+    }
 };
 </script>

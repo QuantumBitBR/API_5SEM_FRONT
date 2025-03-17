@@ -28,7 +28,6 @@ export default {
     async fetchProjects() {
       try {
         this.projects = await ProjectService.allProjects();
-        console.log("PROJECTS:", this.projects);
       } catch (error) {
         console.error("Error to find data:", error);
       }
@@ -49,5 +48,10 @@ export default {
     ];
     this.selectedProject = this.projects[0];
   },
+  watch:{
+    selectedProject(newProject){
+        this.$emit('project-selected', newProject);
+    }
+  }
 };
 </script>
