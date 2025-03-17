@@ -2,9 +2,14 @@ import api from "./apiConfig";
 
 class TagService{
     async quantityPerTag(project_id: any){
-        //acrescentar divisao de acordo com projeto quando endpoint for corrigido
         try{
-            const response = await api.get("fatoProgresso/quantidade-por-etiqueta");
+            let endpoint = ""
+            if(project_id.id === 0){
+                endpoint = "fatoProgresso/quantidade-por-etiqueta"
+            }else{
+                endpoint = `fatoProgresso/quantidade-por-etiqueta?projetoId=${project_id.id}`
+            }
+            const response = await api.get(endpoint);
             return response.data;
         }catch (error){
             console.error("Erro to get data:", error);

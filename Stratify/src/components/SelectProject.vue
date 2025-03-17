@@ -3,7 +3,7 @@
     <Select
       v-model="selectedProject"
       :options="projects"
-      optionLabel="name"
+      optionLabel="nome"
       placeholder="Select a Project"
       class="w-full md:w-56"
     />
@@ -27,26 +27,16 @@ export default {
   methods: {
     async fetchProjects() {
       try {
-        this.projects = await ProjectService.allProjects();
+        const all_projects = await ProjectService.allProjects();
+        this.projects = [{id:0, nome:"Todos"}, ...all_projects]
+        this.selectedProject = this.projects[0]
       } catch (error) {
         console.error("Error to find data:", error);
       }
     },
   },
   mounted() {
-    // ativar quando endpoint estiver pronto
-    // fetchProjects();
-
-    //desativar quando endpoint estiver pronto
-    this.projects = [
-      { name: "Todos", code: "all" },
-      { name: "Projeto A", code: "A" },
-      { name: "Projeto B", code: "B" },
-      { name: "Projeto C", code: "C" },
-      { name: "Projeto D", code: "D" },
-      { name: "Projeto E", code: "E" },
-    ];
-    this.selectedProject = this.projects[0];
+    this.fetchProjects();
   },
   watch:{
     selectedProject(newProject){
