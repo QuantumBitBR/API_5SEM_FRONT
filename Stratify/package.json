@@ -15,6 +15,7 @@
     "@primeuix/themes": "^1.0.0",
     "@primevue/themes": "^4.3.1",
     "axios": "^1.8.3",
+    "chart.js": "^4.4.8",
     "pinia": "^3.0.1",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
