@@ -40,7 +40,7 @@ export default {
   background: linear-gradient(135deg, #5aa17e, #468f66);
   border-radius: 15px;
   color: white;
-  width: 13em;
-  height: 8em;
+  width: 100%;
+  height: 7em;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Menubar :model="items" />
+    <!-- <Menubar :model="items" /> -->
     <SelectProject @project-selected="handleProjectSelection"/>
     <div class="QuantitativeCards">
       <!-- quando quiser inserir mais cards, poderá adicionar os cards aqui para manter estilização correta. -->
@@ -8,9 +8,11 @@
       <TotalCards />
       <TotalCards />
     </div>
-    <DonutChart/>
-    <div class="tagDash">
-        <TagTable :selectedProject="selectedProject"/>
+    <div class="grid-container">
+      <DonutChart/>
+      <TagTable :selectedProject="selectedProject"/>
+      <DonutChart/>
+      <DonutChart/>
     </div>
   </div>
 </template>
@@ -49,6 +51,17 @@ const items = ref([
 </script>
 
 <style scoped>
+.grid-container{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  padding: 20px;
+  grid-template-columns: 2fr 1fr;
+}
+
+
 .card {
   position: relative;
 }
