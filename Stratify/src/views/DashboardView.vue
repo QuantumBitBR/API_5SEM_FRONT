@@ -9,10 +9,10 @@
       <TotalCards />
     </div>
     <div class="grid-container">
-      <DonutChart/>
+      <span>In development</span>
       <TagTable :selectedProject="selectedProject"/>
       <DonutChart/>
-      <DonutChart/>
+      <span>In development</span>
     </div>
   </div>
 </template>
