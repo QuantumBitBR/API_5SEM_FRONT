@@ -19,19 +19,19 @@ export default {
     };
   },
   methods: {
-    async fetchTotalCards() {
-      try {
-        const response = await axios.get(''); // API endpoint
-        this.totalCards = response.data.total || '---';
-      } catch (error) {
-        console.error('Erro ao buscar os dados:', error);
-        this.totalCards = '---';
-      }
-    },
-  },
-  mounted() {
-    this.fetchTotalCards();
-  },
+  async fetchTotalCards() {
+    try {
+      const response = await axios.get('http://localhost:8080/total-cards'); // API endpoint
+      this.totalCards = response.data;
+    } catch (error) {
+      console.error('Erro ao buscar os dados:', error);
+      this.totalCards = '---';
+    }
+  }
+},
+mounted() {
+  this.fetchTotalCards();
+}
 };
 </script>
 
@@ -40,7 +40,11 @@ export default {
   background: linear-gradient(135deg, #5aa17e, #468f66);
   border-radius: 15px;
   color: white;
-  width: 13em;
+  width: 25em;
   height: 8em;
+}
+
+.text-sm {
+  font-size: 1.2rem;
 }
 </style>

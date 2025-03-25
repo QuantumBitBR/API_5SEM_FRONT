@@ -5,8 +5,6 @@
     <div class="QuantitativeCards">
       <!-- quando quiser inserir mais cards, poderá adicionar os cards aqui para manter estilização correta. -->
       <TotalCards />
-      <TotalCards />
-      <TotalCards />
     </div>
     <div class="tagDash">
         <TagTable :selectedProject="selectedProject"/>
