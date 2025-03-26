@@ -9,6 +9,10 @@
     <div class="tagDash">
         <TagTable :selectedProject="selectedProject"/>
     </div>
+
+    <div class="lifetimeTable">
+      <LifetimeCardTable :selectedProject="selectedProject"/>
+    </div>
   </div>
 </template>
 
@@ -18,6 +22,7 @@ import { Menubar } from "primevue";
 import TagTable from "../components/TagTable.vue";
 import TotalCards from "@/components/TotalCards.vue";
 import SelectProject from "@/components/SelectProject.vue";
+import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
 
 const selectedProject = ref(null);
 
