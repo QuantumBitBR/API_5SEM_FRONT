@@ -1,9 +1,10 @@
 <template>
   <Card class="custom-card">
     <template #content>
-      <h3 class="title">Tempo de vida de cards</h3>
-      <p class="subtitle"> <span>Tempo que um card permanece ativo sem ser concluído</span></p>
-      <Chart v-if="chartData.datasets[0].data.length" type="bar" :data="chartData" :options="chartOptions" class="chart"/>
+      <h3 class="title">Grafico 4</h3>
+      <p class="subtitle"> <span>Tempo Gasto por Card</span></p>
+      <Chart v-if="chartData.datasets[0].data.length" type="bar" :data="chartData" :options="chartOptions"
+        class="chart" />
       <p v-else class="loading-text">Carregando dados...</p>
     </template>
   </Card>
@@ -19,13 +20,14 @@ export default {
   data() {
     return {
       chartData: {
-        labels: [], // Eixo X (Dias)
+        labels: [], // Eixo Y (Numérico)
         datasets: [
           {
-            label: "Dias ",
+            label: "Tempo Gasto",
             backgroundColor: "#5aa17e",
             borderRadius: 10,
-            data: [], // Eixo Y (Valores)
+            data: [], // Valores numéricos para o eixo Y
+            labels: [] // Rótulos para tooltip
           },
         ],
       },
@@ -33,9 +35,24 @@ export default {
         indexAxis: "y",
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const index = context.dataIndex;
+                return `${context.dataset.labels[index]}: ${context.raw} horas`;
+              },
+            },
+          },
+        },
         scales: {
           x: { ticks: { color: "#666" } },
-          y: { ticks: { color: "#666" } },
+          y: {
+            ticks: {
+              color: "#666",
+              stepSize: 1, // Mantém numérico
+            },
+          },
         },
       },
     };
@@ -43,40 +60,44 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        const response = await axios.get("http://localhost:8080/tempo-gasto"); // API endpoint
-        const dados = response.data;
+        const response = await axios.get("http://localhost:8080/tempo-gasto");
+        const dados = response.data; // Exemplo: [{ label: "Task A", valor: 5 }, { label: "Task B", valor: 10 }]
 
-        this.chartData.labels = dados.map(item => item.label); // Define os labels (X)
-        this.chartData.datasets[0].data = dados.map(item => item.valor); // Define os valores (Y)
+        this.chartData.labels = dados.map((_, index) => index + 1); // Índices numéricos no eixo Y
+        this.chartData.datasets[0].data = dados.map(item => item.valor);
+        this.chartData.datasets[0].labels = dados.map(item => item.label); // Labels para tooltip
       } catch (error) {
         console.error("Erro ao buscar os dados. Usando mock:", error);
 
         // Mock de dados para teste
         const mockData = [
-          { label: "card1", valor: 5 },
-          { label: "card2", valor: 10 },
-          { label: "card3", valor: 8 },
-          { label: "card3", valor: 15 },
-          { label: "card4", valor: 4 },
-          { label: "card5", valor: 12 }
+          { label: "Task aasdaisjdnaioksdniasdjoaisjdoiadonefoinqnoaoni", valor: 5 },
+          { label: "Task B", valor: 10 },
+          { label: "Task C", valor: 8 },
+          { label: "Task D", valor: 15 },
+          { label: "Task E", valor: 4 },
+          { label: "Task F", valor: 12 }
         ];
 
-        this.chartData.labels = mockData.map(item => item.label);
+        this.chartData.labels = mockData.map((_, index) => index + 1);
         this.chartData.datasets[0].data = mockData.map(item => item.valor);
+        this.chartData.datasets[0].labels = mockData.map(item => item.label);
       }
     }
   },
   mounted() {
-    this.fetchChartData(); // Busca os dados ao carregar
+    this.fetchChartData();
   }
 };
 </script>
 
 <style scoped>
 .custom-card {
-  width: 400px;
+  width: 35vw;
+  height: 30vh;
   padding: 15px;
   border-radius: 10px;
+  overflow: auto;
 }
 
 .title {
