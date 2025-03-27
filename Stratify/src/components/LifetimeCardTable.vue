@@ -14,7 +14,6 @@
 import axios from "axios";
 import Card from "primevue/card";
 import Chart from "primevue/chart";
-
 export default {
   components: { Card, Chart },
   data() {
@@ -67,21 +66,8 @@ export default {
         this.chartData.datasets[0].data = dados.map(item => item.valor);
         this.chartData.datasets[0].labels = dados.map(item => item.label); // Labels para tooltip
       } catch (error) {
-        console.error("Erro ao buscar os dados. Usando mock:", error);
+        console.error("Erro ao buscar os dados.", error);
 
-        // Mock de dados para teste
-        const mockData = [
-          { label: "Task aasdaisjdnaioksdniasdjoaisjdoiadonefoinqnoaoni", valor: 5 },
-          { label: "Task B", valor: 10 },
-          { label: "Task C", valor: 8 },
-          { label: "Task D", valor: 15 },
-          { label: "Task E", valor: 4 },
-          { label: "Task F", valor: 12 }
-        ];
-
-        this.chartData.labels = mockData.map((_, index) => index + 1);
-        this.chartData.datasets[0].data = mockData.map(item => item.valor);
-        this.chartData.datasets[0].labels = mockData.map(item => item.label);
       }
     }
   },
@@ -97,6 +83,7 @@ export default {
   height: 30vh;
   padding: 15px;
   border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: auto;
 }
 

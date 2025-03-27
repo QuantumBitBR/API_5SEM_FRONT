@@ -1,17 +1,15 @@
 <template>
   <div class="card">
     <Menubar :model="items" />
-    <SelectProject @project-selected="handleProjectSelection"/>
+    <SelectProject @project-selected="handleProjectSelection" />
     <div class="QuantitativeCards">
       <!-- quando quiser inserir mais cards, poderá adicionar os cards aqui para manter estilização correta. -->
       <TotalCards />
     </div>
-    <div class="tagDash">
-        <TagTable :selectedProject="selectedProject"/>
-    </div>
+    <div class="responsive-container">
 
-    <div class="lifetimeTable">
-      <LifetimeCardTable :selectedProject="selectedProject"/>
+      <LifetimeCardTable :selectedProject="selectedProject" class="lifetimeTable" />
+      <TagTable :selectedProject="selectedProject" class="tagDash" />
     </div>
   </div>
 </template>
@@ -27,7 +25,7 @@ import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
 const selectedProject = ref(null);
 
 const handleProjectSelection = (project) => {
-    selectedProject.value = project;
+  selectedProject.value = project;
 };
 const items = ref([
   {
@@ -53,20 +51,43 @@ const items = ref([
 .card {
   position: relative;
 }
+
 .QuantitativeCards {
   display: flex;
   box-sizing: border-box;
-  justify-content: right; /* horizontal aligment*/
-  align-items: center; /* vertical aligment*/
+  justify-content: right;
+  /* horizontal aligment*/
+  align-items: center;
+  /* vertical aligment*/
   gap: 1.3em;
   margin-top: 2em;
 }
+
 .tagDash {
   display: flex;
   box-sizing: border-box;
-  justify-content: right; /* horizontal aligment*/
-  align-items: center; /* vertical aligment*/
+  justify-content: right;
+  /* horizontal aligment*/
+  align-items: center;
+  /* vertical aligment*/
   gap: 1.3em;
   margin-top: 2em;
+}
+
+.lifetimeTable {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: left;
+  /* horizontal aligment*/
+  align-items: center;
+  /* vertical aligment*/
+  gap: 1.3em;
+  margin-top: 2em;
+}
+
+.responsive-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 </style>
