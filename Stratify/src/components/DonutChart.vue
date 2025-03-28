@@ -20,12 +20,12 @@ export default {
   data() {
     return {
       chartData: {
-        // labels: ["A", "B", "C"],
-        labels: [],
+        labels: ["A", "B", "C"],
+        // labels: [],
         datasets: [
           {
-            // data: [30,20,50],
-            data: [],
+            data: [30,20,50],
+            // data: [],
             backgroundColor: ["#94E9B8", "#92BFFF", "#6F98F0"],
           },
         ],
