@@ -11,15 +11,19 @@
 </template>
 
 <script>
-import axios from "axios";
 import Card from "primevue/card";
 import Chart from "primevue/chart";
+import LifeTimeService from "@/services/lifeTimeService.ts";
+
 export default {
   components: { Card, Chart },
+  props: {
+    selectedProject: Object,
+  },
   data() {
     return {
       chartData: {
-        labels: [], // Eixo Y (Numérico)
+        labels: [], // Eixo Y (id ou numérico)
         datasets: [
           {
             label: "Tempo Gasto",
@@ -58,23 +62,28 @@ export default {
   },
   methods: {
     async fetchChartData() {
+      if (!this.selectedProject || this.selectedProject.id === undefined) return;
       try {
-        const response = await axios.get("http://localhost:8080/tempo-gasto");
-        const dados = response.data; // Exemplo: [{ label: "Task A", valor: 5 }, { label: "Task B", valor: 10 }]
-
-        this.chartData.labels = dados.map((_, index) => index + 1); // Índices numéricos no eixo Y
-        this.chartData.datasets[0].data = dados.map(item => item.valor);
-        this.chartData.datasets[0].labels = dados.map(item => item.label); // Labels para tooltip
+        const dados = await LifeTimeService.quantityPerProject(this.selectedProject);
+        if (dados) {
+          this.chartData.labels = dados.map(item => item.idUserStory); // Usa id ou sequência numérica
+          this.chartData.datasets[0].data = dados.map(item => item.tempoMedio);
+          this.chartData.datasets[0].labels = dados.map(item => item.descricao); // Labels para tooltip
+        }
       } catch (error) {
         console.error("Erro ao buscar os dados.", error);
-
       }
     }
+  },
+  watch: {
+    selectedProject: "fetchChartData"
   },
   mounted() {
     this.fetchChartData();
   }
 };
+
+
 </script>
 
 <style scoped>
