@@ -3,8 +3,10 @@
 #app {
   margin: 0 auto;
   padding: 2rem;
+  padding-top: 1rem;
   padding-bottom: 0;
   font-weight: normal;
+  background-color: #F4F6F9;
 }
 
 a,

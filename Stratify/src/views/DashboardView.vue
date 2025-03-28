@@ -40,18 +40,15 @@ const handleSidebarToggle = (isOpen) => {
 </script>
 
 <style scoped>
-.app-container {
-  display: flex;
-}
 
 .card {
   position: relative;
   transition: padding-left 0.3s ease;
-  padding-left: 3em; /* Sidebar aberto */
+  padding-left: 3em;
 }
 
 .sidebar-open {
-  padding-left: 12em; /* Sidebar fechado */
+  padding-left: 12em;
 }
 
 .QuantitativeCards {
@@ -65,7 +62,7 @@ const handleSidebarToggle = (isOpen) => {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 2fr;
   grid-template-rows: repeat(2, 1fr);
   gap: 10px;
   width: 100%;

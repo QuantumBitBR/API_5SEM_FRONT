@@ -1,6 +1,6 @@
 <template>
   <div class="donut_container">
-    <h2 class="donut_title">Status dos cards</h2>
+    <h4 class="donut_title">Status dos cards</h4>
     <Chart type="doughnut" :data="chartData" :options="chartOptions" />
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
           {
             data: [30,20,50],
             // data: [],
-            backgroundColor: ["#94E9B8", "#92BFFF", "#6F98F0"],
+            backgroundColor: ["#071952", "#088395", "#37B7C3"],
           },
         ],
       },
@@ -106,8 +106,6 @@ export default {
   width: 600px;
 }
 .donut_title {
-  color: #00c7be;
-  font-weight: 500;
   padding: 5px;
 }
 </style>
