@@ -20,13 +20,13 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ["A", "B", "C"],
-        // labels: [],
+        // labels: ["A", "B", "C"],
+        labels: [],
         datasets: [
           {
-            data: [30,20,50],
-            // data: [],
-            backgroundColor: ["#071952", "#088395", "#37B7C3"],
+            // data: [30,20,50],
+            data: [],
+            backgroundColor: ["#071952", "#088395", "#37B7C3", "#2D9596", "#145DA0", "#1F6E8C"],
           },
         ],
       },
@@ -72,15 +72,9 @@ export default {
   methods: {
     async fetchCards(project) {
       try {
-        this.chartData = {
-          labels: response.map((item) => item.status),
-          datasets: [
-            {
-              data: response.map((item) => item.quantity),
-              backgroundColor: ["#94E9B8", "#92BFFF", "#6F98F0"],
-            },
-          ],
-        };
+        const response = await StatusService.quantityPerStatus(project);
+        this.chartData.labels = response.map((item) => item.status);
+        this.chartData.datasets[0].data = response.map((item) => item.percentual);
       } catch (error) {
         console.error("Error to find data:", error);
       }

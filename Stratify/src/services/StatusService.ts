@@ -6,9 +6,9 @@ class StatusService{
             let endpoint = ""
             if(project_id.id === 0){
                 //corrigir endpoint
-                endpoint = "fatoProgresso/quantidade-por-etiqueta"
+                endpoint = "fatoStatusUserStory/quantidade-por-status"
             }else{
-                endpoint = `fatoProgresso/quantidade-por-etiqueta?projetoId=${project_id.id}`
+                endpoint = `fatoStatusUserStory/quantidade-por-status?projetoId=${project_id.id}`
             }
             const response = await api.get(endpoint);
             return response.data;

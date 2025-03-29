@@ -12,7 +12,7 @@
       <div class="grid-container">
         <span>In development</span>
         <TagTable :selectedProject="selectedProject" />
-        <DonutChart />
+        <DonutChart :selectedProject="selectedProject"/>
         <span>In development</span>
       </div>
     </div>
