@@ -21,8 +21,8 @@ export default {
   methods: {
     async fetchTotalCards() {
       try {
-        const response = await axios.get('http://localhost:8080/total-cards');
-        this.totalCards = response.data;
+        const response = await axios.get('http://localhost:8080/userStory/total-cards');
+        this.totalCards = response.data.quantidadeUserStories;
       } catch (error) {
         console.error('Erro ao buscar os dados:', error);
         this.totalCards = '---';

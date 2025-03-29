@@ -3,7 +3,7 @@ import api from "./apiConfig";
 class TagService{
     async quantityPerTag(project_id: any){
         try{
-            let endpoint = ""
+            let endpoint = "/fatoProgresso/quantidade-por-etiqueta"
             // if(project_id.id === 0){
             //     endpoint = "fatoProgresso/quantidade-por-etiqueta"
             // }else{
