@@ -49,14 +49,34 @@ export default {
           },
         },
         scales: {
-          x: { ticks: { color: "#666" } },
+          x: {
+            title: {
+              display: true,
+              text: "Tempo Gasto (horas)",
+              color: "#333",
+              font: {
+                size: 14,
+                weight: "bold"
+              }
+            },
+            ticks: { color: "#666" }
+          },
           y: {
+            title: {
+              display: true,
+              text: "ID User Stories",
+              color: "#333",
+              font: {
+                size: 14,
+                weight: "bold"
+              }
+            },
             ticks: {
               color: "#666",
-              stepSize: 1, // Mantém numérico
-            },
-          },
-        },
+              stepSize: 1
+            }
+          }
+        }
       },
     };
   },
@@ -89,7 +109,7 @@ export default {
 <style scoped>
 .custom-card {
   width: 35vw;
-  height: 30vh;
+  height: 40vh;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
