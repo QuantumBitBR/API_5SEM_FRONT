@@ -23,14 +23,14 @@ export default {
   data() {
     return {
       chartData: {
-        labels: [], // Eixo Y (id ou numérico)
+        labels: [], 
         datasets: [
           {
             label: "Tempo Gasto",
             backgroundColor: "#5aa17e",
             borderRadius: 10,
-            data: [], // Valores numéricos para o eixo Y
-            labels: [] // Rótulos para tooltip
+            data: [], 
+            labels: [] 
           },
         ],
       },
@@ -86,9 +86,9 @@ export default {
       try {
         const dados = await LifeTimeService.quantityPerProject(this.selectedProject);
         if (dados) {
-          this.chartData.labels = dados.map(item => item.idUserStory); // Usa id ou sequência numérica
+          this.chartData.labels = dados.map(item => item.idUserStory); 
           this.chartData.datasets[0].data = dados.map(item => item.tempoMedio);
-          this.chartData.datasets[0].labels = dados.map(item => item.descricao); // Labels para tooltip
+          this.chartData.datasets[0].labels = dados.map(item => item.descricao); 
         }
       } catch (error) {
         console.error("Erro ao buscar os dados.", error);
