@@ -23,14 +23,14 @@ export default {
   data() {
     return {
       chartData: {
-        labels: [], // Eixo Y (id ou numérico)
+        labels: [], 
         datasets: [
           {
             label: "Tempo Gasto",
             backgroundColor: "#5aa17e",
             borderRadius: 10,
-            data: [], // Valores numéricos para o eixo Y
-            labels: [] // Rótulos para tooltip
+            data: [], 
+            labels: [] 
           },
         ],
       },
@@ -49,14 +49,34 @@ export default {
           },
         },
         scales: {
-          x: { ticks: { color: "#666" } },
+          x: {
+            title: {
+              display: true,
+              text: "Tempo Gasto (horas)",
+              color: "#333",
+              font: {
+                size: 14,
+                weight: "bold"
+              }
+            },
+            ticks: { color: "#666" }
+          },
           y: {
+            title: {
+              display: true,
+              text: "ID User Stories",
+              color: "#333",
+              font: {
+                size: 14,
+                weight: "bold"
+              }
+            },
             ticks: {
               color: "#666",
-              stepSize: 1, // Mantém numérico
-            },
-          },
-        },
+              stepSize: 1
+            }
+          }
+        }
       },
     };
   },
@@ -66,9 +86,9 @@ export default {
       try {
         const dados = await LifeTimeService.quantityPerProject(this.selectedProject);
         if (dados) {
-          this.chartData.labels = dados.map(item => item.idUserStory); // Usa id ou sequência numérica
+          this.chartData.labels = dados.map(item => item.idUserStory); 
           this.chartData.datasets[0].data = dados.map(item => item.tempoMedio);
-          this.chartData.datasets[0].labels = dados.map(item => item.descricao); // Labels para tooltip
+          this.chartData.datasets[0].labels = dados.map(item => item.descricao); 
         }
       } catch (error) {
         console.error("Erro ao buscar os dados.", error);
@@ -89,7 +109,7 @@ export default {
 <style scoped>
 .custom-card {
   width: 35vw;
-  height: 30vh;
+  height: 40vh;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
