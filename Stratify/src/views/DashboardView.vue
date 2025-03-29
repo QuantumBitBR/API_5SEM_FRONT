@@ -9,9 +9,12 @@
         <TotalCards />
         <TotalCards />
       </div>
+      <div class="responsive-container">
+        <LifetimeCardTable :selectedProject="selectedProject" class="lifetimeTable" />
+      </div>
       <div class="grid-container">
         <span>In development</span>
-        <TagTable :selectedProject="selectedProject" />
+        <TagTable :selectedProject="selectedProject" class="tagDash" />
         <DonutChart :selectedProject="selectedProject"/>
         <span>In development</span>
       </div>
@@ -26,6 +29,7 @@ import TotalCards from "@/components/TotalCards.vue";
 import SelectProject from "@/components/SelectProject.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import Sidebar from "@/components/Sidebar.vue";
+import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
 
 const selectedProject = ref(null);
 const isSidebarOpen = ref(false);
@@ -67,5 +71,33 @@ const handleSidebarToggle = (isOpen) => {
   gap: 10px;
   width: 100%;
   padding: 20px;
+}
+
+.tagDash {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: right;
+  /* horizontal aligment*/
+  align-items: center;
+  /* vertical aligment*/
+  gap: 1.3em;
+  margin-top: 2em;
+}
+
+.lifetimeTable {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: left;
+  /* horizontal aligment*/
+  align-items: center;
+  /* vertical aligment*/
+  gap: 1.3em;
+  margin-top: 2em;
+}
+
+.responsive-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 </style>
