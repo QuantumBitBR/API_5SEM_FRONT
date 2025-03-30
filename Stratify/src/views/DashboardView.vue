@@ -10,7 +10,7 @@
         <TotalCards />
       </div>
       <div class="grid-container">
-        <span>In development</span>
+        <span class="template_dash">In development</span>
         <TagTable :selectedProject="selectedProject" class="tagDash" />
         <DonutChart :selectedProject="selectedProject"/>
         <LifetimeCardTable :selectedProject="selectedProject" class="lifetimeTable" />
@@ -63,7 +63,7 @@ const handleSidebarToggle = (isOpen) => {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 2fr 1fr;
   grid-template-rows: repeat(2, 1fr);
   gap: 10px;
   width: 100%;
@@ -84,5 +84,9 @@ const handleSidebarToggle = (isOpen) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.template_dash{
+  background-color: #fff;
 }
 </style>

@@ -22,7 +22,7 @@ export default {
         datasets: [
           {
             label: "Tempo Gasto",
-            backgroundColor: "#5aa17e",
+            backgroundColor: "#071952",
             borderRadius: 10,
             data: [], 
             labels: [] 
