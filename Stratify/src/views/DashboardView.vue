@@ -6,6 +6,7 @@
       <SelectProject @project-selected="handleProjectSelection" />
       <div class="QuantitativeCards">
         <TotalCards />
+        <AverageTimeCard :selectedProject="selectedProject" />
       </div>
       <div class="grid-container">
         <TimelineChart :selectedProject="selectedProject" class="grid_item"/>
@@ -21,6 +22,7 @@
 import { ref } from "vue";
 import TagTable from "../components/TagTable.vue";
 import TotalCards from "@/components/TotalCards.vue";
+import AverageTimeCard from "@/components/AverageTimeCard.vue";
 import SelectProject from "@/components/SelectProject.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import Sidebar from "@/components/Sidebar.vue";

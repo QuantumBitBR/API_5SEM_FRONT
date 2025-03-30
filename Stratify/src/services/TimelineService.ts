@@ -10,7 +10,6 @@ class TimelineService{
                 endpoint = `temporais?projetoId=${project_id.id}`
             }
             const response = await api.get(endpoint);
-            console.log("Response:", response)
             return response.data;
         }catch (error){
             console.error("Erro to get data:", error);
