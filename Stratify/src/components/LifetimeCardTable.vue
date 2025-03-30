@@ -101,7 +101,7 @@ export default {
 
 <style scoped>
 .custom-card {
-  max-width: 500px;
+  /* max-width: 500px; */
   height: 300px;
   padding: 0px;
   margin: 0px;
