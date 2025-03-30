@@ -6,8 +6,6 @@
       <SelectProject @project-selected="handleProjectSelection" />
       <div class="QuantitativeCards">
         <TotalCards />
-        <TotalCards />
-        <TotalCards />
       </div>
       <div class="grid-container">
         <span class="template_dash">In development</span>
