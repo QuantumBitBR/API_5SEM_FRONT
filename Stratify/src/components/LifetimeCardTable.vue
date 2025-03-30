@@ -1,22 +1,17 @@
 <template>
-  <Card class="custom-card">
-    <template #content>
-      <h3 class="title">Grafico 4</h3>
-      <p class="subtitle"> <span>Tempo Gasto por Card</span></p>
-      <Chart v-if="chartData.datasets[0].data.length" type="bar" :data="chartData" :options="chartOptions"
-        class="chart" />
-      <p v-else class="loading-text">Carregando dados...</p>
-    </template>
-  </Card>
+  <div class="custom-card">
+    <h4 class="lifetime_title">Tempo médio gasto por card</h4>
+    <Chart v-if="chartData.datasets[0].data.length" type="bar" :data="chartData" :options="chartOptions" class="chart" />
+    <p v-else class="loading-text">Carregando dados...</p>
+  </div>
 </template>
 
 <script>
-import Card from "primevue/card";
 import Chart from "primevue/chart";
 import LifeTimeService from "@/services/lifeTimeService.ts";
 
 export default {
-  components: { Card, Chart },
+  components: { Chart },
   props: {
     selectedProject: Object,
   },
@@ -27,7 +22,7 @@ export default {
         datasets: [
           {
             label: "Tempo Gasto",
-            backgroundColor: "#5aa17e",
+            backgroundColor: "#071952",
             borderRadius: 10,
             data: [], 
             labels: [] 
@@ -102,18 +97,22 @@ export default {
     this.fetchChartData();
   }
 };
-
-
 </script>
 
 <style scoped>
 .custom-card {
-  width: 35vw;
-  height: 40vh;
-  padding: 15px;
-  border-radius: 10px;
+  max-width: 500px;
+  height: 300px;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: auto;
+}
+
+.lifetime_title{
+  padding: 5px;
+  padding-bottom: 40px;
 }
 
 .title {

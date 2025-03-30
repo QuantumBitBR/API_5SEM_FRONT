@@ -37,20 +37,10 @@ export default {
 
 <style scoped>
 .custom-card {
-  background: linear-gradient(135deg, #5aa17e, #468f66);
-  border-radius: 15px;
-  color: white;
-  width: 25em;
-  height: 8em;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.custom-card:hover {
-  transform: scale(1.05);
-}
-
-.text-sm {
-  font-size: 1.2rem;
+  background: #fff;
+  border-radius: 0;
+  color: black;
+  width: 100%;
+  height: 7em;
 }
 </style>
