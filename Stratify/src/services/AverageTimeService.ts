@@ -3,15 +3,15 @@ import api from "@/services/apiConfig";
 
 class AverageTimeService {
   async getAverageTime(projectId: any) {
-    try {
-      console.log("Buscando dados do projeto com ID:", projectId);
-      const response = await api.get(`/fatoeficiencia/total?projetoId=${projectId}`);
-      console.log("Dados do projeto:", response.data);
-      return response.data;
+    if(projectId !== 0){
+      try {
+        const response = await api.get(`/fatoeficiencia/total?projetoId=${projectId}`);
+        return response.data;
 
-    } catch (error) {
-      console.error("Erro ao buscar os dados:", error);
-      throw error;
+      } catch (error) {
+        console.error("Erro ao buscar os dados:", error);
+        throw error;
+      }
     }
   }
 }

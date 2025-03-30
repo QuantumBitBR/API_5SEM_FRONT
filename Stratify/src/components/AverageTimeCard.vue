@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     async fetchAverageTime() {
-        if (!this.selectedProject || !this.selectedProject.id) return;
         try {
           const data = await AverageTimeService.getAverageTime(this.selectedProject.id);
           this.averageTime = data.tempoMedio ? parseFloat(data.tempoMedio.toFixed(1)) : "---";
@@ -37,7 +36,9 @@ export default {
     selectedProject: "fetchAverageTime",
   },
   mounted() {
-    this.fetchAverageTime();
+    if (this.selectedProject) {
+        this.fetchAverageTime();
+    }
   },
 };
 </script>

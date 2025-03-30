@@ -9,10 +9,10 @@
         <AverageTimeCard :selectedProject="selectedProject" />
       </div>
       <div class="grid-container">
-        <span class="template_dash">In development</span>
-        <TagTable :selectedProject="selectedProject" class="tagDash" />
-        <DonutChart :selectedProject="selectedProject"/>
-        <LifetimeCardTable :selectedProject="selectedProject" class="lifetimeTable" />
+        <TimelineChart :selectedProject="selectedProject" class="grid_item"/>
+        <TagTable :selectedProject="selectedProject" class="grid_item" />
+        <DonutChart :selectedProject="selectedProject" class="grid_item"/>
+        <LifetimeCardTable :selectedProject="selectedProject" id="lifetimeTable" class="grid_item"/>
       </div>
     </div>
   </div>
@@ -27,6 +27,7 @@ import SelectProject from "@/components/SelectProject.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
+import TimelineChart from "@/components/TimelineChart.vue";
 
 const selectedProject = ref(null);
 const isSidebarOpen = ref(false);
@@ -63,7 +64,7 @@ const handleSidebarToggle = (isOpen) => {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
   grid-template-rows: repeat(2, 1fr);
   gap: 10px;
   width: 100%;
@@ -71,7 +72,7 @@ const handleSidebarToggle = (isOpen) => {
 }
 
 
-.lifetimeTable {
+#lifetimeTable {
     display: flex;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

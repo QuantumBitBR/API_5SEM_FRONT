@@ -1,14 +1,13 @@
 import api from "./apiConfig";
 
-class LifeTimeService{
-    async quantityPerProject(project_id: any){
-      try{
+class TimelineService{
+    async quantityPerTimeline(project_id: any){
+        try{
             let endpoint = ""
-            endpoint = `/fatoeficiencia/projeto/${project_id.id}`;
             if(project_id.id === 0){
-                endpoint = "fatoeficiencia/projeto/todos"
+                endpoint = "temporais"
             }else{
-                endpoint = `fatoeficiencia/projeto/${project_id.id}`
+                endpoint = `temporais?projetoId=${project_id.id}`
             }
             const response = await api.get(endpoint);
             return response.data;
@@ -19,5 +18,4 @@ class LifeTimeService{
     }
 }
 
-
-export default new LifeTimeService();
+export default new TimelineService();

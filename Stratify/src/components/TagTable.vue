@@ -1,5 +1,5 @@
 <template>
-    <div style="overflow-y: auto;">
+    <div style="overflow: auto;height:60vh">
         <DataTable :value="tags" removableSort showGridlines stripedRows>
             <Column field="nomeTag" sortable header="Etiqueta" />
             <Column field="quantidadeCards" sortable header="Quantidade Card" />
