@@ -97,9 +97,15 @@ export default {
 
 <style lang="css" scoped>
 .donut_container {
-  width: 600px;
+    display: flex;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    padding: 30px;
+    height: 300px;
 }
 .donut_title {
   padding: 5px;
+  padding-bottom: 40px;
 }
 </style>

@@ -9,6 +9,10 @@
   background-color: #F4F6F9;
 }
 
+h1, h2, h3, h4, h5, h6{
+  color: #000;
+}
+
 a,
 .green {
   text-decoration: none;

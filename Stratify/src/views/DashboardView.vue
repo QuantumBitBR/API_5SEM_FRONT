@@ -9,14 +9,11 @@
         <TotalCards />
         <TotalCards />
       </div>
-      <div class="responsive-container">
-        <LifetimeCardTable :selectedProject="selectedProject" class="lifetimeTable" />
-      </div>
       <div class="grid-container">
         <span>In development</span>
         <TagTable :selectedProject="selectedProject" class="tagDash" />
         <DonutChart :selectedProject="selectedProject"/>
-        <span>In development</span>
+        <LifetimeCardTable :selectedProject="selectedProject" class="lifetimeTable" />
       </div>
     </div>
   </div>
@@ -73,26 +70,14 @@ const handleSidebarToggle = (isOpen) => {
   padding: 20px;
 }
 
-.tagDash {
-  display: flex;
-  box-sizing: border-box;
-  justify-content: right;
-  /* horizontal aligment*/
-  align-items: center;
-  /* vertical aligment*/
-  gap: 1.3em;
-  margin-top: 2em;
-}
 
 .lifetimeTable {
-  display: flex;
-  box-sizing: border-box;
-  justify-content: left;
-  /* horizontal aligment*/
-  align-items: center;
-  /* vertical aligment*/
-  gap: 1.3em;
-  margin-top: 2em;
+    display: flex;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    padding: 30px;
+    height: 300px;
 }
 
 .responsive-container {
