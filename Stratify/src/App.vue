@@ -1,20 +1,11 @@
-<script setup lang="ts">
-</script>
 
 <template>
-  <header>
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-      </nav>
-    </div>
-  </header>
-
-
+  <RouterView />
 </template>
 
-<style scoped>
-
+<script setup>
+import { RouterView } from "vue-router";
+</script>
+<style>
+@import 'primeicons/primeicons.css';
 </style>
