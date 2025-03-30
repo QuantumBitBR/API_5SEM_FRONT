@@ -1,5 +1,6 @@
+// components/TotalCards.vue
 <template>
-  <Card class="p-4 text-white custom-card" id="totalCards" @click="fetchTotalCards">
+  <Card class="p-4 text-white custom-card" id="totalCards" @click="updateTotalCards">
     <template #content>
       <div class="text-sm">Cards totais</div>
       <div class="text-3xl font-bold">{{ totalCards }}</div>
@@ -8,29 +9,23 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Card from 'primevue/card';
+import Card from "primevue/card";
+import TotalCardsService from "@/services/TotalCardsService";
 
 export default {
   components: { Card },
   data() {
     return {
-      totalCards: '---',
+      totalCards: "---",
     };
   },
   methods: {
-    async fetchTotalCards() {
-      try {
-        const response = await axios.get('http://localhost:8080/userStory/total-cards');
-        this.totalCards = response.data.quantidadeUserStories;
-      } catch (error) {
-        console.error('Erro ao buscar os dados:', error);
-        this.totalCards = '---';
-      }
+    async updateTotalCards() {
+      this.totalCards = await TotalCardsService.fetchTotalCards();
     }
   },
   mounted() {
-    this.fetchTotalCards();
+    this.updateTotalCards();
   }
 };
 </script>
