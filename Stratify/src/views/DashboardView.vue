@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <Sidebar @toggle="handleSidebarToggle" />
-    <div class="card" :class="{ 'sidebar-open': isSidebarOpen }">
+    <Navbar/>
+    <div class="card">
       <!-- <Menubar :model="items" /> -->
       <SelectProject @project-selected="handleProjectSelection" />
       <div class="QuantitativeCards">
@@ -25,20 +25,16 @@ import TotalCards from "@/components/TotalCards.vue";
 import AverageTimeCard from "@/components/AverageTimeCard.vue";
 import SelectProject from "@/components/SelectProject.vue";
 import DonutChart from "@/components/DonutChart.vue";
-import Sidebar from "@/components/Sidebar.vue";
+import Navbar from "@/components/Navbar.vue";
 import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
 import TimelineChart from "@/components/TimelineChart.vue";
 
 const selectedProject = ref(null);
-const isSidebarOpen = ref(false);
 
 const handleProjectSelection = (project) => {
   selectedProject.value = project;
 };
 
-const handleSidebarToggle = (isOpen) => {
-  isSidebarOpen.value = isOpen;
-};
 </script>
 
 <style scoped>
@@ -46,11 +42,7 @@ const handleSidebarToggle = (isOpen) => {
 .card {
   position: relative;
   transition: padding-left 0.3s ease;
-  padding-left: 3em;
-}
-
-.sidebar-open {
-  padding-left: 12em;
+  padding: 0 2em 0 2em
 }
 
 .QuantitativeCards {
