@@ -25,12 +25,12 @@
             {
               label: "Criados",
               data: [],
-              backgroundColor: "#071952",
+              backgroundColor: "#5739B4",
             },
             {
               label: "Finalizados",
               data: [],
-              backgroundColor: "#088395",
+              backgroundColor: "#071952",
             },
           ],
         },
@@ -86,9 +86,19 @@
       async fetchTimelines(project) {
         try {
           const response = await TimelineService.quantityPerTimeline(project);
-  
+
+          // const response = [
+          //   { periodo: "Jan", quantidadeCriadas: 5, quantidadeFinalizadas: 2 },
+          //   { periodo: "Fev", quantidadeCriadas: 8, quantidadeFinalizadas: 6 },
+          //   { periodo: "Mar", quantidadeCriadas: 6, quantidadeFinalizadas: 4 },
+          //   { periodo: "Abr", quantidadeCriadas: 10, quantidadeFinalizadas: 9 },
+          // ];
+
           if (response && Array.isArray(response)) {
-            this.chartData.labels = response.map((item) => item.periodo);
+            this.chartData.labels = response.map((item) => {
+              const periodo = item.periodo;
+              return periodo.charAt(0).toUpperCase() + periodo.slice(1).toLowerCase();
+            });
             this.chartData.datasets[0].data = response.map((item) => item.quantidadeCriadas);
             this.chartData.datasets[1].data = response.map((item) => item.quantidadeFinalizadas);
           } else {
@@ -122,6 +132,8 @@
     flex-direction: column;
     padding: 30px;
     height: 400px;
+    border: 1px solid #5739B4;
+    border-radius: 12px;
   }
   .bar_title {
     padding: 5px;
