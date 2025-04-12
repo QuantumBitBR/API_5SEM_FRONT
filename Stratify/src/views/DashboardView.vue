@@ -61,7 +61,7 @@ const handleProjectSelection = (project) => {
   grid-template-rows: 1fr;
   gap: 10px;
   width: 100%;
-  padding: 20px;
+  padding-top: 20px;
   padding-bottom: 0;
 }
 
@@ -71,8 +71,7 @@ const handleProjectSelection = (project) => {
   grid-template-rows: 1fr;
   gap: 10px;
   width: 100%;
-  padding: 20px;
-  padding-bottom: 20px;
+  padding: 20px 0;
 }
 
 #lifetimeTable {
