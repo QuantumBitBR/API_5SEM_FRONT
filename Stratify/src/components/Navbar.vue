@@ -24,7 +24,7 @@
 
     <template #end>
       <button class="profile-btn">
-        <i class="pi pi-user"></i>
+        <i class="pi pi-user"><span>Teste</span></i>
       </button>
     </template>
   </Menubar>
@@ -53,6 +53,26 @@ export default {
 .start-content {
   display: flex;
   align-items: center;
+}
+
+span{
+  font-family: Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+    padding: 10px;
+}
+
+.pi-user{
+  padding: 0 10px;
 }
 
 .logo h1 {
@@ -86,7 +106,8 @@ export default {
 
 .profile-btn {
   background: transparent;
-  border: none;
+  border: 1px solid #fff;
+  border-radius: 10px;
   color: white;
   font-size: 1.3rem;
   cursor: pointer;
