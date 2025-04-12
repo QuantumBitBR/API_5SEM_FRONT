@@ -2,15 +2,16 @@
   <div class="app-container">
     <Navbar/>
     <div class="card">
-      <!-- <Menubar :model="items" /> -->
       <SelectProject @project-selected="handleProjectSelection" />
       <div class="QuantitativeCards">
         <TotalCards />
         <AverageTimeCard :selectedProject="selectedProject" />
       </div>
-      <div class="grid-container">
+      <div class="grid-container1">
         <TimelineChart :selectedProject="selectedProject" class="grid_item"/>
         <TagTable :selectedProject="selectedProject" class="grid_item" />
+      </div>
+      <div class="grid-container2">
         <DonutChart :selectedProject="selectedProject" class="grid_item"/>
         <LifetimeCardTable :selectedProject="selectedProject" id="lifetimeTable" class="grid_item"/>
       </div>
@@ -54,15 +55,25 @@ const handleProjectSelection = (project) => {
   margin-top: 2em;
 }
 
-.grid-container {
+.grid-container1 {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 1fr;
   gap: 10px;
   width: 100%;
   padding: 20px;
+  padding-bottom: 0;
 }
 
+.grid-container2 {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  grid-template-rows: 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 20px;
+  padding-bottom: 20px;
+}
 
 #lifetimeTable {
     display: flex;
