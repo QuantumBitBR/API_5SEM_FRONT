@@ -1,20 +1,45 @@
 <template>
   <div class="tabela">
     <DataTable :value="usuarios" class="tabela-src" removableSort showGridlines stripedRows>
-      <Column header="Nome">
+      <Column field="nome" header="Nome" sortable>
         <template #body="slotProps">
           <i class="pi pi-user" style="margin-right: 8px"></i>
           {{ slotProps.data.nome }}
         </template>
       </Column>
+
       <Column field="email" header="Email" sortable />
-      <Column field="opcao1" header="Opção 1" />
-      <Column field="opcao2" header="Opção 2" />
-      <Column field="dataCriada" header="Data Criada" sortable />
+
+      <Column header="Cargo">
+        <template #body="slotProps">
+          <Dropdown
+            v-model="slotProps.data.cargo"
+            :options="cargos"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+          />
+        </template>
+      </Column>
+
+      <Column field="gestor" header="Gestor" />
+
+      <Column header="Habilitado">
+        <template #body="slotProps">
+          <ToggleButton
+            v-model="slotProps.data.habilitado"
+            onLabel="Sim"
+            offLabel="Não"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+            class="p-button-sm"
+          />
+        </template>
+      </Column>
+
       <Column header="Ações">
         <template #body="slotProps">
-          <button @click="editarUsuario(slotProps.data)" class="btn-editar">Editar</button>
-          <button @click="excluirUsuario(slotProps.data)" class="btn-excluir">Excluir</button>
+          <button @click="editPass(slotProps.data)" class="btn-senha">Trocar senha</button>
         </template>
       </Column>
     </DataTable>
@@ -24,45 +49,51 @@
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import Dropdown from "primevue/dropdown";
+import ToggleButton from "primevue/togglebutton";
 
 export default {
   components: {
     DataTable,
     Column,
+    Dropdown,
+    ToggleButton,
   },
   data() {
     return {
+      cargos: [
+        { label: "Admin", value: "Admin" },
+        { label: "Gestor", value: "Gestor" },
+        { label: "Funcionário", value: "Funcionário" },
+      ],
       usuarios: [
         {
           nome: "André Meneses",
           email: "andre@email.com",
-          opcao1: "abc",
-          opcao2: "xyz",
-          dataCriada: "13/04/2025",
+          cargo: "Admin",
+          gestor: "-",
+          habilitado: true,
         },
         {
           nome: "Maria Silva",
           email: "maria@email.com",
-          opcao1: "abc",
-          opcao2: "xyz",
-          dataCriada: "12/04/2025",
+          cargo: "Funcionário",
+          gestor: "André Meneses",
+          habilitado: true,
         },
         {
           nome: "João Santos",
           email: "joao@email.com",
-          opcao1: "abc",
-          opcao2: "xyz",
-          dataCriada: "10/04/2025",
+          cargo: "Gestor",
+          gestor: "André Meneses",
+          habilitado: false,
         },
       ],
     };
   },
   methods: {
-    editarUsuario(usuario) {
-      console.log("Editar clicado:", usuario);
-    },
-    excluirUsuario(usuario) {
-      console.log("Excluir clicado:", usuario);
+    editPass(pass) {
+      console.log("Editar clicado:", pass);
     },
   },
 };
@@ -75,14 +106,14 @@ export default {
 
 .tabela-src {
   border: 1px solid #5739b4;
-  max-height: 25rem;
+  max-height: 30rem;
   border-radius: 12px;
   padding: 5px;
   background-color: #fff;
 }
 
 ::v-deep(.p-datatable-table-container) {
-  max-height: 24rem;
+  max-height: 29rem;
   overflow: auto;
 }
 
@@ -98,7 +129,7 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.btn-editar {
+.btn-senha {
   background-color: #3f51b5;
   color: white;
   border: none;
@@ -109,21 +140,8 @@ export default {
   font-size: 0.85rem;
 }
 
-.btn-excluir {
-  background-color: #e53935;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.btn-editar:hover {
+.btn-senha:hover {
   background-color: #303f9f;
 }
 
-.btn-excluir:hover {
-  background-color: #c62828;
-}
 </style>
