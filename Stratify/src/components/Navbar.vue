@@ -6,11 +6,11 @@
           <h1>Stratify</h1>
         </div>
         <div class="nav-buttons">
-          <button class="nav-btn" @click="$router.push('/')">
+          <button class="nav-btn" @click="$router.push('/dashboard')">
             <i class="pi pi-home"></i>
             <span>Home</span>
           </button>
-          <button class="nav-btn" @click="$router.push('/usuarios')">
+          <button class="nav-btn" @click="$router.push('/management')">
             <i class="pi pi-users"></i>
             <span>Usuários</span>
           </button>
