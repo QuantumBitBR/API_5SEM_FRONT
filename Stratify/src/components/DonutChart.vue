@@ -26,7 +26,7 @@ export default {
           {
             // data: [30,20,50],
             data: [],
-            backgroundColor: ["#071952", "#088395", "#37B7C3", "#2D9596", "#145DA0", "#1F6E8C"],
+            backgroundColor: ["#071952", "#5739B4", "#C6B7F4", "#2D9596", "#145DA0", "#1F6E8C"],
           },
         ],
       },
@@ -73,7 +73,10 @@ export default {
     async fetchCards(project) {
       try {
         const response = await StatusService.quantityPerStatus(project);
-        this.chartData.labels = response.map((item) => item.status);
+        this.chartData.labels = response.map((item) => {
+          const status = item.status;
+          return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+        });
         this.chartData.datasets[0].data = response.map((item) => item.percentual);
       } catch (error) {
         console.error("Error to find data:", error);
@@ -103,6 +106,8 @@ export default {
     flex-direction: column;
     padding: 30px;
     height: 300px;
+    border: 1px solid #5739B4;
+    border-radius: 12px;
 }
 .donut_title {
   padding: 5px;
