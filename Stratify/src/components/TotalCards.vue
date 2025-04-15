@@ -1,6 +1,6 @@
 // components/TotalCards.vue
 <template>
-  <Card class="p-4 text-white custom-card" id="totalCards" @click="updateTotalCards">
+  <Card class="text-white custom-card" id="totalCards" @click="updateTotalCards">
     <template #content>
       <div class="text-sm">Cards totais</div>
       <div class="total_number">{{ totalCards }}</div>

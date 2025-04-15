@@ -1,4 +1,5 @@
 @import './base.css';
+@import "tailwindcss";
 
 #app {
   margin: 0 auto;

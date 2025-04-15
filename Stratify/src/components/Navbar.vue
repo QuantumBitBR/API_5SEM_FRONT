@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 .custom-menubar {
-  background: linear-gradient(135deg, #0C1947, #5739B4); /* roxo escuro pro claro */
+  background: linear-gradient(135deg, #0c1947, #5739b4);
   border: none;
   color: white;
   margin-bottom: 1em;
@@ -55,24 +55,15 @@ export default {
   align-items: center;
 }
 
-span{
-  font-family: Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-    padding: 10px;
+span {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  padding: 10px;
 }
 
-.pi-user{
+.pi-user {
   padding: 0 10px;
+  padding-right: 0;
 }
 
 .logo h1 {
@@ -113,6 +104,8 @@ span{
   cursor: pointer;
   margin-right: 10px;
   transition: opacity 0.2s ease;
+  display: flex;
+  padding: 6px;
 }
 
 .profile-btn:hover {
