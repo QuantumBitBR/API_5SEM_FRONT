@@ -102,18 +102,19 @@ export default {
 <style scoped>
 .tabela {
   padding: 40px;
+  padding-top: 20px;
 }
 
 .tabela-src {
   border: 1px solid #5739b4;
-  max-height: 30rem;
+  max-height: 25rem;
   border-radius: 12px;
   padding: 5px;
   background-color: #fff;
 }
 
 ::v-deep(.p-datatable-table-container) {
-  max-height: 29rem;
+  max-height: 24rem;
   overflow: auto;
 }
 

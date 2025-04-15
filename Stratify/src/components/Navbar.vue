@@ -59,11 +59,17 @@ span {
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
     Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   padding: 10px;
+  padding-left: 0;
+  padding-right: 15px;
 }
 
 .pi-user {
   padding: 0 10px;
   padding-right: 0;
+}
+
+.pi-user span{
+  padding: 10px;
 }
 
 .logo h1 {
