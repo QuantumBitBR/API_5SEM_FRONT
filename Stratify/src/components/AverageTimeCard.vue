@@ -1,5 +1,5 @@
 <template>
-  <Card class="p-4 text-white custom-card" id="AverageTime" @click="fetchAverageTime">
+  <Card class=" text-white custom-card" id="AverageTime" @click="fetchAverageTime">
     <template #content>
       <div class="text-sm">Média total de horas:</div>
       <div class="total_number">{{ averageTime }}</div>
