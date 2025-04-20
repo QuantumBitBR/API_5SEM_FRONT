@@ -1,5 +1,5 @@
 // services/TotalCardsService.ts
-import api from "@/services/apiConfig";
+import {api} from "@/services/apiConfig";
 
 class TotalCardsService {
   async fetchTotalCards(project_id: number): Promise<string | number> {

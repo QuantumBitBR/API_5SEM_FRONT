@@ -1,4 +1,4 @@
-import api from "./apiConfig";
+import {api} from "./apiConfig";
 
 class StatusService{
     async quantityPerStatus(project_id: any){

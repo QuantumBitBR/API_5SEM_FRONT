@@ -1,5 +1,5 @@
 // Service (AverageTimeService.ts)
-import api from "@/services/apiConfig";
+import {api} from "@/services/apiConfig";
 
 class AverageTimeService {
   async getAverageTime(projectId: any) {
