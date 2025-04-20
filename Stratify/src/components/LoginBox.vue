@@ -47,6 +47,12 @@ export default {
     methods: {
         login() {
             console.log(`Usuário: ${this.email}, Senha: ${this.password}`);
+            this.$toast.add({
+                severity: 'info',
+                summary: 'Login',
+                detail: 'Tentando fazer login...',
+                life: 3000
+            })
         },
     },
 };
