@@ -57,6 +57,8 @@ export default {
                     detail: `Login realizado com sucesso`,
                     life: 3000
                 });
+
+                this.$router.push("/dashboard");
             } catch (error) {
                 console.error(error);
 
@@ -67,6 +69,8 @@ export default {
                         detail: 'Missing required fields',
                         life: 3000
                     });
+
+                    this.$router.push("/dashboard");
                 } else if (error instanceof Error && error.message) {
                     this.$toast.add({
                         severity: 'error',
