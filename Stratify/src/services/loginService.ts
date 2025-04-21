@@ -15,8 +15,8 @@ class LoginService {
 
             if (response.status === 200) {
                 const { token, user } = response.data;
-                Cookies.set("authToken", token, { expires: 7 });
-                // return user;
+                this.storeToken(token);
+                return user;
             } else {
                 throw new Error("Unexpected response from server");
             }
@@ -25,7 +25,13 @@ class LoginService {
                 const apiMessage = error.response.data?.message || "Erro desconhecido";
                 throw new Error(apiMessage);
             }
+
+            throw error;
         }
+    }
+
+    private storeToken(token: string) {
+        Cookies.set("authToken", token, { expires: 7 });
     }
 }
 
