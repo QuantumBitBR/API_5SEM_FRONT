@@ -49,30 +49,37 @@ export default {
     methods: {
         async login() {
             try {
-                this.$toast.add({
-                    severity: 'info',
-                    summary: 'Login',
-                    detail: 'Tentando fazer login...',
-                    life: 3000
-                });
-
                 const user = await loginService.doLogin(this.email, this.password);
 
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Login bem-sucedido',
-                    detail: `Bem-vindo, ${user.name}`,
+                    detail: `Login realizado com sucesso`,
                     life: 3000
                 });
             } catch (error) {
-                this.$toast.add({
-                    severity: 'error',
-                    summary: 'Erro ao fazer login',
-                    detail: error.message,
-                    life: 3000
-                });
+                console.error(error);
+
+                if (error instanceof TypeError) {
+                    this.$toast.add({
+                        severity: 'error',
+                        summary: 'Erro ao fazer login',
+                        detail: 'Missing required fields',
+                        life: 3000
+                    });
+                } else if (error instanceof Error && error.message) {
+                    this.$toast.add({
+                        severity: 'error',
+                        summary: 'Erro ao fazer login',
+                        detail: error.message,
+                        life: 3000
+                    });
+                } else {
+                    console.error('Erro interno no login:', error);
+                }
             }
         }
+
     },
 };
 </script>
