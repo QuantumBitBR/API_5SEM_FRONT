@@ -5,7 +5,7 @@
             <span class="text-black text-base">Enter your credentials to access the system</span>
         </div>
 
-        <div class="all_forms">
+        <form @submit.prevent="login" class="all_forms">
             <div class="form-group icon-input">
                 <label for="email" class="text-black">E-Mail:</label>
                 <div class="input-wrapper">
@@ -21,6 +21,7 @@
             <div class="form-group icon-input">
                 <label for="password" class="text-black">Password:</label>
                 <div class="input-wrapper">
+
                     <svg xmlns="http://www.w3.org/2000/svg" fill="#5739B4" viewBox="0 0 24 24" class="input-icon">
                         <path fill-rule="evenodd"
                             d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
@@ -30,9 +31,9 @@
                         placeholder="Type here your Password" />
                 </div>
             </div>
-        </div>
 
-        <button @click="login">Sign In</button>
+            <button type="submit">Sign In</button>
+        </form>
     </div>
 </template>
 
