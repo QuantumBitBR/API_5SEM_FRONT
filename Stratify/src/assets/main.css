@@ -1,6 +1,10 @@
 @import './base.css';
 @import "tailwindcss";
 
+html{
+  background-color: #F4F6F9;
+}
+
 #app {
   margin: 0 auto;
   /* padding: 2rem; */

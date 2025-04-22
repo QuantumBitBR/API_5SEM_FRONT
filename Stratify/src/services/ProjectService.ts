@@ -1,4 +1,4 @@
-import api from "./apiConfig";
+import {api} from "./apiConfig";
 
 class ProjectService{
     async allProjects(){
