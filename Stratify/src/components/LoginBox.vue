@@ -34,11 +34,13 @@
 
             <button type="submit">Sign In</button>
         </form>
+
     </div>
 </template>
 
 <script>
 import loginService from '@/services/loginService';
+import { showToast } from '@/eventBus';
 
 export default {
     data() {
@@ -52,10 +54,10 @@ export default {
             try {
                 const user = await loginService.doLogin(this.email, this.password);
 
-                this.$toast.add({
+                showToast({
                     severity: 'success',
                     summary: 'Login bem-sucedido',
-                    detail: `Login realizado com sucesso`,
+                    detail: 'Login realizado com sucesso',
                     life: 3000
                 });
 
@@ -64,16 +66,17 @@ export default {
                 console.error(error);
 
                 if (error instanceof TypeError) {
-                    this.$toast.add({
+                    showToast({
                         severity: 'error',
                         summary: 'Erro ao fazer login',
                         detail: 'Missing required fields',
                         life: 3000
                     });
 
+
                     this.$router.push("/dashboard");
                 } else if (error instanceof Error && error.message) {
-                    this.$toast.add({
+                    showToast({
                         severity: 'error',
                         summary: 'Erro ao fazer login',
                         detail: error.message,
