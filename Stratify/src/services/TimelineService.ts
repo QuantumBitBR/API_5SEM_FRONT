@@ -5,7 +5,7 @@ class TimelineService{
         try{
             let endpoint = ""
             if(project_id.id === 0){
-                endpoint = "temporais"
+                endpoint = "temporais/projeto"
             }else{
                 endpoint = `temporais?projetoId=${project_id.id}`
             }
