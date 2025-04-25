@@ -41,12 +41,13 @@
 <script>
 import loginService from '@/services/loginService';
 import { showToast } from '@/eventBus';
+import Cookies from "js-cookie";
 
 export default {
     data() {
         return {
-            email: "",
-            password: "",
+            email: "admin@gmail.com",
+            password: "QuantumBit321!",
         };
     },
     methods: {
@@ -54,14 +55,21 @@ export default {
             try {
                 const user = await loginService.doLogin(this.email, this.password);
 
-                showToast({
-                    severity: 'success',
-                    summary: 'Login bem-sucedido',
-                    detail: 'Login realizado com sucesso',
-                    life: 3000
-                });
 
-                this.$router.push("/dashboard");
+                if(user.changePassword){
+                    Cookies.set("userMail", this.email);
+                    Cookies.set("userId", user.userId);
+                    this.$router.push("/reset");
+                }else{
+                    showToast({
+                        severity: 'success',
+                        summary: 'Login bem-sucedido',
+                        detail: 'Login realizado com sucesso',
+                        life: 3000
+                    });
+                    this.$router.push("/dashboard");
+                }
+
             } catch (error) {
                 console.error(error);
 

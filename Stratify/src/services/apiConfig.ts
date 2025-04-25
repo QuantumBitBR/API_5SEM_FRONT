@@ -30,7 +30,7 @@ api.interceptors.response.use(response => {
         if (!hasShownTokenExpiredToast) {
             hasShownTokenExpiredToast = true;
 
-            Cookies.remove('authToken');
+            // Cookies.remove('authToken');
 
             showToast({
                 severity: "error",
@@ -39,7 +39,7 @@ api.interceptors.response.use(response => {
                 life: 3000
             });
 
-            router.push('/');
+            // router.push('/');
 
             setTimeout(() => {
                 hasShownTokenExpiredToast = false;

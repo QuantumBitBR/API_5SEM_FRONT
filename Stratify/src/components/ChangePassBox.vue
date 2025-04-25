@@ -38,6 +38,8 @@
 <script>
 import { showToast } from '@/eventBus';
 import loginService from '@/services/loginService';
+import Cookies from "js-cookie";
+
 
 export default {
     data() {
@@ -59,16 +61,26 @@ export default {
             }
 
             try {
-                await userService.resetPassword(this.newPassword);
+                const userId = Cookies.get("userId");
+                const reseting = await loginService.changePassword(userId, this.newPassword);
 
-                showToast({
-                    severity: 'success',
-                    summary: 'Password Reset',
-                    detail: 'Your password has been successfully updated.',
-                    life: 3000
-                });
+                if(reseting){
+                    showToast({
+                        severity: 'success',
+                        summary: 'Password Reset',
+                        detail: 'Your password has been successfully updated.',
+                        life: 3000
+                    });
+                }else{
+                    showToast({
+                        severity: 'success',
+                        summary: 'Error',
+                        detail: 'An error occurred to change password.',
+                        life: 3000
+                    });
+                }
 
-                this.$router.push("/login");
+                this.$router.push("/");
             } catch (error) {
                 console.error(error);
                 showToast({

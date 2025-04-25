@@ -14,9 +14,39 @@ class LoginService {
             });
 
             if (response.status === 200) {
-                const { token, user } = response.data;
-                this.storeToken(token);
-                return user;
+                const data = response.data;
+                console.log(data.token)
+                this.storeToken(data.token);
+                return data;
+            } else {
+                throw new Error("Unexpected response from server");
+            }
+        } catch (error: any) {
+            if (error.response) {
+                if (error.response.status === 403) {
+                    return {
+                        userId: error.response.userId,
+                        changePassword: true,
+                        message: "Senha expirada ou inválida. Por favor, redefina sua senha.",
+                    };
+                }
+                const apiMessage = error.response.data?.message || "Erro desconhecido";
+                throw new Error(apiMessage);
+            }
+
+            throw error;
+        }
+    }
+
+    async changePassword(idUsuario:string, novaSenha: string) {
+        try {
+            const response = await login_api.post("/usuario/resetar-senha", {
+                idUsuario,
+                novaSenha,
+            });
+
+            if (response.status === 200) {
+                return true;
             } else {
                 throw new Error("Unexpected response from server");
             }
