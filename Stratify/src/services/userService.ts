@@ -26,8 +26,9 @@ const userService = {
   },
 
   async resetarSenha(id: number): Promise<void> {
-    await api.put(`/admin-reset-senha/${id}`);
+    await api.post('/usuario/admin-reset-senha', { idUsuario: id });
   }
+
 };
 
 export default userService;
