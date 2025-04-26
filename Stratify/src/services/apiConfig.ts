@@ -41,9 +41,9 @@ api.interceptors.response.use(response => {
 
             // router.push('/');
 
-            setTimeout(() => {
-                hasShownTokenExpiredToast = false;
-            }, 3000);
+            // setTimeout(() => {
+            //     hasShownTokenExpiredToast = false;
+            // }, 3000);
         }
     }
 

@@ -1,4 +1,4 @@
-import { api } from './apiConfig';
+import { api } from '@/services/apiConfig';
 
 export interface UsuarioInfo {
   id: number;
@@ -12,6 +12,7 @@ export interface UsuarioInfo {
 
 const userService = {
   async listarUsuarios(): Promise<UsuarioInfo[]> {
+    // Garante que usa a instância do api com interceptores de token
     const response = await api.get<UsuarioInfo[]>('/usuario/listar');
     return response.data;
   },
@@ -22,6 +23,10 @@ const userService = {
 
   async desativarUsuario(id: number): Promise<void> {
     await api.put(`/usuario/${id}/desativar`);
+  },
+
+  async resetarSenha(id: number): Promise<void> {
+    await api.put(`/admin-reset-senha/${id}`);
   }
 };
 

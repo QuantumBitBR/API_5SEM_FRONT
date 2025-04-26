@@ -1,6 +1,7 @@
 // src/components/UserTable.vue
 <template>
   <div class="tabela">
+    <Toast />
     <DataTable
       :value="usuarios"
       class="tabela-src"
@@ -56,8 +57,8 @@
 
       <Column header="Ações">
         <template #body="{ data }">
-          <button @click="editPass(data.id)" class="btn-senha">
-            Trocar senha
+          <button @click="resetarSenha(data.id)" class="btn-senha">
+            Resetar senha
           </button>
         </template>
       </Column>
@@ -71,8 +72,12 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
 import ToggleButton from 'primevue/togglebutton';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import userService from '../services/userService';
 import type { UsuarioInfo } from '../services/userService';
+
+const toast = useToast();
 
 const cargos = [
   { label: 'Admin', value: 'ADMIN' },
@@ -93,6 +98,7 @@ async function fetchUsuarios() {
       habilitado: u.isEnable
     } as any));
   } catch (err) {
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
     console.error('Erro ao carregar usuários:', err);
   }
 }
@@ -103,22 +109,30 @@ async function onToggleStatus(user: { id: number; habilitado: boolean }, val: bo
   try {
     if (val) {
       await userService.ativarUsuario(user.id);
+      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Usuário ativado', life: 3000 });
     } else {
       await userService.desativarUsuario(user.id);
+      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Usuário desativado', life: 3000 });
     }
   } catch (err) {
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível alterar status', life: 3000 });
     console.error('Erro ao alterar status do usuário:', err);
     user.habilitado = previous;
   }
 }
 
-function onSelection(event: { value: UsuarioInfo }) {
-  selectedUsuario.value = event.value;
+async function resetarSenha(userId: number) {
+  try {
+    await userService.resetarSenha(userId);
+    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Senha resetada', life: 3000 });
+  } catch (err) {
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao resetar senha', life: 3000 });
+    console.error('Erro ao resetar senha:', err);
+  }
 }
 
-function editPass(userId: number) {
-  console.log('Editar senha para usuário ID:', userId);
-  // abra modal ou roteie
+function onSelection(event: { value: UsuarioInfo }) {
+  selectedUsuario.value = event.value;
 }
 
 onMounted(fetchUsuarios);
