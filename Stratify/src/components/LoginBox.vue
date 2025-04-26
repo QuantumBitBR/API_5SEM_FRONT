@@ -46,8 +46,8 @@ import Cookies from "js-cookie";
 export default {
     data() {
         return {
-            email: "admin@gmail.com",
-            password: "QuantumBit321!",
+            email: "",
+            password: "",
         };
     },
     methods: {
