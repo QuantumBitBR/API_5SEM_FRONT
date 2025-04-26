@@ -36,19 +36,7 @@
 
       <Column field="gestor" header="Gestor">
         <template #body="{ data }">
-          <div v-if="data.cargo === 'USER'">
-            <Dropdown
-              v-model="data.gestor"
-              :options="gestoresOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Selecione o gestor"
-              class="w-full"
-            />
-          </div>
-          <div v-else>
-            {{ data.gestor || '-' }}
-          </div>
+          {{ data.gestor}}
         </template>
       </Column>
 
@@ -92,23 +80,28 @@ const cargos = [
   { label: 'Funcionário', value: 'USER' },
 ];
 
-const usuarios = ref<UsuarioInfo[]>([]);
-const selectedUsuario = ref<UsuarioInfo | null>(null);
+const usuarios = ref<any[]>([]);
+const selectedUsuario = ref<any | null>(null);
 
-// Computed: apenas gestores (role === 'GESTOR')
-const gestoresOptions = computed(() =>
-  usuarios.value
-    .filter(u => u.role === 'GESTOR')
-    .map(u => ({ label: u.nome, value: u.nome }))
-);
+// Computed: extrair todos os nomes de gestor disponíveis (campo "gestor") e remover duplicados
+const gestoresOptions = computed(() => {
+  const nomes = usuarios.value
+    .map(u => u.gestor)
+    .filter((name): name is string => Boolean(name));
+  return Array.from(new Set(nomes)).map(name => ({ label: name, value: name }));
+});
 
 async function fetchUsuarios() {
   try {
     const data = await userService.listarUsuarios();
     usuarios.value = data.map(u => ({
-      ...u,
-      cargo: u.role,         // agora corresponde a one of ['ADMIN','GESTOR','USER']
+      id: u.id,
+      nome: u.nome || u.email,
+      email: u.email,
+      cargo: u.role,
+      role: u.role,
       gestor: u.gestorNome,
+      requireReset: u.requireReset,
       habilitado: u.isEnable
     }));
   } catch (err) {
@@ -116,12 +109,12 @@ async function fetchUsuarios() {
   }
 }
 
-function onSelection(event: { value: UsuarioInfo }) {
+function onSelection(event: { value: any }) {
   selectedUsuario.value = event.value;
   console.log('Usuário selecionado ID:', selectedUsuario.value?.id);
 }
 
-function editPass(user: UsuarioInfo) {
+function editPass(user: any) {
   console.log('Editar senha, usuário ID:', user.id);
   // abra modal ou navegue passando user.id
 }
@@ -140,7 +133,7 @@ onMounted(fetchUsuarios);
   background-color: #fff;
 }
 
-/* Ajusta o header fixo no PrimeVue quando scrollable é true */
+/* Fixar header no scroll */
 ::v-deep(.p-datatable-scrollable-header) {
   position: sticky;
   top: 0;

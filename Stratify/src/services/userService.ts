@@ -17,6 +17,7 @@ export default {
     return data;
   }
 };
+
 export async function listarUsuarios(): Promise<UsuarioInfo[]> {
   const { data } = await api.get<UsuarioInfo[]>('/usuario/listar');
   return data;
