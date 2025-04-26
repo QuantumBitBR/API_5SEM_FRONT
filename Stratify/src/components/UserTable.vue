@@ -71,7 +71,8 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
 import ToggleButton from 'primevue/togglebutton';
-import userService, { UsuarioInfo } from '@/services/userService';
+import userService from '../services/userService';
+import type { UsuarioInfo } from '../services/userService';
 
 const cargos = [
   { label: 'Admin', value: 'ADMIN' },
