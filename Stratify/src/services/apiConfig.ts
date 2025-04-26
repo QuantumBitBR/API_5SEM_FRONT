@@ -39,7 +39,7 @@ api.interceptors.response.use(response => {
                 life: 3000
             });
 
-            router.push('/');
+            // router.push('/');
 
             setTimeout(() => {
                 hasShownTokenExpiredToast = false;
