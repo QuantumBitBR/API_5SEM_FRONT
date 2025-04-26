@@ -1,5 +1,4 @@
-// src/services/userService.ts
-import {api} from './apiConfig';
+import { api } from './apiConfig';
 
 export interface UsuarioInfo {
   id: number;
@@ -11,14 +10,19 @@ export interface UsuarioInfo {
   isEnable: boolean;
 }
 
-export default {
+const userService = {
   async listarUsuarios(): Promise<UsuarioInfo[]> {
-    const { data } = await api.get<UsuarioInfo[]>('/usuario/listar');
-    return data;
+    const response = await api.get<UsuarioInfo[]>('/usuario/listar');
+    return response.data;
+  },
+
+  async ativarUsuario(id: number): Promise<void> {
+    await api.put(`/usuario/${id}/ativar`);
+  },
+
+  async desativarUsuario(id: number): Promise<void> {
+    await api.put(`/usuario/${id}/desativar`);
   }
 };
 
-export async function listarUsuarios(): Promise<UsuarioInfo[]> {
-  const { data } = await api.get<UsuarioInfo[]>('/usuario/listar');
-  return data;
-}
+export default userService;

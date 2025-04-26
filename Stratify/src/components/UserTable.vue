@@ -36,7 +36,7 @@
 
       <Column field="gestor" header="Gestor">
         <template #body="{ data }">
-          {{ data.gestor}}
+          {{ data.gestor }}
         </template>
       </Column>
 
@@ -44,6 +44,7 @@
         <template #body="{ data }">
           <ToggleButton
             v-model="data.habilitado"
+            @update:modelValue="val => onToggleStatus(data, val)"
             onLabel="Sim"
             offLabel="Não"
             onIcon="pi pi-check"
@@ -55,7 +56,7 @@
 
       <Column header="Ações">
         <template #body="{ data }">
-          <button @click="editPass(data)" class="btn-senha">
+          <button @click="editPass(data.id)" class="btn-senha">
             Trocar senha
           </button>
         </template>
@@ -65,58 +66,58 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
 import ToggleButton from 'primevue/togglebutton';
-import userService from '../services/userService';
-import type { UsuarioInfo } from '../services/userService';
+import userService, { UsuarioInfo } from '@/services/userService';
 
-// Opções de Cargo devem casar com valores retornados pelo endpoint
 const cargos = [
   { label: 'Admin', value: 'ADMIN' },
   { label: 'Gestor', value: 'GESTOR' },
-  { label: 'Funcionário', value: 'USER' },
+  { label: 'Funcionário', value: 'USER' }
 ];
 
-const usuarios = ref<any[]>([]);
-const selectedUsuario = ref<any | null>(null);
-
-// Computed: extrair todos os nomes de gestor disponíveis (campo "gestor") e remover duplicados
-const gestoresOptions = computed(() => {
-  const nomes = usuarios.value
-    .map(u => u.gestor)
-    .filter((name): name is string => Boolean(name));
-  return Array.from(new Set(nomes)).map(name => ({ label: name, value: name }));
-});
+const usuarios = ref<UsuarioInfo[]>([]);
+const selectedUsuario = ref<UsuarioInfo | null>(null);
 
 async function fetchUsuarios() {
   try {
     const data = await userService.listarUsuarios();
     usuarios.value = data.map(u => ({
-      id: u.id,
-      nome: u.nome || u.email,
-      email: u.email,
+      ...u,
       cargo: u.role,
-      role: u.role,
       gestor: u.gestorNome,
-      requireReset: u.requireReset,
       habilitado: u.isEnable
-    }));
+    } as any));
   } catch (err) {
     console.error('Erro ao carregar usuários:', err);
   }
 }
 
-function onSelection(event: { value: any }) {
-  selectedUsuario.value = event.value;
-  console.log('Usuário selecionado ID:', selectedUsuario.value?.id);
+async function onToggleStatus(user: { id: number; habilitado: boolean }, val: boolean) {
+  const previous = user.habilitado;
+  user.habilitado = val;
+  try {
+    if (val) {
+      await userService.ativarUsuario(user.id);
+    } else {
+      await userService.desativarUsuario(user.id);
+    }
+  } catch (err) {
+    console.error('Erro ao alterar status do usuário:', err);
+    user.habilitado = previous;
+  }
 }
 
-function editPass(user: any) {
-  console.log('Editar senha, usuário ID:', user.id);
-  // abra modal ou navegue passando user.id
+function onSelection(event: { value: UsuarioInfo }) {
+  selectedUsuario.value = event.value;
+}
+
+function editPass(userId: number) {
+  console.log('Editar senha para usuário ID:', userId);
+  // abra modal ou roteie
 }
 
 onMounted(fetchUsuarios);
@@ -133,7 +134,6 @@ onMounted(fetchUsuarios);
   background-color: #fff;
 }
 
-/* Fixar header no scroll */
 ::v-deep(.p-datatable-scrollable-header) {
   position: sticky;
   top: 0;
