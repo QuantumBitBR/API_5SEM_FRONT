@@ -54,12 +54,14 @@ export default {
         async login() {
             try {
                 const user = await loginService.doLogin(this.email, this.password);
-
-
-                if(user.changePassword){
-                    Cookies.set("userMail", this.email);
-                    Cookies.set("userId", user.userId);
-                    this.$router.push("/reset");
+                if(user.requireReset){
+                    showToast({
+                        severity: 'info',
+                        summary: 'Change Password',
+                        detail: 'You need to change your temporary password',
+                        life: 3000
+                    });
+                    this.$router.push(`/reset?id=${user.id}`);
                 }else{
                     showToast({
                         severity: 'success',
