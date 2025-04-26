@@ -1,4 +1,3 @@
-// src/components/UserTable.vue
 <template>
   <div class="tabela">
     <Toast />
@@ -37,7 +36,18 @@
 
       <Column field="gestor" header="Gestor">
         <template #body="{ data }">
-          {{ data.gestor }}
+          <template v-if="data.cargo === 'USER'">
+            <Dropdown
+              v-model="data.gestor"
+              :options="gestores"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+            />
+          </template>
+          <template v-else>
+            {{ data.gestor }}
+          </template>
         </template>
       </Column>
 
@@ -79,6 +89,7 @@ import type { UsuarioInfo } from '../services/userService';
 
 const toast = useToast();
 
+// opções de cargo, já com label "Funcionário" para USER
 const cargos = [
   { label: 'Admin', value: 'ADMIN' },
   { label: 'Gestor', value: 'GESTOR' },
@@ -87,16 +98,24 @@ const cargos = [
 
 const usuarios = ref<UsuarioInfo[]>([]);
 const selectedUsuario = ref<UsuarioInfo | null>(null);
+// lista de gestores filtrada dos próprios usuários
+const gestores = ref<{ label: string; value: number }[]>([]);
 
 async function fetchUsuarios() {
   try {
     const data = await userService.listarUsuarios();
+    // mapear usuários e construir lista de gestores
     usuarios.value = data.map(u => ({
       ...u,
       cargo: u.role,
       gestor: u.gestorNome,
       habilitado: u.isEnable
     } as any));
+
+    // filtrar gestores existentes (role === 'GESTOR')
+    gestores.value = usuarios.value
+      .filter(u => u.role === 'GESTOR')
+      .map(u => ({ label: u.nome, value: u.id }));
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
     console.error('Erro ao carregar usuários:', err);
