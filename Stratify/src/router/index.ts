@@ -16,6 +16,12 @@ const routes = [
         name: 'management',
         component: () => import('../views/UserManagementView.vue')
     },
+    {
+        path: '/reset',
+        name: 'reset',
+        component: () => import('../views/ChangeInfoView.vue')
+    },
+
 ];
 
 const router = createRouter({

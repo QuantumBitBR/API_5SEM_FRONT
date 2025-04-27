@@ -30,6 +30,7 @@
             optionLabel="label"
             optionValue="value"
             class="w-full"
+            @change="handleRole(data)"
           />
         </template>
       </Column>
@@ -81,6 +82,7 @@
 </template>
 
 <script setup lang="ts">
+import ManagementService from '@/services/ManagementService';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
@@ -103,6 +105,20 @@ const cargos = [
 const usuarios = ref<UsuarioInfo[]>([]);
 const selectedUsuario = ref<UsuarioInfo | null>(null);
 const gestores = ref<{ label: string; value: number }[]>([]);
+
+async function handleRole(data: any){
+  try{
+    const res = await ManagementService.setNewRole(data.id, data.cargo);
+    if(res){
+      toast.add({ severity: 'success', summary: 'Role changed', detail: 'User role changed successfully', life: 3000 });
+    }else{
+      toast.add({ severity: 'warn', summary: 'Atenção', detail: 'Não foi possível alterar o cargo.', life: 3000 });
+    }
+  }catch(error){
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Error to change role', life: 3000 });
+    console.error(error);
+  }
+}
 
 async function fetchUsuarios() {
   try {
