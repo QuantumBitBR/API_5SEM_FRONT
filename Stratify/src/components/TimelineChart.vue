@@ -12,8 +12,8 @@
   export default {
     components: { Chart },
     props: {
-      selectedProject: Object,
-      userSelected: Object,
+      selectedProject: null,
+      selectedUser: null,
     },
     data() {
       return {
@@ -81,16 +81,10 @@
       };
     },
     methods: {
-      async fetchTimelines(project) {
+      async fetchTimelines() {
         try {
-          const response = await TimelineService.quantityPerTimeline(project);
-
-          // const response = [
-          //   { periodo: "Jan", quantidadeCriadas: 5, quantidadeFinalizadas: 2 },
-          //   { periodo: "Fev", quantidadeCriadas: 8, quantidadeFinalizadas: 6 },
-          //   { periodo: "Mar", quantidadeCriadas: 6, quantidadeFinalizadas: 4 },
-          //   { periodo: "Abr", quantidadeCriadas: 10, quantidadeFinalizadas: 9 },
-          // ];
+          console.log(this.selectedProject.id, this.selectedUser.idUsuario)
+          const response = await TimelineService.quantityPerTimeline(this.selectedProject.id, this.selectedUser.idUsuario);
 
           if (response && Array.isArray(response)) {
             this.chartData.labels = response.map((item) => {
@@ -109,15 +103,12 @@
     },
     mounted() {
       if (this.selectedProject) {
-        this.fetchTimelines(this.selectedProject, this.userSelected);
+        this.fetchTimelines(this.selectedProject, this.selectedUser);
       }
     },
     watch: {
-      selectedProject(newProject) {
-        if (newProject) {
-          this.fetchTimelines(newProject);
-        }
-      },
+      selectedProject: "fetchTimelines",
+      selectedUser: "fetchTimelines",
     },
   };
   </script>

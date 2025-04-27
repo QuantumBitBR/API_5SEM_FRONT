@@ -7,7 +7,6 @@
         optionLabel="nome"
         placeholder="Select a Project"
         class="w-full md:w-56"
-        @change="fetchOneProject"
       />
     </div>
     <div>
@@ -17,7 +16,6 @@
         optionLabel="nomeUsuario"
         placeholder="Select a User"
         class="w-full md:w-56"
-        @change="fetchOneProject"
       />
     </div>
   </div>
@@ -52,8 +50,6 @@ export default {
     },
     async fetchUsers() {
       try {
-        console.log("fetchUsers");
-        console.log(this.selectedProject)
         const all_users = await ProjectService.listUsers(this.selectedProject.id);
         this.users = [{ idUsuario: 0, nomeUsuario: "Todos" }, ...all_users];
         this.selectedUser = this.users[0];
@@ -61,9 +57,6 @@ export default {
         console.error("Error to find data:", error);
       }
     },
-    async fetchOneProject(){
-      console.log(`Id do projeto: ${this.selectedProject.id} e Id do usuário: ${this.selectedUser.idUsuario}`)
-    }
   },
   mounted() {
     this.fetchProjects();
@@ -73,6 +66,7 @@ export default {
       this.$emit("project-selected", newProject);
     },
     selectedUser(newUser) {
+      console.log("USER:", newUser)
       this.$emit("user-selected", newUser);
     },
   },

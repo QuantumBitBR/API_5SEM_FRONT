@@ -1,16 +1,16 @@
 import { api } from "./apiConfig";
 
 class StatusService {
-    async quantityPerStatus(project_id: any, userId: number) {
+    async quantityPerStatus(project_id: any, userId: any) {
         try {
             const params: any = {};
-            if (project_id.id !== 0) {
-                params.projetoId = project_id.id;
+            if (project_id !== undefined && project_id !== 0) {
+                params.projetoId = project_id;
             }
             if (userId !== undefined && userId !== 0) {
                 params.userId = userId;
             }
-            const endpoint = "fatoStatusUserStory/quantidade-por-status";
+            const endpoint = "/userStory/percentual-por-status";
             const response = await api.get(endpoint, { params });
             return response.data;
         } catch (error) {

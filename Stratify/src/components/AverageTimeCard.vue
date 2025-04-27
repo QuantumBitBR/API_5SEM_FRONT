@@ -14,8 +14,8 @@ import AverageTimeService from "@/services/AverageTimeService";
 export default {
   components: { Card },
   props: {
-    selectedProject: Object,
-    userSelected: Object,
+    selectedProject: null,
+    selectedUser: null,
   },
   data() {
     return {
@@ -25,7 +25,7 @@ export default {
   methods: {
     async fetchAverageTime() {
         try {
-          const data = await AverageTimeService.getAverageTime(this.selectedProject.id, this.userSelected.usuarioId);
+          const data = await AverageTimeService.getAverageTime(this.selectedProject.id, this.selectedUser.idUsuario);
           if(data !== undefined){
             this.averageTime = data.tempoMedio ? parseFloat(data.tempoMedio.toFixed(1)) : "---";
           }else{
@@ -39,9 +39,10 @@ export default {
   },
   watch: {
     selectedProject: "fetchAverageTime",
+    selectedUser: "fetchAverageTime",
   },
   mounted() {
-    if (this.selectedProject) {
+    if (this.selectedProject && this.selectedUser) {
         this.fetchAverageTime();
     }
   },

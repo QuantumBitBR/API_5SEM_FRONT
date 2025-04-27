@@ -20,15 +20,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import TagTable from "../components/TagTable.vue";
-import TotalCards from "@/components/TotalCards.vue";
 import AverageTimeCard from "@/components/AverageTimeCard.vue";
-import SelectProject from "@/components/SelectProject.vue";
 import DonutChart from "@/components/DonutChart.vue";
-import Navbar from "@/components/Navbar.vue";
 import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
+import Navbar from "@/components/Navbar.vue";
+import SelectProject from "@/components/SelectProject.vue";
+import TagTable from "@/components/TagTable.vue";
 import TimelineChart from "@/components/TimelineChart.vue";
+import TotalCards from "@/components/TotalCards.vue";
+import { ref } from "vue";
 
 const selectedProject = ref(null);
 const selectedUser = ref(null);
@@ -37,8 +37,8 @@ const handleProjectSelection = (project) => {
   selectedProject.value = project;
 };
 
-const handleUserSelection = (project) => {
-  selectedUser.value = project;
+const handleUserSelection = (user) => {
+  selectedUser.value = user;
 };
 
 </script>

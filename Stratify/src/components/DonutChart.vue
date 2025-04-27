@@ -12,10 +12,8 @@ import Chart from "primevue/chart";
 export default {
   components: { Chart },
   props: {
-    selectedProject: {
-      type: String,
-      default: null,
-    },
+    selectedProject: null,
+    selectedUser: null,
   },
   data() {
     return {
@@ -70,12 +68,12 @@ export default {
     };
   },
   methods: {
-    async fetchCards(project) {
+    async fetchCards() {
       try {
-        const response = await StatusService.quantityPerStatus(project);
+        const response = await StatusService.quantityPerStatus(this.selectedProject.id, this.selectedUser.idUsuario);
         this.chartData.labels = response.map((item) => {
-          const status = item.status;
-          return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+          const status = item.nomeStatus;
+          return status;
         });
         this.chartData.datasets[0].data = response.map((item) => item.percentual);
       } catch (error) {
@@ -83,17 +81,14 @@ export default {
       }
     },
   },
+  watch: {
+    selectedProject: "fetchCards",
+    selectedUser: "fetchCards",
+  },
   mounted() {
     if (this.selectedProject) {
-      this.fetchCards(this.selectedProject);
+      this.fetchCards();
     }
-  },
-  watch: {
-    selectedProject(newProject) {
-      if (newProject) {
-        this.fetchCards(newProject);
-      }
-    },
   },
 };
 </script>

@@ -1,11 +1,12 @@
 import { api } from "./apiConfig";
 
 class TagService {
-    async quantityPerTag(project_id: any, userId: number) {
+    async quantityPerTag(project_id: any, userId: any) {
         try {
+            console.log("HIIIIIIIIIIIIIIIIIII")
             const params: any = {};
-            if (project_id.id !== 0) {
-                params.projetoId = project_id.id;
+            if (project_id !== undefined && project_id !== 0) {
+                params.projetoId = project_id;
             }
             if (userId !== undefined && userId !== 0) {
                 params.userId = userId;
