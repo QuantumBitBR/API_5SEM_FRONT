@@ -41,6 +41,7 @@
 <script>
 import loginService from '@/services/loginService';
 import { showToast } from '@/eventBus';
+import Cookies from "js-cookie";
 
 export default {
     data() {
@@ -53,15 +54,24 @@ export default {
         async login() {
             try {
                 const user = await loginService.doLogin(this.email, this.password);
+                if(user.requireReset){
+                    showToast({
+                        severity: 'info',
+                        summary: 'Change Password',
+                        detail: 'You need to change your temporary password',
+                        life: 3000
+                    });
+                    this.$router.push(`/reset?id=${user.id}`);
+                }else{
+                    showToast({
+                        severity: 'success',
+                        summary: 'Login bem-sucedido',
+                        detail: 'Login realizado com sucesso',
+                        life: 3000
+                    });
+                    this.$router.push("/dashboard");
+                }
 
-                showToast({
-                    severity: 'success',
-                    summary: 'Login bem-sucedido',
-                    detail: 'Login realizado com sucesso',
-                    life: 3000
-                });
-
-                this.$router.push("/dashboard");
             } catch (error) {
                 console.error(error);
 

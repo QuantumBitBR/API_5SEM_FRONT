@@ -1,6 +1,5 @@
 import { api, login_api } from "./apiConfig";
-import Cookies from "js-cookie";
-
+import tokenService from "./TokenService";
 class LoginService {
     async doLogin(email: string, senha: string) {
         try {
@@ -14,9 +13,9 @@ class LoginService {
             });
 
             if (response.status === 200) {
-                const { token, user } = response.data;
-                this.storeToken(token);
-                return user;
+                const data = response.data;
+                tokenService.storeToken(data.token);
+                return data;
             } else {
                 throw new Error("Unexpected response from server");
             }
@@ -30,8 +29,26 @@ class LoginService {
         }
     }
 
-    private storeToken(token: string) {
-        Cookies.set("authToken", token, { expires: 7 });
+    async changePassword(idUsuario: number, novaSenha: string) {
+        try {
+            const response = await api.put("/usuario/resetar-senha", {
+                idUsuario,
+                novaSenha,
+            });
+
+            if (response.status === 200) {
+                return true;
+            } else {
+                throw new Error("Unexpected response from server");
+            }
+        } catch (error: any) {
+            if (error.response) {
+                const apiMessage = error.response.data?.message || "Erro desconhecido";
+                throw new Error(apiMessage);
+            }
+
+            throw error;
+        }
     }
 }
 
