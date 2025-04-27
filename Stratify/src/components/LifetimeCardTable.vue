@@ -14,6 +14,7 @@ export default {
   components: { Chart },
   props: {
     selectedProject: Object,
+    userSelected: Object,
   },
   data() {
     return {
@@ -82,7 +83,7 @@ export default {
     async fetchChartData() {
       if (!this.selectedProject || this.selectedProject.id === undefined) return;
       try {
-        const dados = await LifeTimeService.quantityPerProject(this.selectedProject);
+        const dados = await LifeTimeService.quantityPerProject(this.selectedProject, this.userSelected);
         if (dados) {
           this.chartData.labels = dados.map(item => item.idUserStory); 
           this.chartData.datasets[0].data = dados.map(item => item.tempoMedio);

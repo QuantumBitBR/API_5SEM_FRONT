@@ -1,11 +1,21 @@
 // Service (AverageTimeService.ts)
-import {api} from "@/services/apiConfig";
+import { api } from "@/services/apiConfig";
 
 class AverageTimeService {
-  async getAverageTime(projectId: any) {
-    if(projectId !== 0){
+  async getAverageTime(projectId: any, userId: number) {
+    if (projectId !== 0) {
       try {
-        const response = await api.get(`/fatoeficiencia/total?projetoId=${projectId}`);
+        const params: any = {};
+        
+        if (projectId !== undefined && projectId !== 0) {
+          params.projetoId = projectId;
+        }
+        
+        if (userId !== undefined && userId !== 0) {
+          params.userId = userId;
+        }
+
+        const response = await api.get("/fatoeficiencia/media-tempo/", { params });
         return response.data;
 
       } catch (error) {
@@ -16,6 +26,4 @@ class AverageTimeService {
   }
 }
 
-
 export default new AverageTimeService();
-

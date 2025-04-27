@@ -18,10 +18,8 @@ export default {
         Column,
     },
     props: {
-        selectedProject: {
-            type: String,
-            default: null,
-        },
+        selectedProject: Object,
+        userSelected: Object,
     },
     data() {
         return {
@@ -49,7 +47,7 @@ export default {
     },
     mounted() {
         if (this.selectedProject) {
-            this.fetchTags(this.selectedProject);
+            this.fetchTags(this.selectedProject, this.userSelected);
         }
     },
     watch:{

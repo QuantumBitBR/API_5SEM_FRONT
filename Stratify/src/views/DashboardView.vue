@@ -2,18 +2,18 @@
   <div class="app-container">
     <Navbar/>
     <div class="card">
-      <SelectProject @project-selected="handleProjectSelection" />
+      <SelectProject @project-selected="handleProjectSelection" @user-selected="handleUserSelection"/>
       <div class="QuantitativeCards">
-        <TotalCards />
-        <AverageTimeCard :selectedProject="selectedProject" />
+        <TotalCards :selectedProject="selectedProject" :selectedUser="selectedUser"/>
+        <AverageTimeCard :selectedProject="selectedProject" :selectedUser="selectedUser" />
       </div>
       <div class="grid-container1">
-        <TimelineChart :selectedProject="selectedProject" class="grid_item"/>
-        <TagTable :selectedProject="selectedProject" class="grid_item" />
+        <TimelineChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+        <TagTable :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
       </div>
       <div class="grid-container2">
-        <DonutChart :selectedProject="selectedProject" class="grid_item"/>
-        <LifetimeCardTable :selectedProject="selectedProject" id="lifetimeTable" class="grid_item"/>
+        <DonutChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+        <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable" class="grid_item"/>
       </div>
     </div>
   </div>
@@ -31,9 +31,14 @@ import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
 import TimelineChart from "@/components/TimelineChart.vue";
 
 const selectedProject = ref(null);
+const selectedUser = ref(null);
 
 const handleProjectSelection = (project) => {
   selectedProject.value = project;
+};
+
+const handleUserSelection = (project) => {
+  selectedUser.value = project;
 };
 
 </script>
