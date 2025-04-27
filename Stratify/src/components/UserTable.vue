@@ -1,18 +1,8 @@
 <template>
   <div class="tabela">
     <Toast />
-    <DataTable
-      :value="usuarios"
-      class="tabela-src"
-      removableSort
-      showGridlines
-      stripedRows
-      selectionMode="single"
-      :selection="selectedUsuario"
-      @selection-change="onSelection"
-      scrollable
-      scrollHeight="400px"
-    >
+    <DataTable :value="usuarios" class="tabela-src" removableSort showGridlines stripedRows selectionMode="single"
+      :selection="selectedUsuario" @selection-change="onSelection" scrollable scrollHeight="400px">
       <Column field="nome" header="Nome" sortable>
         <template #body="{ data }">
           <i class="pi pi-user" style="margin-right: 8px"></i>
@@ -24,45 +14,34 @@
 
       <Column field="cargo" header="Cargo" sortable>
         <template #body="{ data }">
-          <Dropdown
-            v-model="data.cargo"
-            :options="cargos"
-            optionLabel="label"
-            optionValue="value"
-            class="w-full"
-            @change="handleRole(data)"
-          />
+          <Dropdown v-model="data.cargo" :options="cargos" optionLabel="label" optionValue="value" class="w-full"
+            @change="handleRole(data)" />
         </template>
       </Column>
 
       <Column field="gestor" header="Gestor">
         <template #body="{ data }">
           <template v-if="data.cargo === 'USER'">
-            <Dropdown
-              v-model="data.gestor"
-              :options="gestores"
-              optionLabel="label"
-              optionValue="value"
-              class="w-full"
-            />
+            <b>Atual: </b>{{ data.gestor }}
+            <Dropdown v-model="data.gestor" :value="data.gestor" :options="gestores" optionLabel="label"
+              optionValue="value" class="w-full" @update:modelValue="val => {
+                atribuirGestor(data.id, val);
+                const selectedGestor = gestores.find(g => g.value === val);
+                if (selectedGestor) {
+                  data.gestor = selectedGestor.label;
+                }
+              }" />
           </template>
-          <template v-else>
-            {{ data.gestor }}
+          <template v-if="data.cargo === 'ADMIN' || data.cargo === 'GESTOR'">
+            <b>N/A</b>
           </template>
         </template>
       </Column>
 
       <Column field="habilitado" header="Habilitado">
         <template #body="{ data }">
-          <ToggleButton
-            v-model="data.habilitado"
-            @update:modelValue="val => onToggleStatus(data, val)"
-            onLabel="Sim"
-            offLabel="Não"
-            onIcon="pi pi-check"
-            offIcon="pi pi-times"
-            class="p-button-sm"
-          />
+          <ToggleButton v-model="data.habilitado" @update:modelValue="val => onToggleStatus(data, val)" onLabel="Sim"
+            offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" class="p-button-sm" />
         </template>
       </Column>
 
@@ -78,16 +57,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Dropdown from 'primevue/dropdown';
-import ToggleButton from 'primevue/togglebutton';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast';
-import userService from '../services/userService';
-import type { UsuarioInfo } from '../services/userService';
 import ManagementService from '@/services/ManagementService';
+import Column from 'primevue/column';
+import DataTable from 'primevue/datatable';
+import Dropdown from 'primevue/dropdown';
+import Toast from 'primevue/toast';
+import ToggleButton from 'primevue/togglebutton';
+import { useToast } from 'primevue/usetoast';
+import { onMounted, ref } from 'vue';
+import type { UsuarioInfo } from '../services/userService';
+import userService from '../services/userService';
 
 const toast = useToast();
 
@@ -100,18 +79,17 @@ const cargos = [
 
 const usuarios = ref<UsuarioInfo[]>([]);
 const selectedUsuario = ref<UsuarioInfo | null>(null);
-// lista de gestores filtrada dos próprios usuários
 const gestores = ref<{ label: string; value: number }[]>([]);
 
-async function handleRole(data: any){
-  try{
+async function handleRole(data: any) {
+  try {
     const res = await ManagementService.setNewRole(data.id, data.cargo);
-    if(res){
+    if (res) {
       toast.add({ severity: 'success', summary: 'Role changed', detail: 'User role changed successfully', life: 3000 });
-    }else{
+    } else {
       toast.add({ severity: 'warn', summary: 'Atenção', detail: 'Não foi possível alterar o cargo.', life: 3000 });
     }
-  }catch(error){
+  } catch (error) {
     toast.add({ severity: 'error', summary: 'Erro', detail: 'Error to change role', life: 3000 });
     console.error(error);
   }
@@ -128,13 +106,51 @@ async function fetchUsuarios() {
       habilitado: u.isEnable
     } as any));
 
-    // filtrar gestores existentes (role === 'GESTOR')
-    gestores.value = usuarios.value
-      .filter(u => u.role === 'GESTOR')
-      .map(u => ({ label: u.nome, value: u.id }));
+    usuarios.value.forEach(u => {
+      const gestorEncontrado = gestores.value.find(g => g.label === u.gestorNome);
+      if (gestorEncontrado) {
+        u.gestorNome = gestorEncontrado.label;
+      }
+    });
+
+
+    console.log('Usuários:', usuarios.value);
+
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
     console.error('Erro ao carregar usuários:', err);
+  }
+}
+
+async function fetchGestores() {
+  try {
+    const data = await userService.listarGestores();
+    // mapear usuários e construir lista de gestores
+    gestores.value = data.map(u => ({
+      ...u,
+      label: u.nome,
+      value: u.id
+    } as any));
+
+
+    console.log('Gestores:', gestores.value);
+
+
+  } catch (err) {
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
+    console.error('Erro ao carregar usuários:', err);
+  }
+}
+
+async function atribuirGestor(userId: number, newGestorId: number) {
+  try {
+    await userService.atribuirGestor(userId, newGestorId);
+    fetchUsuarios();
+
+    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Gestor atualizado', life: 3000 });
+  } catch (err) {
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao atualizar gestor', life: 3000 });
+    console.error('Erro ao atualizar gestor:', err);
   }
 }
 
@@ -170,7 +186,11 @@ function onSelection(event: { value: UsuarioInfo }) {
   selectedUsuario.value = event.value;
 }
 
-onMounted(fetchUsuarios);
+onMounted(async () => {
+  await fetchGestores();
+  await fetchUsuarios();
+});
+
 </script>
 
 <style scoped>
@@ -202,5 +222,9 @@ onMounted(fetchUsuarios);
 
 .btn-senha:hover {
   background-color: #303f9f;
+}
+
+b {
+  font-weight: bold;
 }
 </style>
