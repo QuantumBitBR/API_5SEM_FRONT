@@ -38,8 +38,6 @@
 <script>
 import { showToast } from '@/eventBus';
 import loginService from '@/services/loginService';
-import tokenService from '@/services/tokenService';
-import Cookies from "js-cookie";
 
 
 export default {

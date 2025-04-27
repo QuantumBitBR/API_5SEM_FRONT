@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
-class TokenService {
+class tokenService {
     private readonly tokenKey = "authToken";
 
     public storeToken(token: string): void {
@@ -27,4 +27,4 @@ class TokenService {
     }
 }
 
-export default new TokenService();
+export default new tokenService();

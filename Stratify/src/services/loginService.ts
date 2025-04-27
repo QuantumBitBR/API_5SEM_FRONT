@@ -1,6 +1,5 @@
 import { api, login_api } from "./apiConfig";
-import Cookies from "js-cookie";
-import tokenService from "./tokenService";
+import tokenService from "./TokenService";
 class LoginService {
     async doLogin(email: string, senha: string) {
         try {
