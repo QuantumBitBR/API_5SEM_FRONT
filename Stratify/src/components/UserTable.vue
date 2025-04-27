@@ -37,16 +37,20 @@
       <Column field="gestor" header="Gestor">
         <template #body="{ data }">
           <template v-if="data.cargo === 'USER'">
-            <Dropdown
-              v-model="data.gestor"
-              :options="gestores"
-              optionLabel="label"
-              optionValue="value"
-              class="w-full"
-            />
+        <Dropdown
+          v-model="data.gestor"
+          :value="data.gestor"
+          :options="gestores"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+          @update:modelValue="val => {
+            atribuirGestor(data.id, val);
+          }"
+        />
           </template>
           <template v-else>
-            {{ data.gestor }}
+        {{ data.gestor }}
           </template>
         </template>
       </Column>
@@ -77,15 +81,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
-import ToggleButton from 'primevue/togglebutton';
 import Toast from 'primevue/toast';
+import ToggleButton from 'primevue/togglebutton';
 import { useToast } from 'primevue/usetoast';
-import userService from '../services/userService';
+import { onMounted, ref } from 'vue';
 import type { UsuarioInfo } from '../services/userService';
+import userService from '../services/userService';
 
 const toast = useToast();
 
@@ -98,7 +102,6 @@ const cargos = [
 
 const usuarios = ref<UsuarioInfo[]>([]);
 const selectedUsuario = ref<UsuarioInfo | null>(null);
-// lista de gestores filtrada dos próprios usuários
 const gestores = ref<{ label: string; value: number }[]>([]);
 
 async function fetchUsuarios() {
@@ -112,13 +115,49 @@ async function fetchUsuarios() {
       habilitado: u.isEnable
     } as any));
 
-    // filtrar gestores existentes (role === 'GESTOR')
-    gestores.value = usuarios.value
-      .filter(u => u.role === 'GESTOR')
-      .map(u => ({ label: u.nome, value: u.id }));
+      usuarios.value.forEach(u => {
+      const gestorEncontrado = gestores.value.find(g => g.label === u.gestorNome);
+      if (gestorEncontrado) {
+        u.gestorNome = gestorEncontrado.label;
+      }
+    });
+
+
+    console.log('Usuários:', usuarios.value);
+
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
     console.error('Erro ao carregar usuários:', err);
+  }
+}
+
+async function fetchGestores() {
+  try {
+    const data = await userService.listarGestores();
+    // mapear usuários e construir lista de gestores
+    gestores.value = data.map(u => ({
+      ...u,
+      label: u.nome,
+      value: u.id
+    } as any));
+
+
+    console.log('Gestores:', gestores.value);
+
+
+  } catch (err) {
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
+    console.error('Erro ao carregar usuários:', err);
+  }
+}
+
+async function atribuirGestor(userId: number, newGestorId: number) {
+  try {
+    await userService.atribuirGestor(userId, newGestorId);
+    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Gestor atualizado', life: 3000 });
+  } catch (err) {
+    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao atualizar gestor', life: 3000 });
+    console.error('Erro ao atualizar gestor:', err);
   }
 }
 
@@ -154,7 +193,11 @@ function onSelection(event: { value: UsuarioInfo }) {
   selectedUsuario.value = event.value;
 }
 
-onMounted(fetchUsuarios);
+onMounted(async () => {
+  await fetchGestores();
+  await fetchUsuarios();
+});
+
 </script>
 
 <style scoped>

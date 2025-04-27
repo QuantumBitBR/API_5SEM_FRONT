@@ -17,6 +17,13 @@ const userService = {
     return response.data;
   },
 
+  async listarGestores(): Promise<UsuarioInfo[]> {
+    // Garante que usa a instância do api com interceptores de token
+    const response = await api.get<UsuarioInfo[]>('/usuario/por-role/GESTOR');
+    return response.data;
+  },
+
+
   async ativarUsuario(id: number): Promise<void> {
     await api.put(`/usuario/${id}/ativar`);
   },
@@ -27,6 +34,10 @@ const userService = {
 
   async resetarSenha(id: number): Promise<void> {
     await api.post('/usuario/admin-reset-senha', { idUsuario: id });
+  },
+
+  async atribuirGestor(userId: number, newGestorId: number): Promise<void> {
+    await api.post('/usuario/lideradosgestor', { idUsuarioGestor: newGestorId, listaIdLiderados: [userId] });
   }
 
 };
