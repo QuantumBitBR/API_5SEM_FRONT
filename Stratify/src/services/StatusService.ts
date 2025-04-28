@@ -1,18 +1,19 @@
-import {api} from "./apiConfig";
+import { api } from "./apiConfig";
 
-class StatusService{
-    async quantityPerStatus(project_id: any){
-        try{
-            let endpoint = ""
-            if(project_id.id === 0){
-                //corrigir endpoint
-                endpoint = "fatoStatusUserStory/quantidade-por-status"
-            }else{
-                endpoint = `fatoStatusUserStory/quantidade-por-status?projetoId=${project_id.id}`
+class StatusService {
+    async quantityPerStatus(project_id: any, userId: any) {
+        try {
+            const params: any = {};
+            if (project_id !== undefined && project_id !== 0) {
+                params.projetoId = project_id;
             }
-            const response = await api.get(endpoint);
+            if (userId !== undefined && userId !== 0) {
+                params.userId = userId;
+            }
+            const endpoint = "/userStory/percentual-por-status";
+            const response = await api.get(endpoint, { params });
             return response.data;
-        }catch (error){
+        } catch (error) {
             console.error("Erro to get data:", error);
             throw error;
         }

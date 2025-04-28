@@ -1,5 +1,6 @@
 import { api, login_api } from "./apiConfig";
 import tokenService from "./TokenService";
+import Cookies from "js-cookie";
 class LoginService {
     async doLogin(email: string, senha: string) {
         try {
@@ -14,6 +15,8 @@ class LoginService {
 
             if (response.status === 200) {
                 const data = response.data;
+                Cookies.set('RoleCookie', data.role); 
+                Cookies.set('IdCookie', data.id); 
                 tokenService.storeToken(data.token);
                 return data;
             } else {

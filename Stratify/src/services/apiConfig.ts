@@ -26,26 +26,26 @@ let hasShownTokenExpiredToast = false;
 api.interceptors.response.use(response => {
     return response;
 }, error => {
-    // if (error.response && error.response.status === 401) {
-    //     if (!hasShownTokenExpiredToast) {
-    //         hasShownTokenExpiredToast = true;
+    if (error.response && error.response.status === 401) {
+        if (!hasShownTokenExpiredToast) {
+            hasShownTokenExpiredToast = true;
 
-            // Cookies.remove('authToken');
+            Cookies.remove('authToken');
 
-    //         showToast({
-    //             severity: "error",
-    //             summary: "Sessão expirada",
-    //             detail: "Sua sessão expirou. Faça login novamente.",
-    //             life: 3000
-    //         });
+            showToast({
+                severity: "error",
+                summary: "Sessão expirada",
+                detail: "Sua sessão expirou. Faça login novamente.",
+                life: 3000
+            });
 
-            // router.push('/');
+            router.push('/');
 
-    //          setTimeout(() => {
-    //              hasShownTokenExpiredToast = false;
-    //          }, 3000);
-    //     }
-    // }
+            setTimeout(() => {
+                hasShownTokenExpiredToast = false;
+            }, 3000);
+        }
+    }
 
     return Promise.reject(error);
 });

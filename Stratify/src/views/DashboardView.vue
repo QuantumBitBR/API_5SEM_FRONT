@@ -2,39 +2,51 @@
   <div class="app-container">
     <Navbar/>
     <div class="card">
-      <SelectProject @project-selected="handleProjectSelection" />
+      <SelectProject @project-selected="handleProjectSelection" @user-selected="handleUserSelection"/>
       <div class="QuantitativeCards">
-        <TotalCards />
-        <AverageTimeCard :selectedProject="selectedProject" />
+        <TotalCards :selectedProject="selectedProject" :selectedUser="selectedUser"/>
+        <AverageTimeCard :selectedProject="selectedProject" :selectedUser="selectedUser" />
       </div>
       <div class="grid-container1">
-        <TimelineChart :selectedProject="selectedProject" class="grid_item"/>
-        <TagTable :selectedProject="selectedProject" class="grid_item" />
+        <TimelineChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+        <TagTable :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
       </div>
       <div class="grid-container2">
-        <DonutChart :selectedProject="selectedProject" class="grid_item"/>
-        <LifetimeCardTable :selectedProject="selectedProject" id="lifetimeTable" class="grid_item"/>
+        <DonutChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+        <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable" class="grid_item"/>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import TagTable from "../components/TagTable.vue";
-import TotalCards from "@/components/TotalCards.vue";
 import AverageTimeCard from "@/components/AverageTimeCard.vue";
-import SelectProject from "@/components/SelectProject.vue";
 import DonutChart from "@/components/DonutChart.vue";
-import Navbar from "@/components/Navbar.vue";
 import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
+import Navbar from "@/components/Navbar.vue";
+import SelectProject from "@/components/SelectProject.vue";
+import TagTable from "@/components/TagTable.vue";
 import TimelineChart from "@/components/TimelineChart.vue";
+import TotalCards from "@/components/TotalCards.vue";
+import TokenService from "@/services/TokenService";
+import { onMounted, ref } from "vue";
+import Cookies from "js-cookie";
 
 const selectedProject = ref(null);
+const selectedUser = ref(null);
+const role = ref(null);
 
 const handleProjectSelection = (project) => {
   selectedProject.value = project;
 };
+
+const handleUserSelection = (user) => {
+  selectedUser.value = user;
+};
+
+onMounted(() => {
+  role.value = Cookies.get('RoleCookie')
+});
 
 </script>
 

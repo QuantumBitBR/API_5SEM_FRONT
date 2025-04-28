@@ -18,10 +18,8 @@ export default {
         Column,
     },
     props: {
-        selectedProject: {
-            type: String,
-            default: null,
-        },
+        selectedProject: null,
+        selectedUser: null,
     },
     data() {
         return {
@@ -29,19 +27,9 @@ export default {
         };
     },
     methods:{
-        async fetchTags(project){
+        async fetchTags(){
             try{
-                this.tags = await TagService.quantityPerTag(project);
-                // this.tags = [
-                //     { nomeTag: "Frontend", quantidadeCards: 12 },
-                //     { nomeTag: "Backend", quantidadeCards: 8 },
-                //     { nomeTag: "Bug", quantidadeCards: 5 },
-                //     { nomeTag: "Deploy", quantidadeCards: 3 },
-                //     { nomeTag: "Frontend2", quantidadeCards: 12 },
-                //     { nomeTag: "Backend2", quantidadeCards: 8 },
-                //     { nomeTag: "Bug2", quantidadeCards: 5 },
-                //     { nomeTag: "Deploy2", quantidadeCards: 3 },
-                // ];
+                this.tags = await TagService.quantityPerTag(this.selectedProject.id, this.selectedUser.idUsuario);
             }catch(error){
                 console.error("Error to find data:", error)
             }
@@ -49,15 +37,12 @@ export default {
     },
     mounted() {
         if (this.selectedProject) {
-            this.fetchTags(this.selectedProject);
+            this.fetchTags();
         }
     },
     watch:{
-        selectedProject(newProject){
-            if(newProject){
-                this.fetchTags(newProject)
-            }
-        }
+        selectedProject: "fetchTags",
+        selectedUser: "fetchTags",
     }
 };
 </script>

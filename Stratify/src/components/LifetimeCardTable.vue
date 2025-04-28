@@ -13,7 +13,8 @@ import LifeTimeService from "@/services/lifeTimeService.ts";
 export default {
   components: { Chart },
   props: {
-    selectedProject: Object,
+    selectedProject: null,
+    selectedUser: null,
   },
   data() {
     return {
@@ -80,9 +81,8 @@ export default {
   },
   methods: {
     async fetchChartData() {
-      if (!this.selectedProject || this.selectedProject.id === undefined) return;
       try {
-        const dados = await LifeTimeService.quantityPerProject(this.selectedProject);
+        const dados = await LifeTimeService.quantityPerProject(this.selectedProject.id, this.selectedUser.idUsuario);
         if (dados) {
           this.chartData.labels = dados.map(item => item.idUserStory); 
           this.chartData.datasets[0].data = dados.map(item => item.tempoMedio);
@@ -94,10 +94,13 @@ export default {
     }
   },
   watch: {
-    selectedProject: "fetchChartData"
+    selectedProject: "fetchChartData",
+    selectedUser: "fetchChartData",
   },
   mounted() {
-    this.fetchChartData();
+    if(this.selectedProject){
+      this.fetchChartData();
+    }
   }
 };
 </script>
