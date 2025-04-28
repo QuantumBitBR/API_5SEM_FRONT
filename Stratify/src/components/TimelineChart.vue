@@ -83,7 +83,6 @@
     methods: {
       async fetchTimelines() {
         try {
-          console.log(this.selectedProject.id, this.selectedUser.idUsuario)
           const response = await TimelineService.quantityPerTimeline(this.selectedProject.id, this.selectedUser.idUsuario);
 
           if (response && Array.isArray(response)) {

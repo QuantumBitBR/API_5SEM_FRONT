@@ -10,12 +10,10 @@ class AverageTimeService {
         params.projetoId = projectId;
       }
 
-      console.log(userId)
       if (userId !== undefined && userId !== 0) {
         params.userId = userId;
       }
 
-      console.log(params)
       const response = await api.get("/fatoeficiencia/media-tempo", { params });
       return response.data;
     } catch (error) {

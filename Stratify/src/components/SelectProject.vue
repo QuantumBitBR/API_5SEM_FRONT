@@ -9,7 +9,7 @@
         class="w-full md:w-56"
       />
     </div>
-    <div>
+    <div v-if="role !== 'USER'">
       <Select
         v-model="selectedUser"
         :options="users"
@@ -24,6 +24,7 @@
 <script>
 import Select from "primevue/select";
 import ProjectService from "@/services/ProjectService";
+import Cookies from "js-cookie";
 
 export default {
   components: {
@@ -33,6 +34,8 @@ export default {
     return {
       selectedProject: null,
       selectedUser: null,
+      role: null,
+      id: null,
       projects: [],
       users: [],
     };
@@ -52,13 +55,19 @@ export default {
       try {
         const all_users = await ProjectService.listUsers(this.selectedProject.id);
         this.users = [{ idUsuario: 0, nomeUsuario: "Todos" }, ...all_users];
-        this.selectedUser = this.users[0];
+        if (this.role === 'USER') {
+          this.selectedUser = this.users.find(user => user.idUsuario == this.id) || this.users[0];
+        } else {
+          this.selectedUser = this.users[0];
+        }
       } catch (error) {
         console.error("Error to find data:", error);
       }
     },
   },
   mounted() {
+    this.role = Cookies.get("RoleCookie") || 'USER';
+    this.id = Cookies.get("IdCookie" || 0)
     this.fetchProjects();
   },
   watch: {
@@ -66,7 +75,6 @@ export default {
       this.$emit("project-selected", newProject);
     },
     selectedUser(newUser) {
-      console.log("USER:", newUser)
       this.$emit("user-selected", newUser);
     },
   },

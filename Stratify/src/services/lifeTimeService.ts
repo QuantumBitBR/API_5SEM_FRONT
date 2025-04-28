@@ -2,8 +2,6 @@ import { api } from "./apiConfig";
 
 class LifeTimeService {
   async quantityPerProject(project_id: any, userId: any) {
-    console.log(project_id)
-    console.log(userId)
     try {
       const params: any = {};
 

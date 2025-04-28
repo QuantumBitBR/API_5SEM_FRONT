@@ -12,7 +12,6 @@ class ProjectService{
     }
     async listUsers(idProjeto?: any, idGestor?: number) {
         try {
-            console.log("ID PROJETO:", idProjeto)
             const params: any = {};
             
             if (idProjeto !== undefined && idProjeto !== 0) {

@@ -82,8 +82,6 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        console.log(this.selectedProject)
-        console.log(this.selectedUser)
         const dados = await LifeTimeService.quantityPerProject(this.selectedProject.id, this.selectedUser.idUsuario);
         if (dados) {
           this.chartData.labels = dados.map(item => item.idUserStory); 

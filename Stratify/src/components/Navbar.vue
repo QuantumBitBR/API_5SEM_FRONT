@@ -10,11 +10,11 @@
             <i class="pi pi-home"></i>
             <span>Home</span>
           </button>
-          <button class="nav-btn" @click="$router.push('/management')">
+          <button v-if="role === 'ADMIN'" class="nav-btn" @click="$router.push('/management')">
             <i class="pi pi-users"></i>
             <span>Usuários</span>
           </button>
-          <button class="nav-btn" @click="logout">
+          <button class="nav-btn" @click="$router.push('/')">
             <i class="pi pi-sign-out"></i>
             <span>Sair</span>
           </button>
@@ -31,13 +31,17 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 export default {
   name: "StratifyMenubar",
-  methods: {
-    logout() {
-      console.log("Usuário deslogado");
-    },
+  data(){
+    return{
+      role: null,
+    }
   },
+  mounted(){
+    this.role = Cookies.get('RoleCookie')
+  }
 };
 </script>
 
