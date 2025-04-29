@@ -1,17 +1,19 @@
 // services/TotalCardsService.ts
-import api from "@/services/apiConfig";
+import { api } from "@/services/apiConfig";
 
 class TotalCardsService {
-  async fetchTotalCards(project_id: number): Promise<string | number> {
+  async fetchTotalCards(project_id?: number, userId?: number): Promise<string | number> {
     try {
-      let endpoint = " ";
-      if (project_id !== 0) {
-        endpoint = `/userStory/total-cards?projetoId=${project_id}`;
+      const params: any = {};
+      
+      if (project_id !== undefined && project_id !== 0) {
+        params.projetoId = project_id;
       }
-      else {
-        endpoint = "/userStory/total-cards";
+      if (userId !== undefined && userId !== 0) {
+        params.userId = userId;
       }
-      const response = await api.get<{ quantidadeUserStories: number }>(endpoint);
+
+      const response = await api.get("/userStory/total-cards", { params });
       return response.data.quantidadeUserStories;
     } catch (error) {
       console.error("Erro ao buscar os dados:", error);

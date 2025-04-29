@@ -12,10 +12,8 @@
   export default {
     components: { Chart },
     props: {
-      selectedProject: {
-        type: String,
-        default: null,
-      },
+      selectedProject: null,
+      selectedUser: null,
     },
     data() {
       return {
@@ -25,12 +23,12 @@
             {
               label: "Criados",
               data: [],
-              backgroundColor: "#071952",
+              backgroundColor: "#5739B4",
             },
             {
               label: "Finalizados",
               data: [],
-              backgroundColor: "#088395",
+              backgroundColor: "#071952",
             },
           ],
         },
@@ -83,12 +81,15 @@
       };
     },
     methods: {
-      async fetchTimelines(project) {
+      async fetchTimelines() {
         try {
-          const response = await TimelineService.quantityPerTimeline(project);
-  
+          const response = await TimelineService.quantityPerTimeline(this.selectedProject.id, this.selectedUser.idUsuario);
+
           if (response && Array.isArray(response)) {
-            this.chartData.labels = response.map((item) => item.periodo);
+            this.chartData.labels = response.map((item) => {
+              const periodo = item.periodo;
+              return periodo.charAt(0).toUpperCase() + periodo.slice(1).toLowerCase();
+            });
             this.chartData.datasets[0].data = response.map((item) => item.quantidadeCriadas);
             this.chartData.datasets[1].data = response.map((item) => item.quantidadeFinalizadas);
           } else {
@@ -101,15 +102,12 @@
     },
     mounted() {
       if (this.selectedProject) {
-        this.fetchTimelines(this.selectedProject);
+        this.fetchTimelines(this.selectedProject, this.selectedUser);
       }
     },
     watch: {
-      selectedProject(newProject) {
-        if (newProject) {
-          this.fetchTimelines(newProject);
-        }
-      },
+      selectedProject: "fetchTimelines",
+      selectedUser: "fetchTimelines",
     },
   };
   </script>
@@ -122,6 +120,8 @@
     flex-direction: column;
     padding: 30px;
     height: 400px;
+    border: 1px solid #5739B4;
+    border-radius: 12px;
   }
   .bar_title {
     padding: 5px;

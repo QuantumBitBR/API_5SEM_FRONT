@@ -3,6 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue, { defaultOptions } from 'primevue/config';
+import { ToastService } from 'primevue';
 import App from './App.vue'
 import Aura from '@primeuix/themes/aura';
 import { Menubar } from 'primevue';
@@ -20,6 +21,7 @@ app.use(PrimeVue, {
 });
 app.use(router);
 app.component('Menubar', Menubar);
+app.use(ToastService)
 app.use(createPinia())
 
 

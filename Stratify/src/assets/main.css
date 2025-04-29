@@ -1,12 +1,18 @@
 @import './base.css';
+@import "tailwindcss";
+
+html{
+  background-color: #F4F6F9;
+}
 
 #app {
   margin: 0 auto;
-  padding: 2rem;
-  padding-top: 1rem;
+  /* padding: 2rem; */
+  padding-top: 0;
   padding-bottom: 0;
   font-weight: normal;
   background-color: #F4F6F9;
+  height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6{

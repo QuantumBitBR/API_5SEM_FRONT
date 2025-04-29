@@ -1,8 +1,8 @@
 <template>
-  <Card class="p-4 text-white custom-card" id="AverageTime" @click="fetchAverageTime">
+  <Card class=" text-white custom-card" id="AverageTime" @click="fetchAverageTime">
     <template #content>
       <div class="text-sm">Média total de horas:</div>
-      <div class="text-3xl font-bold">{{ averageTime }}</div>
+      <div class="total_number">{{ averageTime }}</div>
     </template>
   </Card>
 </template>
@@ -14,7 +14,8 @@ import AverageTimeService from "@/services/AverageTimeService";
 export default {
   components: { Card },
   props: {
-    selectedProject: Object,
+    selectedProject: null,
+    selectedUser: null,
   },
   data() {
     return {
@@ -24,8 +25,12 @@ export default {
   methods: {
     async fetchAverageTime() {
         try {
-          const data = await AverageTimeService.getAverageTime(this.selectedProject.id);
-          this.averageTime = data.tempoMedio ? parseFloat(data.tempoMedio.toFixed(1)) : "---";
+          const data = await AverageTimeService.getAverageTime(this.selectedProject.id, this.selectedUser.idUsuario);
+          if(data !== undefined){
+            this.averageTime = data.tempoMedio ? parseFloat(data.tempoMedio.toFixed(1)) : "---";
+          }else{
+            this.averageTime = "---"
+          }
         } catch (error) {
           console.error("Error fetching average time:", error);
           this.averageTime = "---";
@@ -34,9 +39,10 @@ export default {
   },
   watch: {
     selectedProject: "fetchAverageTime",
+    selectedUser: "fetchAverageTime",
   },
   mounted() {
-    if (this.selectedProject) {
+    if (this.selectedProject && this.selectedUser) {
         this.fetchAverageTime();
     }
   },
@@ -50,5 +56,12 @@ export default {
   color: black;
   width: 100%;
   height: 7em;
+  border: 1px solid #5739B4;
+  border-radius: 12px;
+}
+
+.total_number{
+  font-weight: 600;
+  font-size: 2em;
 }
 </style>

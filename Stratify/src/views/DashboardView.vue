@@ -1,44 +1,53 @@
 <template>
   <div class="app-container">
-    <Sidebar @toggle="handleSidebarToggle" />
-    <div class="card" :class="{ 'sidebar-open': isSidebarOpen }">
-      <!-- <Menubar :model="items" /> -->
-      <SelectProject @project-selected="handleProjectSelection" />
+    <Navbar/>
+    <div class="card">
+      <SelectProject @project-selected="handleProjectSelection" @user-selected="handleUserSelection"/>
       <div class="QuantitativeCards">
-        <TotalCards />
-        <AverageTimeCard :selectedProject="selectedProject" />
+        <TotalCards :selectedProject="selectedProject" :selectedUser="selectedUser"/>
+        <AverageTimeCard :selectedProject="selectedProject" :selectedUser="selectedUser" />
       </div>
-      <div class="grid-container">
-        <TimelineChart :selectedProject="selectedProject" class="grid_item"/>
-        <TagTable :selectedProject="selectedProject" class="grid_item" />
-        <DonutChart :selectedProject="selectedProject" class="grid_item"/>
-        <LifetimeCardTable :selectedProject="selectedProject" id="lifetimeTable" class="grid_item"/>
+      <div class="grid-container1">
+        <TimelineChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+        <TagTable :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
+      </div>
+      <div class="grid-container2">
+        <DonutChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+        <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable" class="grid_item"/>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import TagTable from "../components/TagTable.vue";
-import TotalCards from "@/components/TotalCards.vue";
 import AverageTimeCard from "@/components/AverageTimeCard.vue";
-import SelectProject from "@/components/SelectProject.vue";
 import DonutChart from "@/components/DonutChart.vue";
-import Sidebar from "@/components/Sidebar.vue";
 import LifetimeCardTable from "@/components/LifetimeCardTable.vue";
+import Navbar from "@/components/Navbar.vue";
+import SelectProject from "@/components/SelectProject.vue";
+import TagTable from "@/components/TagTable.vue";
 import TimelineChart from "@/components/TimelineChart.vue";
+import TotalCards from "@/components/TotalCards.vue";
+import TokenService from "@/services/TokenService";
+import { onMounted, ref } from "vue";
+import Cookies from "js-cookie";
 
 const selectedProject = ref(null);
-const isSidebarOpen = ref(false);
+const selectedUser = ref(null);
+const role = ref(null);
 
 const handleProjectSelection = (project) => {
   selectedProject.value = project;
 };
 
-const handleSidebarToggle = (isOpen) => {
-  isSidebarOpen.value = isOpen;
+const handleUserSelection = (user) => {
+  selectedUser.value = user;
 };
+
+onMounted(() => {
+  role.value = Cookies.get('RoleCookie')
+});
+
 </script>
 
 <style scoped>
@@ -46,11 +55,7 @@ const handleSidebarToggle = (isOpen) => {
 .card {
   position: relative;
   transition: padding-left 0.3s ease;
-  padding-left: 3em;
-}
-
-.sidebar-open {
-  padding-left: 12em;
+  padding: 0 2em 0 2em
 }
 
 .QuantitativeCards {
@@ -62,15 +67,24 @@ const handleSidebarToggle = (isOpen) => {
   margin-top: 2em;
 }
 
-.grid-container {
+.grid-container1 {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 1fr;
   gap: 10px;
   width: 100%;
-  padding: 20px;
+  padding-top: 20px;
+  padding-bottom: 0;
 }
 
+.grid-container2 {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  grid-template-rows: 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 20px 0;
+}
 
 #lifetimeTable {
     display: flex;

@@ -13,19 +13,23 @@ import LifeTimeService from "@/services/lifeTimeService.ts";
 export default {
   components: { Chart },
   props: {
-    selectedProject: Object,
+    selectedProject: null,
+    selectedUser: null,
   },
   data() {
     return {
       chartData: {
         labels: [], 
+        // labels: ["Seg", "Ter", "Qua", "Qui", "Sex"],
         datasets: [
           {
             label: "Tempo Gasto",
             backgroundColor: "#071952",
             borderRadius: 10,
             data: [], 
+            // data: [2, 4, 3, 5, 1],
             labels: [] 
+            // labels: ["2h", "4h", "3h", "5h", "1h"]
           },
         ],
       },
@@ -77,9 +81,8 @@ export default {
   },
   methods: {
     async fetchChartData() {
-      if (!this.selectedProject || this.selectedProject.id === undefined) return;
       try {
-        const dados = await LifeTimeService.quantityPerProject(this.selectedProject);
+        const dados = await LifeTimeService.quantityPerProject(this.selectedProject.id, this.selectedUser.idUsuario);
         if (dados) {
           this.chartData.labels = dados.map(item => item.idUserStory); 
           this.chartData.datasets[0].data = dados.map(item => item.tempoMedio);
@@ -91,10 +94,13 @@ export default {
     }
   },
   watch: {
-    selectedProject: "fetchChartData"
+    selectedProject: "fetchChartData",
+    selectedUser: "fetchChartData",
   },
   mounted() {
-    this.fetchChartData();
+    if(this.selectedProject){
+      this.fetchChartData();
+    }
   }
 };
 </script>
@@ -107,7 +113,9 @@ export default {
   margin: 0px;
   border-radius: 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: auto;
+  overflow: hidden;
+  border: 1px solid #5739B4;
+  border-radius: 12px;
 }
 
 .lifetime_title{
