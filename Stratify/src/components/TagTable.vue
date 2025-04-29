@@ -2,7 +2,7 @@
     <div class="tabela">
         <DataTable :value="tags" class="tabela-src" removableSort stripedRows>
             <Column class="abc" field="nomeTag" sortable header="Etiqueta" />
-            <Column field="quantidadeCards" sortable header="Quantidade Card" />
+            <Column field="quantidade" sortable header="Quantidade Card" />
         </DataTable>
     </div>
 </template>

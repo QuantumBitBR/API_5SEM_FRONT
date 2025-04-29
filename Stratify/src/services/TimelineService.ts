@@ -8,7 +8,7 @@ class TimelineService {
                 params.idProjeto = project_id;
             }
             if (userId !== undefined && userId !== 0) {
-                params.userId = userId;
+                params.idUsuario = userId;
             }
             const endpoint = "temporais/projeto";
             const response = await api.get(endpoint, { params });

@@ -9,7 +9,7 @@
         class="w-full md:w-56"
       />
     </div>
-    <div v-if="role !== 'USER'">
+    <div v-if="role !== 'OPERADOR'">
       <Select
         v-model="selectedUser"
         :options="users"
@@ -55,7 +55,7 @@ export default {
       try {
         const all_users = await ProjectService.listUsers(this.selectedProject.id);
         this.users = [{ idUsuario: 0, nomeUsuario: "Todos" }, ...all_users];
-        if (this.role === 'USER') {
+        if (this.role === 'OPERADOR') {
           this.selectedUser = this.users.find(user => user.idUsuario == this.id) || this.users[0];
         } else {
           this.selectedUser = this.users[0];
@@ -66,7 +66,7 @@ export default {
     },
   },
   mounted() {
-    this.role = Cookies.get("RoleCookie") || 'USER';
+    this.role = Cookies.get("RoleCookie") || 'OPERADOR';
     this.id = Cookies.get("IdCookie" || 0)
     this.fetchProjects();
   },

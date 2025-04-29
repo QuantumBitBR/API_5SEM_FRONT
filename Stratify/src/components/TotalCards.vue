@@ -19,10 +19,18 @@ export default {
       totalCards: "---",
     };
   },
+  props: {
+        selectedProject: null,
+        selectedUser: null,
+    },
   methods: {
     async updateTotalCards() {
-      this.totalCards = await TotalCardsService.fetchTotalCards();
+      this.totalCards = await TotalCardsService.fetchTotalCards(this.selectedProject.id, this.selectedUser.idUsuario);
     }
+  },
+  watch:{
+        selectedProject: "updateTotalCards",
+        selectedUser: "updateTotalCards",
   },
   mounted() {
     this.updateTotalCards();

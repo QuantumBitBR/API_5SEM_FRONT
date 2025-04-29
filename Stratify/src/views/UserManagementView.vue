@@ -1,7 +1,7 @@
 <template>
 	<div class="management-container">
 		<Navbar />
-		<UserFilter />
+		<!--<UserFilter />-->
 		<UserTable />
 	</div>
 </template>
