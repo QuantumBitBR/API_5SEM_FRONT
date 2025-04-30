@@ -8,14 +8,14 @@ class TagService {
                 params.projetoId = project_id;
             }
             if (userId !== undefined && userId !== 0) {
-                params.userId = userId;
+                params.usuarioId = userId;
             }
-            const endpoint = "fatoProgresso/quantidade-por-etiqueta";
+            const endpoint = "userStory/quantidade-por-tag";
             const response = await api.get(endpoint, { params });
             return response.data;
         } catch (error) {
             console.error("Erro to get data:", error);
-            throw error;
+            return [];
         }
     }
 }

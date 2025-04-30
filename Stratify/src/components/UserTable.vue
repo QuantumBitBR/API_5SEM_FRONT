@@ -21,7 +21,7 @@
 
       <Column field="gestor" header="Gestor">
         <template #body="{ data }">
-          <template v-if="data.cargo === 'USER'">
+          <template v-if="data.cargo === 'OPERADOR'">
             <b>Atual: </b>{{ data.gestor }}
             <Dropdown v-model="data.gestor" :value="data.gestor" :options="gestores" optionLabel="label"
               optionValue="value" class="w-full" @update:modelValue="val => {
@@ -74,7 +74,7 @@ const toast = useToast();
 const cargos = [
   { label: 'Admin', value: 'ADMIN' },
   { label: 'Gestor', value: 'GESTOR' },
-  { label: 'Funcionário', value: 'USER' }
+  { label: 'Funcionário', value: 'OPERADOR' }
 ];
 
 const usuarios = ref<UsuarioInfo[]>([]);
