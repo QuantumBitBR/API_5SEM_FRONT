@@ -8,7 +8,7 @@ class StatusService {
                 params.projetoId = project_id;
             }
             if (userId !== undefined && userId !== 0) {
-                params.usuarioId = userId;
+                params.userId = userId;
             }
             const endpoint = "/userStory/percentual-por-status";
             const response = await api.get(endpoint, { params });

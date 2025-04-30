@@ -6,11 +6,11 @@ class LifeTimeService {
       const params: any = {};
 
       if (project_id !== undefined && project_id !== 0) {
-        params.projetoId = project_id;
+        params.project_id = project_id;
       }
 
       if (userId !== undefined && userId !== 0) {
-        params.usuarioId = userId;
+        params.user_id = userId;
       }
 
       const endpoint = "/fatoeficiencia/projeto";
@@ -19,7 +19,7 @@ class LifeTimeService {
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar os dados:", error);
-      return [];
+      throw error;
     }
   }
 }

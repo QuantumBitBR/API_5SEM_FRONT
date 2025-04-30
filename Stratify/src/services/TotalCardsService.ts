@@ -7,10 +7,10 @@ class TotalCardsService {
       const params: any = {};
       
       if (project_id !== undefined && project_id !== 0) {
-        params.idProjeto = project_id;
+        params.projetoId = project_id;
       }
       if (userId !== undefined && userId !== 0) {
-        params.idUsuario = userId;
+        params.userId = userId;
       }
 
       const response = await api.get("/userStory/total-cards", { params });

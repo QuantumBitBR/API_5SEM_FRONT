@@ -11,7 +11,7 @@ class AverageTimeService {
       }
 
       if (userId !== undefined && userId !== 0) {
-        params.usuarioId = userId;
+        params.userId = userId;
       }
 
       const response = await api.get("/fatoeficiencia/media-tempo", { params });
