@@ -2,7 +2,7 @@
   <div class="tabela">
     <Toast />
     <DataTable :value="usuarios" class="tabela-src" removableSort showGridlines stripedRows selectionMode="single"
-      :selection="selectedUsuario" @selection-change="onSelection" scrollable scrollHeight="400px">
+      :selection="selectedUsuario" @selection-change="onSelection" scrollable scrollHeight="calc(100vh - 160px)">
       <Column field="nome" header="Nome" sortable>
         <template #body="{ data }">
           <i class="pi pi-user" style="margin-right: 8px"></i>
