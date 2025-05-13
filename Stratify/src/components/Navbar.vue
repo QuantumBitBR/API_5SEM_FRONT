@@ -23,7 +23,7 @@
     </template>
 
     <template #end>
-      <button class="profile-btn">
+      <button class="profile-btn" @click="$router.push('/profile')">
         <i class="pi pi-user"><span>Teste</span></i>
       </button>
     </template>
