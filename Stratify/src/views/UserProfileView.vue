@@ -21,7 +21,7 @@
 					<span class="label">Email:</span>
 					<span class="value" v-if="user">{{user.email}}</span>
 				</div>
-				<button class="btn-senha">Resetar senha</button>
+				<button v-if="user" class="btn-senha" @click="$router.push(`/reset?id=${user.id}`)">Resetar senha</button>
 			</div>
 		</div>
 	</div>
