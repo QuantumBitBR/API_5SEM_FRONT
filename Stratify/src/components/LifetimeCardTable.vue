@@ -15,7 +15,7 @@
     </DataTable>
 
 
-    <p v-if="dadosTabela.length === 0" class="loading-text">Carregando dados...</p>
+
   </div>
 </template>
 
@@ -91,5 +91,7 @@ export default {
   text-align: center;
   font-size: 1rem;
   color: #101010;
+
 }
+.title{color:black;}
 </style>
