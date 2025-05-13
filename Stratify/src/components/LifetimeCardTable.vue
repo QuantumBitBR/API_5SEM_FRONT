@@ -4,7 +4,7 @@
     <div class="title">Tempo médio gasto por card</div>
     <DataTable :value="dadosTabela" class="tabela-src" removableSort showGridlines stripedRows scrollable scrollHeight="200px">
 
-      <Column field="idUserStory" header="ID User Story" sortable />
+      <Column field="nomeUserStory" header="User Story" sortable />
 
 
       <Column field="tempoMedio" header="Tempo Médio (horas)" sortable>
@@ -62,7 +62,7 @@ export default {
         console.log("Dados recebidos:", dados);
         if (dados && Array.isArray(dados)) {
           this.dadosTabela = dados.map(item => ({
-            idUserStory: item.idUserStory,
+            nomeUserStory: item.descricao,
             tempoMedio: item.tempoMedio,
           }));
         } else {
@@ -90,6 +90,6 @@ export default {
 .loading-text {
   text-align: center;
   font-size: 1rem;
-  color: #999;
+  color: #101010;
 }
 </style>
