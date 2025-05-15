@@ -1,4 +1,3 @@
-// stores/quantitative.ts
 import { defineStore } from 'pinia';
 import AverageTimeService from '@/services/AverageTimeService';
 import TotalCardsService from '@/services/TotalCardsService';
