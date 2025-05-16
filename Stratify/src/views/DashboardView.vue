@@ -31,6 +31,7 @@
       <div class="grid-container1">
         <template v-if="chartStore.loadingTimeline">
           <Skeleton  width="100%" height="400px" class="skeleton-chart" />
+          <Skeleton  width="100%" height="400px" class="skeleton-chart" />
         </template>
         <template v-else>
           <TimelineChart
