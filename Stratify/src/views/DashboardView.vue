@@ -15,6 +15,9 @@
         <DonutChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
         <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable" class="grid_item"/>
       </div>
+      <div class="grid-container3">
+        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +31,7 @@ import SelectProject from "@/components/SelectProject.vue";
 import TagTable from "@/components/TagTable.vue";
 import TimelineChart from "@/components/TimelineChart.vue";
 import TotalCards from "@/components/TotalCards.vue";
+import SprintsChart from "@/components/SprintsChart.vue";
 import TokenService from "@/services/TokenService";
 import { onMounted, ref } from "vue";
 import Cookies from "js-cookie";
@@ -67,6 +71,16 @@ onMounted(() => {
   margin-top: 2em;
 }
 
+.sprints-chart-container {
+  display: flex;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+  padding-top: 20px;
+  padding-bottom: 0;
+  height: 300px;
+}
+
 .grid-container1 {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -84,6 +98,14 @@ onMounted(() => {
   gap: 10px;
   width: 100%;
   padding: 20px 0;
+}
+
+.grid-container3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 0px 0;
 }
 
 #lifetimeTable {
