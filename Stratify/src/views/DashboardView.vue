@@ -9,7 +9,7 @@
 
       <!-- Quantitative Cards -->
        <div class="QuantitativeCards">
-        <template v-if="quantStore.loadingAverageTime">
+        <template v-if="quantStore.loadingAverageTime && quantStore.loadingTotalCards ">
           <!-- Skeletons para TotalCards e AverageTimeCard -->
           <Skeleton width="100%" height="7em" class="mr-4" />
           <Skeleton width="100%" height="7em" />
@@ -29,7 +29,7 @@
 
       <!-- Grid 1: Timeline + TagTable -->
       <div class="grid-container1">
-        <template v-if="chartStore.loadingTimeline">
+        <template v-if="chartStore.loadingTimeline && chartStore.loadingTags">
           <Skeleton  width="100%" height="400px" class="skeleton-chart" />
           <Skeleton  width="100%" height="400px" class="skeleton-chart" />
         </template>
@@ -39,12 +39,13 @@
             :chartOptions="chartOptions"
             class="grid_item"
           />
-          <TagTable
-            :selectedProject="selectedProject"
-            :selectedUser="selectedUser"
-            class="grid_item"
+           <TagTable
+             :tags="chartStore.tags"
+             class="grid_item"
           />
         </template>
+
+
       </div>
 
       <!-- Grid 2: Donut + Lifetime -->
@@ -104,6 +105,7 @@ watch(
     quantStore.fetchAverageTime(pid, uid);
     quantStore.fetchTotalCards(pid, uid);
     chartStore.fetchTimeline(pid, uid);
+    chartStore.fetchTags(pid, uid);
   },
   { immediate: true }
 );
