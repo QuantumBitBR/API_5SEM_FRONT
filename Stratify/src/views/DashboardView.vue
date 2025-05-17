@@ -16,7 +16,7 @@
         <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable" class="grid_item"/>
       </div>
       <div class="grid-container3">
-        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item"/>
+        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" @user-selected="handleUserSelection" class="sprints-chart-container"/>
       </div>
     </div>
   </div>
