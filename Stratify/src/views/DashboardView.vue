@@ -28,14 +28,18 @@
       </div>
 
       <div class="grid-container2">
-        <template v-if="chartStore.loadingStatus">
+        <template v-if="chartStore.loadingStatus && chartStore.loadingLifetime">
           <Skeleton class="skeleton-donut" width="100%" height="300px" />
+          <Skeleton class="skeleton-table" width="100%" height="300px"/>
         </template>
         <template v-else>
           <DonutChart :chartData="donutData" :chartOptions="donutOptions" class="grid_item" />
+          <LifetimeCardTable
+            :lifetimeData="chartStore.lifetimeData"
+            class="grid_item"
+          />
         </template>
-        <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable"
-          class="grid_item" />
+
       </div>
 
     </div>
@@ -81,6 +85,7 @@ watch(
     chartStore.fetchTimeline(pid, uid);
     chartStore.fetchTags(pid, uid);
     chartStore.fetchStatus(pid, uid);
+    chartStore.fetchLifetime(pid, uid);
   },
   { immediate: true }
 );

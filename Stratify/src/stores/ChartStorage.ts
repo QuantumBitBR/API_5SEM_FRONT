@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import TimelineService from '@/services/TimelineService';
 import TagService      from '@/services/TagService';
 import StatusService   from '@/services/StatusService';
-
+import LifeTimeService from '@/services/lifeTimeService';
 interface TimelineItem {
   periodo: string;
   quantidadeCriadas: number;
@@ -20,6 +20,11 @@ interface StatusItem {
   percentual: number;
 }
 
+interface LifetimeItem {
+  descricao: string;
+  tempoMedio: number;
+}
+
 interface ChartState {
   timelineData: TimelineItem[];
   loadingTimeline: boolean;
@@ -27,6 +32,8 @@ interface ChartState {
   loadingTags: boolean;
   statusData: StatusItem[];
   loadingStatus: boolean;
+  lifetimeData: LifetimeItem[];
+  loadingLifetime: boolean;
 }
 
 export const useChartStore = defineStore<'chart', ChartState>('chart', {
@@ -37,6 +44,8 @@ export const useChartStore = defineStore<'chart', ChartState>('chart', {
     loadingTags: false,
     statusData: [],
     loadingStatus: false,
+    lifetimeData: [],
+    loadingLifetime: false,
   }),
   actions: {
     async fetchTimeline(projectId: number, userId: number) {
@@ -61,6 +70,23 @@ export const useChartStore = defineStore<'chart', ChartState>('chart', {
         this.loadingTags = false;
       }
     },
+
+
+    async fetchLifetime(projectId: number, userId: number) {
+      this.loadingLifetime = true;
+      try {
+        const resp = await LifeTimeService.quantityPerProject(projectId, userId);
+        this.lifetimeData = Array.isArray(resp)
+          ? resp.map(item => ({
+              descricao: item.descricao,
+              tempoMedio: item.tempoMedio
+            }))
+          : [];
+      } catch {
+        this.lifetimeData = [];
+      } finally {
+        this.loadingLifetime = false;
+      }},
 
     async fetchStatus(projectId: number, userId: number) {
       this.loadingStatus = true;
