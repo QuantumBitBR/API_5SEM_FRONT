@@ -1,66 +1,31 @@
 <template>
-  <Card class=" text-white custom-card" id="AverageTime" @click="fetchAverageTime">
+  <Card class="custom-card">
     <template #content>
       <div class="text-sm">Média total de horas:</div>
-      <div class="total_number">{{ averageTime }}</div>
+      <div class="total_number">
+        {{ averageTime !== null ? averageTime : '0' + 'h'}}
+      </div>
     </template>
   </Card>
 </template>
 
-<script>
-import Card from "primevue/card";
-import AverageTimeService from "@/services/AverageTimeService";
+<script setup lang="ts">
+import Card from 'primevue/card';
 
-export default {
-  components: { Card },
-  props: {
-    selectedProject: null,
-    selectedUser: null,
-  },
-  data() {
-    return {
-      averageTime: "---",
-    };
-  },
-  methods: {
-    async fetchAverageTime() {
-        try {
-          const data = await AverageTimeService.getAverageTime(this.selectedProject.id, this.selectedUser.idUsuario);
-          if(data !== undefined){
-            this.averageTime = data.tempoMedio ? parseFloat(data.tempoMedio.toFixed(1)) : "---";
-          }else{
-            this.averageTime = "---"
-          }
-        } catch (error) {
-          console.error("Error fetching average time:", error);
-          this.averageTime = "---";
-        }
-      },
-  },
-  watch: {
-    selectedProject: "fetchAverageTime",
-    selectedUser: "fetchAverageTime",
-  },
-  mounted() {
-    if (this.selectedProject && this.selectedUser) {
-        this.fetchAverageTime();
-    }
-  },
-};
+defineProps<{
+  averageTime: number|null
+}>();
 </script>
 
 <style scoped>
 .custom-card {
   background: #fff;
-  border-radius: 0;
-  color: black;
-  width: 100%;
-  height: 7em;
   border: 1px solid #5739B4;
   border-radius: 12px;
+  width: 100%;
+  height: 7em;
 }
-
-.total_number{
+.total_number {
   font-weight: 600;
   font-size: 2em;
 }
