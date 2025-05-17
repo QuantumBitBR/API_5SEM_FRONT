@@ -1,89 +1,64 @@
 <template>
   <div class="app-container">
-    <Navbar/>
+    <Navbar />
     <div class="card">
-      <SelectProject
-        @project-selected="handleProjectSelection"
-        @user-selected="handleUserSelection"
-      />
+      <SelectProject @project-selected="handleProjectSelection" @user-selected="handleUserSelection" />
 
-      <!-- Quantitative Cards -->
-       <div class="QuantitativeCards">
-        <template v-if="quantStore.loadingAverageTime && quantStore.loadingTotalCards ">
-          <!-- Skeletons para TotalCards e AverageTimeCard -->
+      <div class="QuantitativeCards">
+        <template v-if="quantStore.loadingAverageTime && quantStore.loadingTotalCards">
           <Skeleton width="100%" height="7em" class="mr-4" />
           <Skeleton width="100%" height="7em" />
         </template>
         <template v-else>
-          <TotalCards
-            :selectedProject="selectedProject"
-            :selectedUser="selectedUser"
-          />
-          <AverageTimeCard
-            :selectedProject="selectedProject"
-            :selectedUser="selectedUser"
-            :averageTime="quantStore.averageTime"
-          />
+          <TotalCards :selectedProject="selectedProject" :selectedUser="selectedUser" />
+          <AverageTimeCard :selectedProject="selectedProject" :selectedUser="selectedUser"
+            :averageTime="quantStore.averageTime" />
         </template>
       </div>
 
-      <!-- Grid 1: Timeline + TagTable -->
       <div class="grid-container1">
         <template v-if="chartStore.loadingTimeline && chartStore.loadingTags">
-          <Skeleton  width="100%" height="400px" class="skeleton-chart" />
-          <Skeleton  width="100%" height="400px" class="skeleton-chart" />
+          <Skeleton width="100%" height="400px" class="skeleton-chart" />
+          <Skeleton width="100%" height="400px" class="skeleton-chart" />
         </template>
         <template v-else>
-          <TimelineChart
-            :chartData="chartData"
-            :chartOptions="chartOptions"
-            class="grid_item"
-          />
-           <TagTable
-             :tags="chartStore.tags"
-             class="grid_item"
-          />
+          <TimelineChart :chartData="chartData" :chartOptions="chartOptions" class="grid_item" />
+          <TagTable :tags="chartStore.tags" class="grid_item" />
         </template>
-
-
       </div>
 
-      <!-- Grid 2: Donut + Lifetime -->
       <div class="grid-container2">
-        <DonutChart
-          :selectedProject="selectedProject"
-          :selectedUser="selectedUser"
-          class="grid_item"
-        />
-        <LifetimeCardTable
-          :selectedProject="selectedProject"
-          :selectedUser="selectedUser"
-          id="lifetimeTable"
-          class="grid_item"
-        />
+        <template v-if="chartStore.loadingStatus">
+          <Skeleton class="skeleton-donut" width="100%" height="300px" />
+        </template>
+        <template v-else>
+          <DonutChart :chartData="donutData" :chartOptions="donutOptions" class="grid_item" />
+        </template>
+        <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable"
+          class="grid_item" />
       </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue';
-import { useQuantitativeStore } from '@/stores/QuantitativeCardsStorage';       // seu store de cards
-import { useChartStore }       from '@/stores/ChartStorage';       // o novo store só de gráficos
-import Navbar                  from '@/components/Navbar.vue';
-import SelectProject           from '@/components/SelectProject.vue';
-import TotalCards              from '@/components/TotalCards.vue';
-import AverageTimeCard         from '@/components/AverageTimeCard.vue';
-import TimelineChart           from '@/components/TimelineChart.vue';
-import TagTable                from '@/components/TagTable.vue';
-import DonutChart              from '@/components/DonutChart.vue';
-import LifetimeCardTable       from '@/components/LifetimeCardTable.vue';
-import Skeleton                from 'primevue/skeleton';
-import Cookies                 from 'js-cookie';
+import { useQuantitativeStore } from '@/stores/QuantitativeCardsStorage';
+import { useChartStore } from '@/stores/ChartStorage';
+import Navbar from '@/components/Navbar.vue';
+import SelectProject from '@/components/SelectProject.vue';
+import TotalCards from '@/components/TotalCards.vue';
+import AverageTimeCard from '@/components/AverageTimeCard.vue';
+import TimelineChart from '@/components/TimelineChart.vue';
+import TagTable from '@/components/TagTable.vue';
+import DonutChart from '@/components/DonutChart.vue';
+import LifetimeCardTable from '@/components/LifetimeCardTable.vue';
+import Skeleton from 'primevue/skeleton';
+import Cookies from 'js-cookie';
 
 const selectedProject = ref(null);
-const selectedUser    = ref(null);
-const role            = ref(null);
+const selectedUser = ref(null);
 
 const quantStore = useQuantitativeStore();
 const chartStore = useChartStore();
@@ -96,7 +71,6 @@ function handleUserSelection(usr) {
   selectedUser.value = usr;
 }
 
-// dispara todos os fetches de uma vez, inclusive timeline
 watch(
   [selectedProject, selectedUser],
   ([proj, usr]) => {
@@ -106,15 +80,16 @@ watch(
     quantStore.fetchTotalCards(pid, uid);
     chartStore.fetchTimeline(pid, uid);
     chartStore.fetchTags(pid, uid);
+    chartStore.fetchStatus(pid, uid);
   },
   { immediate: true }
 );
 
 onMounted(() => {
-  role.value = Cookies.get('RoleCookie') || null;
+  Cookies.get('RoleCookie');
 });
 
-// monta os dados para o TimelineChart
+// Timeline chart data
 const chartData = computed(() => {
   const labels = chartStore.timelineData.map(item =>
     item.periodo.charAt(0).toUpperCase() + item.periodo.slice(1).toLowerCase()
@@ -122,13 +97,12 @@ const chartData = computed(() => {
   return {
     labels,
     datasets: [
-      { label: 'Criados',     data: chartStore.timelineData.map(i => i.quantidadeCriadas),     backgroundColor: '#5739B4' },
+      { label: 'Criados', data: chartStore.timelineData.map(i => i.quantidadeCriadas), backgroundColor: '#5739B4' },
       { label: 'Finalizados', data: chartStore.timelineData.map(i => i.quantidadeFinalizadas), backgroundColor: '#071952' },
     ]
   };
 });
 
-// opções fixas de configurações do chart
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -147,7 +121,57 @@ const chartOptions = {
     tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}` } }
   }
 };
+
+const donutData = computed(() => {
+  const labels = chartStore.statusData.map(s => s.nomeStatus);
+  const data = chartStore.statusData.map(s => s.percentual);
+  return {
+    labels,
+    datasets: [
+      {
+        data,
+        backgroundColor: ['#071952', '#5739B4', '#C6B7F4', '#2D9596', '#145DA0', '#1F6E8C']
+      }
+    ]
+  };
+});
+
+const donutOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'right',
+      labels: {
+        generateLabels: chart => {
+          const ds = chart.data.datasets[0];
+          const total = ds.data.reduce((a, v) => a + v, 0);
+          return chart.data.labels.map((label, i) => {
+            const val = ds.data[i];
+            const pct = ((val / total) * 100).toFixed(1) + '%';
+            return { text: `${label}: ${pct}`, fillStyle: ds.backgroundColor[i], index: i };
+          });
+        }
+      }
+    },
+    tooltip: {
+      callbacks: {
+        label: ctx => {
+          const ds = ctx.dataset.data;
+          const total = ds.reduce((a, v) => a + v, 0);
+          const val = ctx.raw;
+          return `${ctx.label}: ${((val / total) * 100).toFixed(1)}%`;
+        }
+      }
+    }
+  }
+};
+
+
 </script>
+
+
 <style scoped>
 .card {
   position: relative;
@@ -200,16 +224,14 @@ const chartOptions = {
 }
 
 .skeleton-card {
-  width: 12em;           /* mesmo width que antes */
-  height: 7em;           /* mesmo height que os cards */
-  background-color: #fff;/* fundo branco */
+  width: 12em;
+  height: 7em;
+  background-color: #fff;
   border: 1px solid #5739B4;
   border-radius: 12px;
 }
 
-/* margem igual ao mr-4 que criamos */
 .mr-4 {
   margin-right: 1em;
 }
-
 </style>
