@@ -33,7 +33,7 @@ const routes = [
                 showToast({
                     severity: 'error',
                     summary: 'Session expired',
-                    detail: 'Your session has expired. Please, log in again',
+                    detail: 'Your session has expired. Please log in again.',
                     life: 3000
                 });
                 next('/');
@@ -60,12 +60,28 @@ const routes = [
         name: 'reset',
         component: () => import('../views/ChangeInfoView.vue')
     },
-
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    const publicPaths = ['/'];
+    const token = TokenService.getToken();
+
+    if (!publicPaths.includes(to.path) && !token) {
+        showToast({
+            severity: 'error',
+            summary: 'Session expired',
+            detail: 'Your session has expired. Please log in again.',
+            life: 3000
+        });
+        next('/');
+    } else {
+        next();
+    }
 });
 
 export default router;
