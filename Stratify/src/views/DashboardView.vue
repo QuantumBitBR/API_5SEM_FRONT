@@ -34,7 +34,6 @@ import Cookies from "js-cookie";
 
 const selectedProject = ref(null);
 const selectedUser = ref(null);
-const role = ref(null);
 
 const handleProjectSelection = (project) => {
   selectedProject.value = project;
@@ -45,7 +44,7 @@ const handleUserSelection = (user) => {
 };
 
 onMounted(() => {
-  role.value = Cookies.get('RoleCookie')
+
 });
 
 </script>
