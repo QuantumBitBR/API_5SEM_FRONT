@@ -115,6 +115,7 @@ async function handleRole(data, newRole) {
       emit('refresh');
     }
   } catch (error) {
+    console.error('Erro ao alterar cargo:', error);
     toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao alterar cargo', life: 3000 });
   }
 }
@@ -125,6 +126,7 @@ async function atribuirGestor(userId, newGestorId) {
     toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Gestor atualizado', life: 3000 });
     emit('refresh');
   } catch (err) {
+    console.error('Erro ao atualizar gestor:', err);
     toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao atualizar gestor', life: 3000 });
   }
 }
