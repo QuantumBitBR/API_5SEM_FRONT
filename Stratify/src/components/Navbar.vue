@@ -23,24 +23,27 @@
     </template>
 
     <template #end>
-      <button class="profile-btn">
-        <i class="pi pi-user"><span>Teste</span></i>
+      <button class="profile-btn" @click="$router.push('/profile')">
+        <i class="pi pi-user"><span v-if="username">{{username.nome}}</span></i>
       </button>
     </template>
   </Menubar>
 </template>
 
 <script>
+import TokenService from '@/services/TokenService';
 import Cookies from 'js-cookie';
 export default {
   name: "StratifyMenubar",
   data(){
     return{
       role: null,
+      username: null
     }
   },
   mounted(){
     this.role = Cookies.get('RoleCookie')
+    this.username = TokenService.decodeToken(TokenService.getToken());
   }
 };
 </script>
