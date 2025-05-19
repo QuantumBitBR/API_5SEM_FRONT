@@ -55,11 +55,11 @@ export default {
 
 <style scoped>
 .user-filter-container {
-  padding: 1rem 2rem;
+  padding: 2rem 3rem;
 }
 
 .filter-autocomplete {
-  width: 5%;
+  width: 7%;
 }
 
 :deep(.p-autocomplete) {
@@ -79,6 +79,6 @@ export default {
 }
 
 :deep(.p-autocomplete-item) {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.1rem;
 }
 </style>

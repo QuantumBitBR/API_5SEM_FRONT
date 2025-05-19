@@ -49,7 +49,7 @@ export default {
           severity: 'error',
           summary: 'Acesso negado',
           detail: 'Você não tem permissão para acessar esta página',
-          life: 3000
+          life: 4000
         });
         this.$router.push('/dashboard');
       }

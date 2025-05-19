@@ -154,12 +154,12 @@ async function atribuirGestor(userId, newGestorId) {
 
 <style scoped>
 .tabela {
-  padding: 40px 20px;
+  padding: 41px 21px;
 }
 
 .tabela-src {
   border: 1px solid #5739b4;
-  border-radius: 12px;
+  border-radius: 13px;
   background-color: #fff;
 }
 
