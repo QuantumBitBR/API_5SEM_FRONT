@@ -1,6 +1,5 @@
 <template>
-  <img v-if="loading" src="/loading.gif" alt="Carregando..." class="loading"/>
-  <div v-if="!loading" class="tabela">
+  <div class="tabela">
     <Toast />
     <DataTable :value="usuariosOrdenados" class="tabela-src" removableSort showGridlines stripedRows selectionMode="single"
       :selection="selectedUsuario" @selection-change="onSelection" scrollable scrollHeight="calc(100vh - 160px)">
@@ -79,64 +78,15 @@ const cargos = [
   { label: 'Funcionário', value: 'OPERADOR' }
 ];
 
-SCRUM-100-Adicionar-filtro-para-buscar-usuários-pelo-nome
 const selectedUsuario = ref(null);
 const internalUsuarios = ref([]);
 
-// Lista de usuários ordenada alfabeticamente
+
 const usuariosOrdenados = computed(() => {
   return [...internalUsuarios.value].sort((a, b) => a.nome.localeCompare(b.nome));
 });
 
-const loading = ref(true);
 
-const usuarios = ref<UsuarioInfo[]>([]);
-const selectedUsuario = ref<UsuarioInfo | null>(null);
-const gestores = ref<{ label: string; value: number }[]>([]);
-
-async function handleRole(data: any) {
-  try {
-    const res = await ManagementService.setNewRole(data.id, data.cargo);
-    if (res) {
-      toast.add({ severity: 'success', summary: 'Role changed', detail: 'User role changed successfully', life: 3000 });
-    } else {
-      toast.add({ severity: 'warn', summary: 'Atenção', detail: 'Não foi possível alterar o cargo.', life: 3000 });
-    }
-  } catch (error) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Error to change role', life: 3000 });
-    console.error(error);
-  }
-}
-
-async function fetchUsuarios() {
-  try {
-    const data = await userService.listarUsuarios();
-    usuarios.value = data.map(u => ({
-      ...u,
-      cargo: u.role,
-      gestor: u.gestorNome,
-      habilitado: u.isEnable
-    } as any));
-
-    usuarios.value.forEach(u => {
-      const gestorEncontrado = gestores.value.find(g => g.label === u.gestorNome);
-      if (gestorEncontrado) {
-        u.gestorNome = gestorEncontrado.label;
-      }
-    });
-
-
-    console.log('Usuários:', usuarios.value);
-    loading.value = false;
-
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
-    console.error('Erro ao carregar usuários:', err);
-  }
-}
-
-
-// Lista de gestores disponíveis (atualizada automaticamente)
 const gestoresDisponiveis = computed(() => {
   return internalUsuarios.value
     .filter(u => u.cargo === 'GESTOR')
@@ -147,7 +97,7 @@ const gestoresDisponiveis = computed(() => {
     }));
 });
 
-// Sincroniza os dados recebidos
+
 watch(() => props.usuarios, (newUsuarios) => {
   internalUsuarios.value = newUsuarios.map(u => ({
     ...u,
@@ -158,42 +108,56 @@ watch(() => props.usuarios, (newUsuarios) => {
 }, { immediate: true, deep: true });
 
 async function handleRole(data, newRole) {
-  try {
-    const res = await ManagementService.setNewRole(data.id, newRole);
-    if (res) {
-      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Cargo alterado', life: 3000 });
-      emit('refresh');
-    }
-  } catch (error) {
-    console.error('Erro ao alterar cargo:', error);
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao alterar cargo', life: 3000 });
+  const res = await ManagementService.setNewRole(data.id, newRole);
+
+  if (res) {
+    toast.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Cargo alterado com sucesso',
+      life: 3000
+    });
+    emit('refresh');
   }
 }
 
 async function atribuirGestor(userId, newGestorId) {
   try {
     await userService.atribuirGestor(userId, newGestorId);
-    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Gestor atualizado', life: 3000 });
+
+    toast.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Gestor atribuído com sucesso',
+      life: 3000
+    });
+
     emit('refresh');
   } catch (err) {
-    console.error('Erro ao atualizar gestor:', err);
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao atualizar gestor', life: 3000 });
+    console.error('Falha na atribuição de gestor:', err);
+
+    const errorDetail = err.response?.data?.message
+      ? `Falha: ${err.response.data.message}`
+      : 'Falha ao atualizar gestor. Tente novamente.';
+
+    toast.add({
+      severity: 'error',
+      summary: 'Erro',
+      detail: errorDetail,
+      life: 3000
+    });
   }
 }
 
-// Mantenha os outros métodos (onToggleStatus, resetarSenha, onSelection)
+
 </script>
 
 <style scoped>
 .tabela {
   padding: 40px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .tabela-src {
-  width: 100%;
   border: 1px solid #5739b4;
   border-radius: 12px;
   background-color: #fff;
@@ -221,13 +185,5 @@ async function atribuirGestor(userId, newGestorId) {
 
 b {
   font-weight: bold;
-}
-
-.loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
 }
 </style>
