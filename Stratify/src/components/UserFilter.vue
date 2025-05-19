@@ -1,9 +1,13 @@
 <template>
   <div class="user-filter-container">
+    <label class="filter-label" for="user-autocomplete">Busque Pelo Nome de Usuario:</label>
     <AutoComplete
+      inputId="user-autocomplete"
+      pls
+      placeholder="Digite o nome do usuário"
       v-model="selectedUser"
       :suggestions="filteredUserNames"
-      placeholder="Digite o nome do usuário"
+
       @complete="searchUsers"
       @item-select="handleUserSelect"
       @clear="handleClear"
@@ -58,6 +62,13 @@ export default {
   padding: 2rem 3rem;
 }
 
+.filter-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
 .filter-autocomplete {
   width: 7%;
 }
@@ -76,9 +87,15 @@ export default {
 :deep(.p-autocomplete-panel) {
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-top: -1px;
 }
 
 :deep(.p-autocomplete-item) {
   padding: 0.6rem 1.1rem;
+  border-bottom: none;
+}
+
+:deep(.p-autocomplete-items) {
+  padding: 0;
 }
 </style>
