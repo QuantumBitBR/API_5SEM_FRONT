@@ -91,7 +91,6 @@ watch(
 );
 
 onMounted(() => {
-  Cookies.get('RoleCookie');
 });
 
 // Timeline chart data

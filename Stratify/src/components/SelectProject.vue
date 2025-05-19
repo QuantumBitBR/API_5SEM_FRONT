@@ -24,7 +24,7 @@
 <script>
 import Select from "primevue/select";
 import ProjectService from "@/services/ProjectService";
-import Cookies from "js-cookie";
+import TokenService from "@/services/TokenService";
 
 export default {
   components: {
@@ -66,8 +66,9 @@ export default {
     },
   },
   mounted() {
-    this.role = Cookies.get("RoleCookie") || 'OPERADOR';
-    this.id = Cookies.get("IdCookie" || 0)
+    const token = TokenService.decodeToken();
+    this.role = token.role;
+    this.id = token.id;
     this.fetchProjects();
   },
   watch: {

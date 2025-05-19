@@ -10,11 +10,11 @@
             <i class="pi pi-home"></i>
             <span>Home</span>
           </button>
-          <button v-if="role === 'ADMIN'" class="nav-btn" @click="$router.push('/management')">
+          <button v-if="user && user.role === 'ADMIN'" class="nav-btn" @click="$router.push('/management')">
             <i class="pi pi-users"></i>
             <span>Usuários</span>
           </button>
-          <button class="nav-btn" @click="$router.push('/')">
+          <button class="nav-btn" @click="logout">
             <i class="pi pi-sign-out"></i>
             <span>Sair</span>
           </button>
@@ -24,7 +24,7 @@
 
     <template #end>
       <button class="profile-btn" @click="$router.push('/profile')">
-        <i class="pi pi-user"><span v-if="username">{{username.nome}}</span></i>
+        <i class="pi pi-user"><span v-if="user">{{user.nome}}</span></i>
       </button>
     </template>
   </Menubar>
@@ -32,18 +32,21 @@
 
 <script>
 import TokenService from '@/services/TokenService';
-import Cookies from 'js-cookie';
 export default {
   name: "StratifyMenubar",
   data(){
     return{
-      role: null,
-      username: null
+      user: null
+    }
+  },
+  methods:{
+    logout(){
+      TokenService.removeToken();
+      this.$router.push('/')
     }
   },
   mounted(){
-    this.role = Cookies.get('RoleCookie')
-    this.username = TokenService.decodeToken(TokenService.getToken());
+    this.user = TokenService.decodeToken(TokenService.getToken());
   }
 };
 </script>
