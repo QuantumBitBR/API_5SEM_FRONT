@@ -28,6 +28,9 @@ export default {
 </script>
 
 <style scoped>
+
+
+
 .tabela-src {
   border: 1px solid #5739B4;
   max-height: 25rem;
@@ -46,5 +49,11 @@ export default {
 .tabela-src::-webkit-scrollbar-thumb {
   background-color: blue;
   border-radius: 12px;
+}
+@media (max-width: 768px) {
+  .tabela-src {
+    width: 83vw;
+    margin: 0 auto;
+  }
 }
 </style>
