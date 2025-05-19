@@ -7,7 +7,7 @@
       removableSort
       stripedRows
       scrollable
-      scrollHeight="200px"
+      :scrollHeight="scrollHeightValue"
     >
       <Column field="descricao" header="User Story" sortable />
       <Column field="tempoMedio" header="Tempo Médio (horas)" sortable>
@@ -21,7 +21,7 @@
 
 <script>
 import DataTable from 'primevue/datatable';
-import Column    from 'primevue/column';
+import Column from 'primevue/column';
 
 export default {
   name: 'LifetimeCardTable',
@@ -30,6 +30,22 @@ export default {
     lifetimeData: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return {
+      scrollHeightValue: window.innerWidth <= 768 ? '400px' : '200px'
+    };
+  },
+  mounted() {
+    window.addEventListener('resize', this.updateScrollHeight);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateScrollHeight);
+  },
+  methods: {
+    updateScrollHeight() {
+      this.scrollHeightValue = window.innerWidth <= 768 ? '400px' : '200px';
     }
   }
 };
