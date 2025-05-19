@@ -19,11 +19,7 @@
             <i class="pi pi-users"></i>
             <span>Usuários</span>
           </button>
-          <button class="nav-btn mobile-only" @click="$router.push('/profile')">
-            <i class="pi pi-user"></i>
-            <span>Profile</span>
-          </button>
-          <button class="nav-btn" @click="$router.push('/')">
+          <button class="nav-btn" @click="logout">
             <i class="pi pi-sign-out"></i>
             <span>Sair</span>
           </button>
@@ -50,7 +46,13 @@ export default {
       isMenuOpen: false
     }
   },
-  mounted() {
+  methods:{
+    logout(){
+      TokenService.removeToken();
+      this.$router.push('/')
+    }
+  },
+  mounted(){
     this.user = TokenService.decodeToken(TokenService.getToken());
   },
   methods: {
