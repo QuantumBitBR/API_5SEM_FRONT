@@ -16,7 +16,7 @@
         <LifetimeCardTable :selectedProject="selectedProject" :selectedUser="selectedUser" id="lifetimeTable" class="grid_item"/>
       </div>
       <div class="grid-container3">
-        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" @user-selected="handleUserSelection" class="sprints-chart-container"/>
+        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="sprints-chart-container"/>
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@ onMounted(() => {
   flex-direction: column;
   padding-top: 20px;
   padding-bottom: 0;
-  height: 300px;
+  height: 320px;
 }
 
 .grid-container1 {
@@ -97,15 +97,17 @@ onMounted(() => {
   grid-template-rows: 1fr;
   gap: 10px;
   width: 100%;
-  padding: 20px 0;
+  padding: 20px 0 0 0;
 }
 
 .grid-container3 {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 1fr;
   gap: 10px;
   width: 100%;
-  padding: 0px 0;
+  padding-top: 20px;
+  padding-bottom: 0;
 }
 
 #lifetimeTable {

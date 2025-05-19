@@ -3,27 +3,9 @@
     <div class="sprints-header">
       <h4 class="sprints-title">Cards por Sprint</h4>
       <div class="sprints-filters">
-        <Dropdown 
-          v-model="selectedUserInternal"
-          :options="filteredUsers"
-          optionLabel="nome"
-          optionValue="id"
-          placeholder="Selecione um usuário"
-          :disabled="!selectedProject || usersLoading"
-          :loading="usersLoading"
-          class="user-dropdown"
-          @change="handleUserChange"
-        >
-          <template #option="slotProps">
-            <div class="user-option">
-              <span>{{ slotProps.option.nome }}</span>
-              <span class="user-email">{{ slotProps.option.email }}</span>
-            </div>
-          </template>
-        </Dropdown>
       </div>
     </div>
-    
+
     <div class="sprints-chart">
       <div v-if="!selectedProject" class="no-data">
         Selecione um projeto para visualizar as sprints
@@ -34,18 +16,21 @@
       <div v-else-if="sprintsData.length === 0" class="no-data">
         Nenhuma sprint encontrada para os filtros selecionados
       </div>
-      <div v-else class="sprints-columns">
-        <div 
-          v-for="sprint in sprintsData" 
-          :key="sprint.sprint" 
-          class="sprint-column"
-          :style="{
-            height: `${calculateColumnHeight(sprint.quantidade)}px`,
-            backgroundColor: getColumnColor(sprint.quantidade)
-          }"
-        >
-          <div class="sprint-label">{{ sprint.sprint }}</div>
-          <div class="sprint-value">{{ sprint.quantidade }}</div>
+      <div v-else class="sprints-columns-container">
+        <div class="sprints-columns">
+          <div
+            v-for="(sprint, index) in sprintsData"
+            :key="sprint.sprint"
+            class="sprint-column"
+            :style="{
+              height: `${calculateColumnHeight(sprint.quantidade)}px`,
+              backgroundColor: getColumnColor(sprint.quantidade, index),
+              flex: `${sprint.quantidade + 1}`
+            }"
+          >
+            <div class="sprint-label">{{ sprint.sprint }}</div>
+            <div class="sprint-value">{{ sprint.quantidade }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -54,10 +39,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch, computed, type PropType } from 'vue';
+import Select from 'primevue/select';
+import ProgressSpinner from 'primevue/progressspinner';
 import UserStoryService from '@/services/userStoryService';
-import userService from '@/services/userService'; // Importe o seu userService
-import type { UsuarioInfo } from '@/services/userService'; // Importe a interface
-
 
 interface QuantidadeCardsPorSprintDTO {
   sprint: string;
@@ -66,6 +50,10 @@ interface QuantidadeCardsPorSprintDTO {
 
 export default defineComponent({
   name: 'SprintsChart',
+  components: {
+    Select,
+    ProgressSpinner
+  },
   props: {
     selectedProject: {
       type: Object as PropType<{ id: number } | null>,
@@ -79,46 +67,21 @@ export default defineComponent({
   setup(props, { emit }) {
     const sprintsData = ref<QuantidadeCardsPorSprintDTO[]>([]);
     const maxQuantity = ref(0);
-    const users = ref<UsuarioInfo[]>([]);
-    const selectedUserInternal = ref<number | null>(null);
-    const usersLoading = ref(false);
     const sprintsLoading = ref(false);
-
-    // Filtra usuários ativos
-    const filteredUsers = computed(() => {
-      return users.value.filter(user => user.isEnable);
-    });
-
-    // Busca usuários quando um projeto é selecionado
-    const fetchUsers = async () => {
-      if (!props.selectedProject?.id) {
-        users.value = [];
-        return;
-      }
-
-      try {
-        usersLoading.value = true;
-        // Usa o userService existente
-        users.value = await userService.listarUsuarios();
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      } finally {
-        usersLoading.value = false;
-      }
-    };
 
     // Busca os dados das sprints
     const fetchSprintsData = async () => {
       try {
         const projectId = props.selectedProject?.id;
-        const userId = selectedUserInternal.value;
+        // Use diretamente props.selectedUser?.idUsuario
+        const userId = props.selectedUser?.idUsuario;
 
         sprintsLoading.value = true;
         const response = await UserStoryService.getQuantidadePorSprint(
           projectId,
-          userId || undefined
+          userId
         );
-        
+
         sprintsData.value = response;
         calculateMaxQuantity();
       } catch (error) {
@@ -141,68 +104,59 @@ export default defineComponent({
       return (quantity / maxQuantity.value) * 200;
     };
 
-    const getColumnColor = (quantity: number) => {
-      const percentage = quantity / Math.max(maxQuantity.value, 1);
-      if (percentage < 0.3) return '#4bc0c0';
-      if (percentage < 0.6) return '#36a2eb';
-      return '#5739B4';
+    const getColumnColor = (quantity: number, index: number) => {
+      const colorPalette = [
+        '#36a2eb', // Azul claro
+        '#4a6bdf', // Azul médio
+        '#5e35b1', // Azul-roxo
+        '#7e57c2', // Roxo médio
+        '#9575cd', // Roxo claro
+        '#b39ddb'   // Roxo muito claro
+      ];
+
+      const baseColor = colorPalette[index % colorPalette.length];
+      const percentage = maxQuantity.value > 0 ? quantity / maxQuantity.value : 0;
+      return adjustColorIntensity(baseColor, percentage);
     };
 
-    const handleUserChange = () => {
-      emit('user-selected', selectedUserInternal.value 
-        ? { idUsuario: selectedUserInternal.value } 
-        : null
-      );
-      fetchSprintsData();
+    const adjustColorIntensity = (hex: string, intensity: number) => {
+      const r = parseInt(hex.substring(1, 3), 16);
+      const g = parseInt(hex.substring(3, 5), 16);
+      const b = parseInt(hex.substring(5, 7), 16);
+      const adjustedIntensity = Math.min(Math.max(intensity * 0.8 + 0.2, 0.2), 1.0);
+      const newR = Math.floor(r * adjustedIntensity);
+      const newG = Math.floor(g * adjustedIntensity);
+      const newB = Math.floor(b * adjustedIntensity);
+      return `#${((1 << 24) + (newR << 16) + (newG << 8) + newB).toString(16).slice(1)}`;
     };
 
     // Watchers
     watch(() => props.selectedProject, (newProject) => {
       if (newProject) {
-        fetchUsers();
         fetchSprintsData();
       } else {
         sprintsData.value = [];
-        users.value = [];
-        selectedUserInternal.value = null;
       }
     }, { immediate: true });
 
     watch(() => props.selectedUser, (newUser) => {
-      if (newUser?.idUsuario !== selectedUserInternal.value) {
-        selectedUserInternal.value = newUser?.idUsuario || null;
-      }
-    }, { immediate: true });
-
-    watch(() => props.selectedProject?.id, (newId) => {
-        console.log('Project ID changed:', newId);
-        if (newId) {
-            fetchUsers();
-            fetchSprintsData();
-        } else {
-            sprintsData.value = [];
-            users.value = [];
-            selectedUserInternal.value = null;
-        }
+      // Refetch data when selectedUser prop changes
+      fetchSprintsData();
     }, { immediate: true });
 
     return {
       sprintsData,
       maxQuantity,
-      users,
-      filteredUsers,
-      selectedUserInternal,
-      usersLoading,
       sprintsLoading,
       calculateColumnHeight,
-      getColumnColor,
-      handleUserChange
+      getColumnColor
     };
   }
 });
 </script>
 
 <style scoped>
+
 .sprints-container {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -210,57 +164,55 @@ export default defineComponent({
   border: 1px solid #5739B4;
   border-radius: 12px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .sprints-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 15px;
 }
 
 .sprints-title {
   color: #333;
-  font-size: 1.2rem;
+  font-size: 14px;
+  font-weight: bold;
   margin: 0;
 }
 
 .sprints-filters {
   display: flex;
-  gap: 10px;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-.user-dropdown {
-  min-width: 250px;
-}
-
-.user-option {
+.sprints-chart {
+  height: 400px;
   display: flex;
   flex-direction: column;
 }
 
-.user-email {
-  font-size: 0.8rem;
-  color: #666;
-}
-
-.sprints-chart {
-  height: 300px;
+.sprints-columns-container {
+  flex: 1;
   display: flex;
-  align-items: flex-end;
+  overflow-x: auto;
+  padding-bottom: 0% 40px;
 }
 
 .sprints-columns {
   display: flex;
-  width: 100%;
-  height: 100%;
-  gap: 20px;
-  align-items: flex-end;
+  flex: 1;
   justify-content: center;
+  gap: 12px;
+  align-items: flex-end;
+  min-width: min-content;
+  padding: 0 10px 3px;
 }
 
 .sprint-column {
-  flex: 1;
   min-width: 60px;
   max-width: 100px;
   border-radius: 8px 8px 0 0;
@@ -268,8 +220,16 @@ export default defineComponent({
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  transition: height 0.5s ease, background-color 0.5s ease;
+  transition: all 0.3s ease;
   position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.sprint-column:hover {
+  opacity: 0.8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .sprint-label {
@@ -299,5 +259,16 @@ export default defineComponent({
   color: #666;
   font-style: italic;
   padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .sprint-column {
+    min-width: 50px;
+  }
+  
+  .sprint-label {
+    font-size: 0.7rem;
+    top: -20px;
+  }
 }
 </style>
