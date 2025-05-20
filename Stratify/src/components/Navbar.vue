@@ -10,6 +10,10 @@
             <i class="pi pi-home"></i>
             <span>Home</span>
           </button>
+          <button class="nav-btn mobile-only" @click="$router.push('/profile')">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+          </button>
           <button v-if="role === 'ADMIN'" class="nav-btn" @click="$router.push('/management')">
             <i class="pi pi-users"></i>
             <span>Usuários</span>
