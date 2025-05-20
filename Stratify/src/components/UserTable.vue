@@ -1,8 +1,9 @@
 <template>
-  <div class="tabela">
+  <img v-if="loading" src="/loading.gif" alt="Carregando..." class="loading"/>
+  <div v-if="!loading" class="tabela">
     <Toast />
     <DataTable :value="usuarios" class="tabela-src" removableSort showGridlines stripedRows selectionMode="single"
-      :selection="selectedUsuario" @selection-change="onSelection" scrollable scrollHeight="400px">
+      :selection="selectedUsuario" @selection-change="onSelection" scrollable scrollHeight="calc(100vh - 160px)">
       <Column field="nome" header="Nome" sortable>
         <template #body="{ data }">
           <i class="pi pi-user" style="margin-right: 8px"></i>
@@ -77,6 +78,8 @@ const cargos = [
   { label: 'Funcionário', value: 'OPERADOR' }
 ];
 
+const loading = ref(true);
+
 const usuarios = ref<UsuarioInfo[]>([]);
 const selectedUsuario = ref<UsuarioInfo | null>(null);
 const gestores = ref<{ label: string; value: number }[]>([]);
@@ -98,7 +101,6 @@ async function handleRole(data: any) {
 async function fetchUsuarios() {
   try {
     const data = await userService.listarUsuarios();
-    // mapear usuários e construir lista de gestores
     usuarios.value = data.map(u => ({
       ...u,
       cargo: u.role,
@@ -115,6 +117,7 @@ async function fetchUsuarios() {
 
 
     console.log('Usuários:', usuarios.value);
+    loading.value = false;
 
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
@@ -196,9 +199,13 @@ onMounted(async () => {
 <style scoped>
 .tabela {
   padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .tabela-src {
+  width: 100%;
   border: 1px solid #5739b4;
   border-radius: 12px;
   background-color: #fff;
@@ -226,5 +233,13 @@ onMounted(async () => {
 
 b {
   font-weight: bold;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
 }
 </style>

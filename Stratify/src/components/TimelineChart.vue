@@ -1,135 +1,43 @@
 <template>
-    <div class="bar_container">
-      <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
-      <Chart type="bar" :data="chartData" :options="chartOptions"/>
-    </div>
-  </template>
-  
-  <script>
-  import TimelineService from "@/services/TimelineService";
-  import Chart from "primevue/chart";
-  
-  export default {
-    components: { Chart },
-    props: {
-      selectedProject: null,
-      selectedUser: null,
-    },
-    data() {
-      return {
-        chartData: {
-          labels: [],
-          datasets: [
-            {
-              label: "Criados",
-              data: [],
-              backgroundColor: "#5739B4",
-            },
-            {
-              label: "Finalizados",
-              data: [],
-              backgroundColor: "#071952",
-            },
-          ],
-        },
-        chartOptions: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-          x: {
-            title: {
-              display: true,
-              text: "Períodos",
-              color: "#333",
-              font: {
-                size: 14,
-                weight: "bold"
-              }
-            },
-            ticks: { color: "#666" }
-          },
-          y: {
-            title: {
-              display: true,
-              text: "ID User Stories",
-              color: "#333",
-              font: {
-                size: 14,
-                weight: "bold"
-              }
-            },
-            ticks: {
-              color: "#666",
-              stepSize: 1
-            }
-          }
-        },
-          plugins: {
-            legend: {
-              display: true,
-              position: "top",
-            },
-            tooltip: {
-              callbacks: {
-                label: (tooltipItem) => {
-                  return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
-                },
-              },
-            },
-          },
-        },
-      };
-    },
-    methods: {
-      async fetchTimelines() {
-        try {
-          const response = await TimelineService.quantityPerTimeline(this.selectedProject.id, this.selectedUser.idUsuario);
+  <div class="bar_container">
+    <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
+    <Chart type="bar" :data="chartData" :options="chartOptions"/>
+  </div>
+</template>
 
-          if (response && Array.isArray(response)) {
-            this.chartData.labels = response.map((item) => {
-              const periodo = item.periodo;
-              return periodo.charAt(0).toUpperCase() + periodo.slice(1).toLowerCase();
-            });
-            this.chartData.datasets[0].data = response.map((item) => item.quantidadeCriadas);
-            this.chartData.datasets[1].data = response.map((item) => item.quantidadeFinalizadas);
-          } else {
-            console.error("Formato inesperado da resposta:", response);
-          }
-        } catch (error) {
-          console.error("Error to find data:", error);
-        }
-      },
-    },
-    mounted() {
-      if (this.selectedProject) {
-        this.fetchTimelines(this.selectedProject, this.selectedUser);
-      }
-    },
-    watch: {
-      selectedProject: "fetchTimelines",
-      selectedUser: "fetchTimelines",
-    },
-  };
-  </script>
-  
-  <style lang="css" scoped>
+<script>
+import Chart from 'primevue/chart';
+
+export default {
+  name: 'TimelineChart',
+  components: { Chart },
+  props: {
+    chartData: { type: Object, required: true },
+    chartOptions: { type: Object, required: true }
+  }
+};
+</script>
+
+<style scoped>
+
+@media (max-width: 768px) {
   .bar_container {
-    display: flex;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    flex-direction: column;
-    padding: 30px;
-    height: 400px;
-    border: 1px solid #5739B4;
-    border-radius: 12px;
+    width: 83vw;
+    margin: 0 auto;
   }
-  .bar_title {
-    padding: 5px;
-    padding-bottom: 20px;
-  }
-
-  .p-chart{
-    height: 300px;
-  }
-  </style>
-  
+}
+.bar_container {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #5739B4;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 30px;
+  height: 400px;
+}
+.bar_title {
+  margin-bottom: 20px;
+}
+.p-chart { height: 300px !important; }
+</style>
