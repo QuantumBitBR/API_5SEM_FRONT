@@ -17,7 +17,12 @@
       </div>
 
       <div class="grid-container3">
-        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="sprints-chart-container"/>
+        <template v-if="chartStore.loadingTimeline && chartStore.loadingTags">
+          <Skeleton width="100%" height="300px" class="skeleton-chart" />
+        </template>
+        <template v-else>
+          <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="sprints-chart-container"/>
+        </template>
       </div>
 
       <div class="grid-container1">

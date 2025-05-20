@@ -1,7 +1,7 @@
 <template>
   <div class="sprints-container">
     <div class="sprints-header">
-      <h4 class="sprints-title">Cards por Sprint</h4>
+      <h4 class="sprints-title">Quantidade de Cards por Sprint</h4>
       <div class="sprints-filters">
       </div>
     </div>
@@ -177,7 +177,6 @@ export default defineComponent({
 .sprints-title {
   color: #333;
   font-size: 14px;
-  font-weight: bold;
   margin: 0;
 }
 
