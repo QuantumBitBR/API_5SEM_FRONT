@@ -33,6 +33,6 @@ export default {
     display: flex;
     align-items: center;
     padding-left: 40px;
-    /* justify-content: space-between; */
+  
 }
 </style>

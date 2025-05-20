@@ -55,22 +55,21 @@
     </DataTable>
   </div>
 </template>
-
 <script setup lang="ts">
-import ManagementService from '@/services/ManagementService';
-import Column from 'primevue/column';
-import DataTable from 'primevue/datatable';
-import Dropdown from 'primevue/dropdown';
-import Toast from 'primevue/toast';
-import ToggleButton from 'primevue/togglebutton';
-import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
-import type { UsuarioInfo } from '../services/userService';
+import { useToast } from 'primevue/usetoast';
+import ManagementService from '../services/ManagementService';
 import userService from '../services/userService';
+import type { UsuarioInfo } from '../services/userService';
+import Toast from 'primevue/toast';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Dropdown from 'primevue/dropdown';
+import ToggleButton from 'primevue/togglebutton';
 
 const toast = useToast();
 
-// opções de cargo, já com label "Funcionário" para USER
+// Mantendo as mesmas variáveis do template
 const cargos = [
   { label: 'Admin', value: 'ADMIN' },
   { label: 'Gestor', value: 'GESTOR' },
@@ -81,43 +80,21 @@ const usuarios = ref<UsuarioInfo[]>([]);
 const selectedUsuario = ref<UsuarioInfo | null>(null);
 const gestores = ref<{ label: string; value: number }[]>([]);
 
-async function handleRole(data: any) {
-  try {
-    const res = await ManagementService.setNewRole(data.id, data.cargo);
-    if (res) {
-      toast.add({ severity: 'success', summary: 'Role changed', detail: 'User role changed successfully', life: 3000 });
-    } else {
-      toast.add({ severity: 'warn', summary: 'Atenção', detail: 'Não foi possível alterar o cargo.', life: 3000 });
-    }
-  } catch (error) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Error to change role', life: 3000 });
-    console.error(error);
-  }
-}
-
+// Métodos principais (mantendo os nomes que o template usa)
 async function fetchUsuarios() {
   try {
     const data = await userService.listarUsuarios();
-    // mapear usuários e construir lista de gestores
     usuarios.value = data.map(u => ({
       ...u,
       cargo: u.role,
       gestor: u.gestorNome,
       habilitado: u.isEnable
-    } as any));
+    }));
 
-    usuarios.value.forEach(u => {
-      const gestorEncontrado = gestores.value.find(g => g.label === u.gestorNome);
-      if (gestorEncontrado) {
-        u.gestorNome = gestorEncontrado.label;
-      }
-    });
-
-
-    console.log('Usuários:', usuarios.value);
-
+    // Atualiza os nomes dos gestores com base na lista atual
+    atualizarNomesGestores();
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
+    mostrarErro('Falha ao carregar usuários');
     console.error('Erro ao carregar usuários:', err);
   }
 }
@@ -125,32 +102,42 @@ async function fetchUsuarios() {
 async function fetchGestores() {
   try {
     const data = await userService.listarGestores();
-    // mapear usuários e construir lista de gestores
     gestores.value = data.map(u => ({
-      ...u,
       label: u.nome,
       value: u.id
-    } as any));
-
-
-    console.log('Gestores:', gestores.value);
-
-
+    }));
+    // Atualiza os nomes nos usuários quando carrega gestores
+    atualizarNomesGestores();
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
-    console.error('Erro ao carregar usuários:', err);
+    mostrarErro('Falha ao carregar gestores');
+    console.error('Erro ao carregar gestores:', err);
+  }
+}
+
+async function handleRole(data: any) {
+  try {
+    await ManagementService.setNewRole(data.id, data.cargo);
+
+    // Se virou gestor ou deixou de ser, atualiza a lista
+    if (data.cargo === 'GESTOR' || data.cargo === 'OPERADOR') {
+      await fetchGestores();
+    }
+
+    mostrarSucesso('Cargo alterado com sucesso');
+  } catch (err) {
+    mostrarErro('Erro ao alterar cargo');
+    console.error('Erro ao alterar cargo:', err);
   }
 }
 
 async function atribuirGestor(userId: number, newGestorId: number) {
   try {
     await userService.atribuirGestor(userId, newGestorId);
-    fetchUsuarios();
-
-    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Gestor atualizado', life: 3000 });
+    await fetchUsuarios();
+    mostrarSucesso('Gestor atribuído com sucesso');
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao atualizar gestor', life: 3000 });
-    console.error('Erro ao atualizar gestor:', err);
+    mostrarErro('Falha ao atribuir gestor');
+    console.error('Erro ao atribuir gestor:', err);
   }
 }
 
@@ -160,24 +147,23 @@ async function onToggleStatus(user: { id: number; habilitado: boolean }, val: bo
   try {
     if (val) {
       await userService.ativarUsuario(user.id);
-      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Usuário ativado', life: 3000 });
     } else {
       await userService.desativarUsuario(user.id);
-      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Usuário desativado', life: 3000 });
     }
+    mostrarSucesso(`Usuário ${val ? 'ativado' : 'desativado'}`);
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível alterar status', life: 3000 });
-    console.error('Erro ao alterar status do usuário:', err);
     user.habilitado = previous;
+    mostrarErro('Não foi possível alterar status');
+    console.error('Erro ao alterar status do usuário:', err);
   }
 }
 
 async function resetarSenha(userId: number) {
   try {
     await userService.resetarSenha(userId);
-    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Senha resetada', life: 3000 });
+    mostrarSucesso('Senha resetada com sucesso');
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao resetar senha', life: 3000 });
+    mostrarErro('Falha ao resetar senha');
     console.error('Erro ao resetar senha:', err);
   }
 }
@@ -186,11 +172,44 @@ function onSelection(event: { value: UsuarioInfo }) {
   selectedUsuario.value = event.value;
 }
 
-onMounted(async () => {
-  await fetchGestores();
-  await fetchUsuarios();
-});
+// Métodos auxiliares novos
+function atualizarNomesGestores() {
+  usuarios.value.forEach(u => {
+    // Encontra o gestor correspondente pelo ID (usando gestorNome como referência)
+    const gestorEncontrado = gestores.value.find(g =>
+      u.gestorNome && g.label === u.gestorNome
+    );
 
+    // Se encontrou, atualiza o objeto usuário mantendo a estrutura original
+    if (gestorEncontrado) {
+      // Mantemos todas as propriedades originais e apenas atualizamos o que existe
+      Object.assign(u, {
+        ...u,
+        gestorNome: gestorEncontrado.label
+      });
+    }
+  });
+}
+
+function mostrarSucesso(mensagem: string) {
+  toast.add({ severity: 'success', summary: 'Sucesso', detail: mensagem, life: 3000 });
+}
+
+function mostrarErro(mensagem: string) {
+  toast.add({ severity: 'error', summary: 'Erro', detail: mensagem, life: 3000 });
+  console.error(mensagem);
+}
+
+// Inicialização (mantendo a mesma lógica)
+onMounted(async () => {
+  try {
+    await fetchGestores();
+    await fetchUsuarios();
+  } catch (err) {
+    mostrarErro('Falha ao carregar dados iniciais');
+    console.error('Erro ao carregar dados iniciais:', err);
+  }
+});
 </script>
 
 <style scoped>
