@@ -163,7 +163,6 @@ export default defineComponent({
   padding: 30px;
   border: 1px solid #5739B4;
   border-radius: 12px;
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }

@@ -16,6 +16,10 @@
         </template>
       </div>
 
+      <div class="grid-container3">
+        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="sprints-chart-container"/>
+      </div>
+
       <div class="grid-container1">
         <template v-if="chartStore.loadingTimeline && chartStore.loadingTags">
           <Skeleton width="100%" height="400px" class="skeleton-chart" />
@@ -40,9 +44,6 @@
           />
         </template>
 
-      </div>
-      <div class="grid-container3">
-        <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="sprints-chart-container"/>
       </div>
     </div>
   </div>
@@ -222,7 +223,7 @@ const donutOptions = {
 
 .grid-container3 {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   gap: 10px;
   width: 100%;
