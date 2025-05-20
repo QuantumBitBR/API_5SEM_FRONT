@@ -16,6 +16,15 @@
         </template>
       </div>
 
+      <div class="grid-container3">
+        <template v-if="chartStore.loadingTimeline && chartStore.loadingTags">
+          <Skeleton width="100%" height="300px" class="skeleton-chart" />
+        </template>
+        <template v-else>
+          <SprintsChart :selectedProject="selectedProject" :selectedUser="selectedUser" class="sprints-chart-container"/>
+        </template>
+      </div>
+
       <div class="grid-container1">
         <template v-if="chartStore.loadingTimeline && chartStore.loadingTags">
           <Skeleton width="100%" height="400px" class="skeleton-chart" />
@@ -41,7 +50,6 @@
         </template>
 
       </div>
-
     </div>
   </div>
 </template>
@@ -56,10 +64,10 @@ import TotalCards from '@/components/TotalCards.vue';
 import AverageTimeCard from '@/components/AverageTimeCard.vue';
 import TimelineChart from '@/components/TimelineChart.vue';
 import TagTable from '@/components/TagTable.vue';
+import SprintsChart from "@/components/SprintsChart.vue";
 import DonutChart from '@/components/DonutChart.vue';
 import LifetimeCardTable from '@/components/LifetimeCardTable.vue';
 import Skeleton from 'primevue/skeleton';
-import Cookies from 'js-cookie';
 
 const selectedProject = ref(null);
 const selectedUser = ref(null);
@@ -91,7 +99,6 @@ watch(
 );
 
 onMounted(() => {
-  Cookies.get('RoleCookie');
 });
 
 // Timeline chart data
@@ -193,6 +200,16 @@ const donutOptions = {
   margin-top: 2em;
 }
 
+.sprints-chart-container {
+  display: flex;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+  padding-top: 20px;
+  padding-bottom: 0;
+  height: 320px;
+}
+
 .grid-container1 {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -206,8 +223,31 @@ const donutOptions = {
   grid-template-columns: 1fr 1.6fr;
   gap: 10px;
   width: 100%;
-  padding: 20px 0;
+  padding: 20px 0 0 0;
 }
+
+.grid-container3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  gap: 10px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .QuantitativeCards {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grid-container1,
+  .grid-container2 {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 #lifetimeTable {
   display: flex;
