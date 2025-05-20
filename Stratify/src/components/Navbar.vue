@@ -50,16 +50,14 @@ export default {
     logout(){
       TokenService.removeToken();
       this.$router.push('/')
+    },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
     }
   },
   mounted(){
     this.user = TokenService.decodeToken(TokenService.getToken());
   },
-  methods: {
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    }
-  }
 };
 </script>
 
