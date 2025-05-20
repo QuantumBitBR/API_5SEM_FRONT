@@ -59,7 +59,7 @@ export default {
 
 <style scoped>
 .user-filter-container {
-  padding: 2rem 3rem;
+  padding: 41px 21px;
 }
 
 .filter-label {
