@@ -208,6 +208,19 @@ const donutOptions = {
   padding: 20px 0;
 }
 
+@media (max-width: 768px) {
+  .QuantitativeCards {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grid-container1,
+  .grid-container2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 #lifetimeTable {
   display: flex;
   background-color: #fff;

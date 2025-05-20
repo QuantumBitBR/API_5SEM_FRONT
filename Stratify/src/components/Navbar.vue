@@ -140,7 +140,7 @@ span {
 
 @media (max-width: 768px) {
   .start-content {
-    width: 100vw;
+    width: 95vw;
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
@@ -148,6 +148,7 @@ span {
 
   .logo h1 {
     font-size: 1.2rem;
+    margin-right: 0;
   }
 
   .menu-toggle {

@@ -34,4 +34,10 @@ export default {
   margin-bottom: 40px;
 }
 .p-chart { height: 250px !important; }
+@media (max-width: 768px) {
+  .donut_container {
+    width: 83vw;
+    margin: 0 auto;
+  }
+}
 </style>

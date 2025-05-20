@@ -19,6 +19,13 @@ export default {
 </script>
 
 <style scoped>
+
+@media (max-width: 768px) {
+  .bar_container {
+    width: 83vw;
+    margin: 0 auto;
+  }
+}
 .bar_container {
   display: flex;
   flex-direction: column;
