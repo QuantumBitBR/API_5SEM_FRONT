@@ -1,10 +1,10 @@
-name: Continuos Integration Frontend
+name: Continuos Integration - Stratify Frontend
 
 on:
   push:
-    branches: [main]
+    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
   pull_request:
-    branches: [main]
+    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
 
 jobs:
   build:
