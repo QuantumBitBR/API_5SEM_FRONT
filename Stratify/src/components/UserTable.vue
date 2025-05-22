@@ -108,6 +108,7 @@ async function fetchGestores() {
     }));
     // Atualiza os nomes nos usuários quando carrega gestores
     atualizarNomesGestores();
+    fetchUsuarios();
   } catch (err) {
     mostrarErro('Falha ao carregar gestores');
     console.error('Erro ao carregar gestores:', err);
