@@ -20,9 +20,9 @@ jobs:
           node-version: '18'
 
       - name: Instalar dependências
-        run: npm ci
-        working-directory: stratify
+        run: npm install
+        working-directory: Stratify
 
       - name: Build do projeto
         run: npm run build
-        working-directory: stratify
+        working-directory: Stratify
