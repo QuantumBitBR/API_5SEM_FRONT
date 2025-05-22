@@ -20,7 +20,9 @@ jobs:
           node-version: '18'
 
       - name: Instalar dependências
-        run: npm install
+        run: npm ci
+        working-directory: frontend
 
       - name: Build do projeto
         run: npm run build
+        working-directory: stratify
