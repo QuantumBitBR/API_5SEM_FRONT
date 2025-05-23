@@ -58,8 +58,9 @@ import Dropdown from 'primevue/dropdown';
 import Toast from 'primevue/toast';
 import ToggleButton from 'primevue/togglebutton';
 import { useToast } from 'primevue/usetoast';
-import { ref, computed, watch } from 'vue';
+import { onMounted,ref, computed, watch } from 'vue';
 import userService from '../services/userService';
+// import type { UsuarioInfo } from '../services/userService';
 
 const toast = useToast();
 const props = defineProps({
@@ -108,7 +109,7 @@ watch(() => props.usuarios, (newUsuarios) => {
 }, { immediate: true, deep: true });
 
 async function handleRole(data, newRole) {
-  const res = await ManagementService.setNewRole(data.id, newRole);
+  const res = await ManagementService.setNewRole(data.id, newRole.value);
 
   if (res) {
     toast.add({
@@ -150,6 +151,34 @@ async function atribuirGestor(userId, newGestorId) {
 }
 
 
+    // // Se encontrou, atualiza o objeto usuário mantendo a estrutura original
+    // if (gestorEncontrado) {
+    //   // Mantemos todas as propriedades originais e apenas atualizamos o que existe
+    //   Object.assign(u, {
+    //     ...u,
+    //     gestorNome: gestorEncontrado.label
+    //   });
+    // };
+
+function mostrarSucesso(mensagem) {
+  toast.add({ severity: 'success', summary: 'Sucesso', detail: mensagem, life: 3000 });
+}
+
+function mostrarErro(mensagem) {
+  toast.add({ severity: 'error', summary: 'Erro', detail: mensagem, life: 3000 });
+  console.error(mensagem);
+}
+
+// Inicialização (mantendo a mesma lógica)
+onMounted(async () => {
+  try {
+    // await fetchGestores();
+    // await fetchUsuarios();
+  } catch (err) {
+    mostrarErro('Falha ao carregar dados iniciais');
+    console.error('Erro ao carregar dados iniciais:', err);
+  }
+});
 </script>
 
 <style scoped>
