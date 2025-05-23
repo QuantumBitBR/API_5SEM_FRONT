@@ -16,7 +16,7 @@ class ManagementService {
 
   async setNewRole(userId: number, role: Role): Promise<Usuario> {
     try {
-      const response = await api.put<Usuario>(`/usuario/${userId}`, { role });
+      const response = await api.put(`/usuario/${userId}`, { role });
       return response.data;
     } catch (error) {
       console.error("Erro ao atualizar o papel do usuário:", error);

@@ -109,7 +109,7 @@ watch(() => props.usuarios, (newUsuarios) => {
 }, { immediate: true, deep: true });
 
 async function handleRole(data, newRole) {
-  const res = await ManagementService.setNewRole(data.id, newRole);
+  const res = await ManagementService.setNewRole(data.id, newRole.value);
 
   if (res) {
     toast.add({
@@ -172,8 +172,8 @@ function mostrarErro(mensagem) {
 // Inicialização (mantendo a mesma lógica)
 onMounted(async () => {
   try {
-    await fetchGestores();
-    await fetchUsuarios();
+    // await fetchGestores();
+    // await fetchUsuarios();
   } catch (err) {
     mostrarErro('Falha ao carregar dados iniciais');
     console.error('Erro ao carregar dados iniciais:', err);
