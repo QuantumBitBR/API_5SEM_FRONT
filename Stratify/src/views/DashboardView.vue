@@ -207,7 +207,7 @@ const donutOptions = {
   flex-direction: column;
   padding-top: 20px;
   padding-bottom: 0;
-  height: 320px;
+  height: 350px;
 }
 
 .grid-container1 {

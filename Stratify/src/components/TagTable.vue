@@ -1,23 +1,28 @@
 <!-- components/TagTable.vue -->
 <template>
-  <DataTable
-    :value="tags"
-    class="tabela-src"
-    removableSort
-    stripedRows
-  >
-    <Column field="nomeTag"    sortable header="Etiqueta"      />
-    <Column field="quantidade" sortable header="Quantidade Card" />
-  </DataTable>
+  <div>
+    <DataTable
+      :value="tags"
+      class="tabela-src"
+      removableSort
+      stripedRows
+      scrollHeight="350px"
+    >
+      <CSVButton/>
+      <Column field="nomeTag"    sortable header="Etiqueta"      />
+      <Column field="quantidade" sortable header="Quantidade Card" />
+    </DataTable>
+  </div>
 </template>
 
 <script>
 import DataTable from 'primevue/datatable';
 import Column    from 'primevue/column';
+import CSVButton from './CSVButton.vue';
 
 export default {
   name: 'TagTable',
-  components: { DataTable, Column },
+  components: { DataTable, Column, CSVButton },
   props: {
     tags: {
       type: Array,

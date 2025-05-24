@@ -1,5 +1,6 @@
 <template>
   <div class="Tabela">
+    <CSVButton/>
     <div class="title">Tempo médio gasto por card</div>
     <DataTable
       :value="lifetimeData"
@@ -22,10 +23,11 @@
 <script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import CSVButton from './CSVButton.vue';
 
 export default {
   name: 'LifetimeCardTable',
-  components: { DataTable, Column },
+  components: { DataTable, Column, CSVButton },
   props: {
     lifetimeData: {
       type: Array,

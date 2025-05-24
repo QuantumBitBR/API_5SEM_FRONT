@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="csv_container">
         <button @click="exportCSV">Export CSV</button>
     </div>
 </template>
@@ -17,7 +17,7 @@ export default {
 <style>
 button {
     padding: 8px 16px;
-    background-color: #4CAF50;
+    background-color: #3f51b5;
     color: white;
     border: none;
     border-radius: 4px;
@@ -25,6 +25,11 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #36469e;
+}
+
+.csv_container{
+    display: flex;
+    justify-content: end;
 }
 </style>

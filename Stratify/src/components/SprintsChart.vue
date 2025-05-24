@@ -1,6 +1,7 @@
 <template>
   <div class="sprints-container">
     <div class="sprints-header">
+      <CSVButton/>  
       <h4 class="sprints-title">Quantidade de Cards por Sprint</h4>
       <div class="sprints-filters">
       </div>
@@ -42,6 +43,7 @@ import { defineComponent, ref, watch, computed, type PropType } from 'vue';
 import Select from 'primevue/select';
 import ProgressSpinner from 'primevue/progressspinner';
 import UserStoryService from '@/services/userStoryService';
+import CSVButton from './CSVButton.vue';
 
 interface QuantidadeCardsPorSprintDTO {
   sprint: string;
@@ -52,7 +54,8 @@ export default defineComponent({
   name: 'SprintsChart',
   components: {
     Select,
-    ProgressSpinner
+    ProgressSpinner,
+    CSVButton
   },
   props: {
     selectedProject: {

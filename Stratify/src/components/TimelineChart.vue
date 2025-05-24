@@ -1,5 +1,6 @@
 <template>
   <div class="bar_container">
+    <CSVButton/>
     <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
     <Chart type="bar" :data="chartData" :options="chartOptions"/>
   </div>
@@ -7,10 +8,11 @@
 
 <script>
 import Chart from 'primevue/chart';
+import CSVButton from './CSVButton.vue';
 
 export default {
   name: 'TimelineChart',
-  components: { Chart },
+  components: { Chart, CSVButton },
   props: {
     chartData: { type: Object, required: true },
     chartOptions: { type: Object, required: true }

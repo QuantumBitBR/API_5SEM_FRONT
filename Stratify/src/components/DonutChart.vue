@@ -1,6 +1,7 @@
 <!-- components/DonutChart.vue -->
 <template>
   <div class="donut_container">
+    <CSVButton/>
     <h4 class="donut_title">Status dos cards</h4>
     <Chart type="doughnut" :data="chartData" :options="chartOptions" />
   </div>
@@ -8,10 +9,11 @@
 
 <script>
 import Chart from 'primevue/chart';
+import CSVButton from './CSVButton.vue';
 
 export default {
   name: 'DonutChart',
-  components: { Chart },
+  components: { Chart, CSVButton },
   props: {
     chartData:    { type: Object, required: true },
     chartOptions: { type: Object, required: true }
