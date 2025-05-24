@@ -1,10 +1,8 @@
 <template>
   <div class="sprints-container">
     <div class="sprints-header">
-      <CSVButton/>  
       <h4 class="sprints-title">Quantidade de Cards por Sprint</h4>
-      <div class="sprints-filters">
-      </div>
+      <CSVButton/>  
     </div>
 
     <div class="sprints-chart">
@@ -172,9 +170,10 @@ export default defineComponent({
 
 .sprints-header {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 15px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .sprints-title {

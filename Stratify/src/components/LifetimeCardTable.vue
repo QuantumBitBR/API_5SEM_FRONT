@@ -1,7 +1,9 @@
 <template>
   <div class="Tabela">
-    <CSVButton/>
-    <div class="title">Tempo médio gasto por card</div>
+    <div class="lifetime_header">
+      <div class="title">Tempo médio gasto por card</div>
+      <CSVButton/>
+    </div>
     <DataTable
       :value="lifetimeData"
       class="tabela-src"
@@ -60,9 +62,18 @@ export default {
   border-radius: 12px;
   background: #fff;
 }
-.title {
+/* .title {
   color: black;
   margin-bottom: 1em;
+} */
+.lifetime_header{
+  color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
 }
 .tabela-src {
   background-color: #fff;

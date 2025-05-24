@@ -6,9 +6,12 @@
       class="tabela-src"
       removableSort
       stripedRows
-      scrollHeight="350px"
+      scrollHeight="320px"
     >
-      <CSVButton/>
+      <div class="tag_header">
+        <h4>Etiqueta por card</h4>
+        <CSVButton/>
+      </div>
       <Column field="nomeTag"    sortable header="Etiqueta"      />
       <Column field="quantidade" sortable header="Quantidade Card" />
     </DataTable>
@@ -34,7 +37,16 @@ export default {
 
 <style scoped>
 
-
+.tag_header{
+  padding: 10px;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
 
 .tabela-src {
   border: 1px solid #5739B4;

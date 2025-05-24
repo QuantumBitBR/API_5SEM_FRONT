@@ -1,8 +1,10 @@
 <!-- components/DonutChart.vue -->
 <template>
   <div class="donut_container">
-    <CSVButton/>
-    <h4 class="donut_title">Status dos cards</h4>
+    <div class="donut_header">
+      <h4 class="donut_title">Status dos cards</h4>
+      <CSVButton/>
+    </div>
     <Chart type="doughnut" :data="chartData" :options="chartOptions" />
   </div>
 </template>
@@ -22,6 +24,14 @@ export default {
 </script>
 
 <style scoped>
+.donut_header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
 .donut_container {
   display: flex;
   flex-direction: column;
@@ -31,9 +41,6 @@ export default {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   padding: 30px;
   height: 300px;
-}
-.donut_title {
-  margin-bottom: 40px;
 }
 .p-chart { height: 250px !important; }
 @media (max-width: 768px) {

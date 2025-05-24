@@ -1,7 +1,9 @@
 <template>
   <div class="bar_container">
-    <CSVButton/>
-    <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
+    <div class="timeline_header">
+      <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
+      <CSVButton/>
+    </div>
     <Chart type="bar" :data="chartData" :options="chartOptions"/>
   </div>
 </template>
@@ -38,7 +40,12 @@ export default {
   padding: 30px;
   height: 400px;
 }
-.bar_title {
+.timeline_header{
+    display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   margin-bottom: 20px;
 }
 .p-chart { height: 300px !important; }
