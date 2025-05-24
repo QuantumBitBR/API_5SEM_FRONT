@@ -15,6 +15,7 @@
           <b>{{ data.tempoMedio }}</b> horas
         </template>
       </Column>
+      <Column field="quantidadeRetrabalhos" header="Contagem de Retrabalho" sortable></Column>
     </DataTable>
   </div>
 </template>

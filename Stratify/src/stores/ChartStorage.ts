@@ -79,7 +79,8 @@ export const useChartStore = defineStore<'chart', ChartState>('chart', {
         this.lifetimeData = Array.isArray(resp)
           ? resp.map(item => ({
               descricao: item.descricao,
-              tempoMedio: item.tempoMedio
+              tempoMedio: item.tempoMedio,
+              quantidadeRetrabalhos: item.quantidadeRetrabalhos
             }))
           : [];
       } catch {
