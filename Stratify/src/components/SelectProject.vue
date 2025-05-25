@@ -47,6 +47,7 @@ export default {
         this.projects = [{ id: 0, nome: "Todos" }, ...all_projects];
         this.selectedProject = this.projects[0];
         this.fetchUsers();
+        this.$emit("project-selected", this.selectedProject);
       } catch (error) {
         console.error("Error to find data:", error);
       }
@@ -60,6 +61,7 @@ export default {
         } else {
           this.selectedUser = this.users[0];
         }
+        this.$emit("user-selected", this.selectedUser);
       } catch (error) {
         console.error("Error to find data:", error);
       }
