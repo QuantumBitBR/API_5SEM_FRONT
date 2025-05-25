@@ -2,7 +2,7 @@
   <div class="Tabela">
     <div class="lifetime_header">
       <div class="title">Tempo médio gasto por card</div>
-      <CSVButton/>
+      <CSVButton exportType="tempomedio" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
     </div>
     <DataTable
       :value="lifetimeData"
@@ -34,7 +34,15 @@ export default {
     lifetimeData: {
       type: Array,
       default: () => []
-    }
+    },
+    selectedUser: {
+      type: Object,
+      default: 0
+    },
+    selectedProject: {
+      type: Object,
+      default: 0
+    },
   },
   data() {
     return {

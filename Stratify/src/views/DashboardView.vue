@@ -45,6 +45,7 @@
           <DonutChart :chartData="donutData" :chartOptions="donutOptions" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
           <LifetimeCardTable
             :lifetimeData="chartStore.lifetimeData"
+            :selectedProject="selectedProject" :selectedUser="selectedUser"
             class="grid_item"
           />
         </template>
