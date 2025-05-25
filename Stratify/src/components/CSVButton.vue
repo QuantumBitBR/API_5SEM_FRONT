@@ -1,6 +1,6 @@
 <template>
     <div class="csv_container">
-        <button @click="exportCSV">Export CSV</button>
+        <button @click="exportCSV">Exportar CSV</button>
     </div>
 </template>
 
@@ -34,7 +34,7 @@ export default {
 
 <style>
 button {
-    padding: 8px 16px;
+    padding: 5px 12px;
     background-color: #3f51b5;
     color: white;
     border: none;
