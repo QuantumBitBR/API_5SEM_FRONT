@@ -1,6 +1,7 @@
 import { api } from '@/services/apiConfig';
 
 export interface UsuarioInfo {
+  habilitado: any;
   id: number;
   nome: string;
   email: string;
