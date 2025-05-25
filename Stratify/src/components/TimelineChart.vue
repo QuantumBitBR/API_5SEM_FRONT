@@ -2,9 +2,14 @@
   <div class="bar_container">
     <div class="timeline_header">
       <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
-      <CSVButton exportType="cardsporperiodo" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
+      <CSVButton v-if="chartData.labels.length != 0" exportType="cardsporperiodo" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
     </div>
-    <Chart type="bar" :data="chartData" :options="chartOptions"/>
+    <template v-if="chartData.labels.length != 0">
+      <Chart type="bar" :data="chartData" :options="chartOptions"/>
+    </template>
+    <template v-else>
+      <h4 id="no-text">Nenhum dado encontrado para os filtros selecionados</h4>
+    </template>
   </div>
 </template>
 
@@ -31,6 +36,16 @@ export default {
 </script>
 
 <style scoped>
+#no-text{
+  display: flex;
+  justify-content: center;
+  height: 70%;
+  align-content: center;
+  align-items: center;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
 
 @media (max-width: 768px) {
   .bar_container {

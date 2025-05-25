@@ -1,14 +1,21 @@
 <!-- components/TagTable.vue -->
 <template>
   <div>
-    <DataTable :value="tags" class="tabela-src" removableSort stripedRows scrollHeight="320px">
+    <div class="tabela-src">
       <div class="tag_header">
         <h4>Quantidade de card por etiqueta</h4>
-        <CSVButton exportType="cardsporetiqueta" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
+        <CSVButton v-if="tags.length != 0" exportType="cardsporetiqueta" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
       </div>
-      <Column field="nomeTag" sortable header="Etiqueta" />
-      <Column field="quantidade" sortable header="Quantidade Card" />
-    </DataTable>
+      <template v-if="tags.length != 0">
+      <DataTable :value="tags" removableSort stripedRows>
+          <Column field="nomeTag" sortable header="Etiqueta" />
+          <Column field="quantidade" sortable header="Quantidade Card" />
+      </DataTable>
+      </template>
+      <template v-else>
+        <h4 id="no-text">Nenhum card encontrado para os filtros selecionados</h4>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -35,8 +42,7 @@ export default {
     },
   },
   mounted(){
-    console.log("Usuario:", this.selectedUser)
-    console.log("Projeto:", this.selectedProject)
+    console.log(this.tags)
   }
 };
 </script>
@@ -55,7 +61,7 @@ export default {
 
 .tabela-src {
   border: 1px solid #5739B4;
-  max-height: 25rem;
+  height: 25rem;
   border-radius: 12px;
   padding: 5px;
   background-color: #fff;
@@ -74,6 +80,17 @@ export default {
 .tabela-src::-webkit-scrollbar-thumb {
   background-color: blue;
   border-radius: 12px;
+}
+
+#no-text{
+  display: flex;
+  justify-content: center;
+  height: 70%;
+  align-content: center;
+  align-items: center;
+  color: #666;
+  font-style: italic;
+  text-align: center;
 }
 
 @media (max-width: 768px) {

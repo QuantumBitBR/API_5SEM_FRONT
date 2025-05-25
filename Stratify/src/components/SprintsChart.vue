@@ -2,7 +2,7 @@
   <div class="sprints-container">
     <div class="sprints-header">
       <h4 class="sprints-title">Quantidade de Cards por Sprint</h4>
-      <CSVButton exportType="cardsporsprint" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>  
+      <CSVButton v-if="sprintsData.length != 0" exportType="cardsporsprint" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>  
     </div>
 
     <div class="sprints-chart">

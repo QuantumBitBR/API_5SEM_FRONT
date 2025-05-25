@@ -24,8 +24,6 @@ export default {
     },
     methods: {
         exportCSV() {
-            console.log(`Exportando CSV tipo: ${this.exportType}`);
-            console.log(`ID Projeto: ${this.projectId} // ID Usuario: ${this.userId}`);
             CSVService.downloadCsvFile(this.exportType, this.projectId, this.userId);
         }
     }

@@ -2,23 +2,28 @@
   <div class="Tabela">
     <div class="lifetime_header">
       <div class="title">Tempo médio gasto por card</div>
-      <CSVButton exportType="tempomedio" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
+      <CSVButton v-if="lifetimeData.length != 0" exportType="tempomedio" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
     </div>
-    <DataTable
-      :value="lifetimeData"
-      class="tabela-src"
-      removableSort
-      stripedRows
-      scrollable
-      :scrollHeight="scrollHeightValue"
-    >
-      <Column field="descricao" header="User Story" sortable />
-      <Column field="tempoMedio" header="Tempo Médio (horas)" sortable>
-        <template #body="{ data }">
-          <b>{{ data.tempoMedio }}</b> horas
-        </template>
-      </Column>
-    </DataTable>
+    <template v-if="lifetimeData.length != 0">
+      <DataTable
+        :value="lifetimeData"
+        class="tabela-src"
+        removableSort
+        stripedRows
+        scrollable
+        :scrollHeight="scrollHeightValue"
+      >
+        <Column field="descricao" header="User Story" sortable />
+        <Column field="tempoMedio" header="Tempo Médio (horas)" sortable>
+          <template #body="{ data }">
+            <b>{{ data.tempoMedio }}</b> horas
+          </template>
+        </Column>
+      </DataTable>
+    </template>
+    <template v-else>
+      <h4 id="no-text">Nenhum card encontrado para os filtros selecionados</h4>
+    </template>
   </div>
 </template>
 
@@ -64,6 +69,18 @@ export default {
 </script>
 
 <style scoped>
+
+#no-text{
+  display: flex;
+  justify-content: center;
+  height: 80%;
+  align-content: center;
+  align-items: center;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
+
 .Tabela {
   padding: 20px;
   border: 1px solid #5739b4;
