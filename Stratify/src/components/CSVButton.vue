@@ -5,10 +5,28 @@
 </template>
 
 <script>
+import CSVService from "@/services/CSVService";
+
 export default {
+    props: {
+        exportType: {
+            type: String,
+            required: true,
+        },
+        projectId: {
+            type: Number,
+            default: null,
+        },
+        userId: {
+            type: Number,
+            default: null,
+        }
+    },
     methods: {
         exportCSV() {
-            console.log('Exportando CSV...');
+            console.log(`Exportando CSV tipo: ${this.exportType}`);
+            console.log(`ID Projeto: ${this.projectId} // ID Usuario: ${this.userId}`);
+            CSVService.downloadCsvFile(this.exportType, this.projectId, this.userId);
         }
     }
 }
@@ -28,7 +46,7 @@ button:hover {
     background-color: #36469e;
 }
 
-.csv_container{
+.csv_container {
     display: flex;
     justify-content: end;
 }

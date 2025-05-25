@@ -32,7 +32,7 @@
         </template>
         <template v-else>
           <TimelineChart :chartData="chartData" :chartOptions="chartOptions" class="grid_item" />
-          <TagTable :tags="chartStore.tags" class="grid_item" />
+          <TagTable :tags="chartStore.tags" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
         </template>
       </div>
 
