@@ -1,6 +1,6 @@
 <template>
     <div class="csv_container">
-        <button @click="exportCSV">Exportar CSV</button>
+        <button @click="exportCSV">CSV</button>
     </div>
 </template>
 
