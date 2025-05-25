@@ -2,7 +2,7 @@
   <div class="bar_container">
     <div class="timeline_header">
       <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
-      <CSVButton/>
+      <CSVButton exportType="cardsporperiodo" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
     </div>
     <Chart type="bar" :data="chartData" :options="chartOptions"/>
   </div>
@@ -17,7 +17,15 @@ export default {
   components: { Chart, CSVButton },
   props: {
     chartData: { type: Object, required: true },
-    chartOptions: { type: Object, required: true }
+    chartOptions: { type: Object, required: true },
+    selectedUser: {
+      type: Object,
+      default: 0
+    },
+    selectedProject: {
+      type: Object,
+      default: 0
+    },
   }
 };
 </script>

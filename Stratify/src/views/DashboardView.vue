@@ -31,7 +31,7 @@
           <Skeleton width="100%" height="400px" class="skeleton-chart" />
         </template>
         <template v-else>
-          <TimelineChart :chartData="chartData" :chartOptions="chartOptions" class="grid_item" />
+          <TimelineChart :chartData="chartData" :chartOptions="chartOptions" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
           <TagTable :tags="chartStore.tags" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
         </template>
       </div>
