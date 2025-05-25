@@ -7,7 +7,7 @@
         <CSVButton v-if="tags.length != 0" exportType="cardsporetiqueta" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
       </div>
       <template v-if="tags.length != 0">
-      <DataTable :value="tags" removableSort stripedRows>
+      <DataTable :value="tags" removableSort stripedRows scrollHeight="18rem">
           <Column field="nomeTag" sortable header="Etiqueta" />
           <Column field="quantidade" sortable header="Quantidade Card" />
       </DataTable>

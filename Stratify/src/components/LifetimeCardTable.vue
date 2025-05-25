@@ -86,6 +86,7 @@ export default {
   border: 1px solid #5739b4;
   border-radius: 12px;
   background: #fff;
+  margin-bottom: 10px;
 }
 /* .title {
   color: black;

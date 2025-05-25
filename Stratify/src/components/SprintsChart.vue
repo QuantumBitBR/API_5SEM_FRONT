@@ -243,7 +243,7 @@ export default defineComponent({
 }
 
 .sprint-value {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   color: white;
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
