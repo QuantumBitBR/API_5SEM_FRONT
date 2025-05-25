@@ -3,7 +3,7 @@
   <div class="donut_container">
     <div class="donut_header">
       <h4 class="donut_title">Status dos cards</h4>
-      <CSVButton/>
+      <CSVButton exportType="cardsporstatus" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
     </div>
     <Chart type="doughnut" :data="chartData" :options="chartOptions" />
   </div>
@@ -18,7 +18,15 @@ export default {
   components: { Chart, CSVButton },
   props: {
     chartData:    { type: Object, required: true },
-    chartOptions: { type: Object, required: true }
+    chartOptions: { type: Object, required: true },
+    selectedUser: {
+      type: Object,
+      default: 0
+    },
+    selectedProject: {
+      type: Object,
+      default: 0
+    },
   }
 };
 </script>

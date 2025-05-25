@@ -42,7 +42,7 @@
           <Skeleton class="skeleton-table" width="100%" height="300px"/>
         </template>
         <template v-else>
-          <DonutChart :chartData="donutData" :chartOptions="donutOptions" class="grid_item" />
+          <DonutChart :chartData="donutData" :chartOptions="donutOptions" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
           <LifetimeCardTable
             :lifetimeData="chartStore.lifetimeData"
             class="grid_item"
