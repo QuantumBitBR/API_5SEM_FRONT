@@ -1,6 +1,9 @@
 <template>
   <div class="Tabela">
-    <div class="title">Tempo médio gasto por card</div>
+    <div class="lifetime_header">
+      <div class="title">Tempo médio gasto por card</div>
+      <CSVButton v-if="lifetimeData.length != 0" exportType="tempomedio" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
+    </div>
     <DataTable
       :value="lifetimeData"
       class="tabela-src"
@@ -81,9 +84,14 @@ export default {
   background: #fff;
   margin-bottom: 10px;
 }
-.title {
+.lifetime_header{
   color: black;
-  /* margin-bottom: 1em; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
 }
 .lifetime_header{
   color: black;
