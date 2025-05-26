@@ -39,25 +39,16 @@ export default {
     };
   },
   async created() {
-    await this.checkPermissions();
+    // await this.checkPermissions();
     await this.fetchUsuarios();
   },
   methods: {
-    async checkPermissions() {
-      if(Cookies.get("RoleCookie") !== "ADMIN") {
-        showToast({
-          severity: 'error',
-          summary: 'Acesso negado',
-          detail: 'Você não tem permissão para acessar esta página',
-          life: 4000
-        });
-        this.$router.push('/dashboard');
-      }
-    },
+
   async fetchUsuarios() {
     try {
       const response = await userService.listarUsuarios();
       this.usuarios = response.sort((a, b) => a.nome.localeCompare(b.nome));
+      // this.usuarios = response;
       this.filteredUsers = [...this.usuarios];
     } catch (error) {
       console.error('Failed to load users:', error);

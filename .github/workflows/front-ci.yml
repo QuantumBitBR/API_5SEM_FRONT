@@ -1,0 +1,29 @@
+name: Continuos Integration - Stratify Frontend
+
+on:
+  push:
+    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
+  pull_request:
+    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Usar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Instalar dependências
+        run: npm install
+        working-directory: Stratify
+
+      - name: Build do projeto
+        run: npm run build
+        working-directory: Stratify

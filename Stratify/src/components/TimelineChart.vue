@@ -1,24 +1,51 @@
 <template>
   <div class="bar_container">
-    <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
-    <Chart type="bar" :data="chartData" :options="chartOptions"/>
+    <div class="timeline_header">
+      <h4 class="bar_title">Evolução da criação e finalização de cards</h4>
+      <CSVButton v-if="chartData.labels.length != 0" exportType="cardsporperiodo" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>
+    </div>
+    <template v-if="chartData.labels.length != 0">
+      <Chart type="bar" :data="chartData" :options="chartOptions"/>
+    </template>
+    <template v-else>
+      <h4 id="no-text">Nenhum dado encontrado para os filtros selecionados</h4>
+    </template>
   </div>
 </template>
 
 <script>
 import Chart from 'primevue/chart';
+import CSVButton from './CSVButton.vue';
 
 export default {
   name: 'TimelineChart',
-  components: { Chart },
+  components: { Chart, CSVButton },
   props: {
     chartData: { type: Object, required: true },
-    chartOptions: { type: Object, required: true }
+    chartOptions: { type: Object, required: true },
+    selectedUser: {
+      type: Object,
+      default: 0
+    },
+    selectedProject: {
+      type: Object,
+      default: 0
+    },
   }
 };
 </script>
 
 <style scoped>
+#no-text{
+  display: flex;
+  justify-content: center;
+  height: 70%;
+  align-content: center;
+  align-items: center;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
 
 @media (max-width: 768px) {
   .bar_container {
@@ -36,7 +63,12 @@ export default {
   padding: 30px;
   height: 400px;
 }
-.bar_title {
+.timeline_header{
+    display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   margin-bottom: 20px;
 }
 .p-chart { height: 300px !important; }

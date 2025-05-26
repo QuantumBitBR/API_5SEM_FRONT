@@ -59,7 +59,7 @@ export default {
 
 <style scoped>
 .user-filter-container {
-  padding: 41px 21px;
+  padding: 10px 21px;
 }
 
 .filter-label {
@@ -78,7 +78,6 @@ export default {
 }
 
 :deep(.p-autocomplete-input) {
-  width: 100%;
   padding: 0.5rem;
   border: 1px solid #5739b4;
   border-radius: 4px;

@@ -31,8 +31,8 @@
           <Skeleton width="100%" height="400px" class="skeleton-chart" />
         </template>
         <template v-else>
-          <TimelineChart :chartData="chartData" :chartOptions="chartOptions" class="grid_item" />
-          <TagTable :tags="chartStore.tags" class="grid_item" />
+          <TimelineChart :chartData="chartData" :chartOptions="chartOptions" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
+          <TagTable :tags="chartStore.tags" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
         </template>
       </div>
 
@@ -42,9 +42,10 @@
           <Skeleton class="skeleton-table" width="100%" height="300px"/>
         </template>
         <template v-else>
-          <DonutChart :chartData="donutData" :chartOptions="donutOptions" class="grid_item" />
+          <DonutChart :chartData="donutData" :chartOptions="donutOptions" :selectedProject="selectedProject" :selectedUser="selectedUser" class="grid_item" />
           <LifetimeCardTable
             :lifetimeData="chartStore.lifetimeData"
+            :selectedProject="selectedProject" :selectedUser="selectedUser"
             class="grid_item"
           />
         </template>
@@ -207,7 +208,7 @@ const donutOptions = {
   flex-direction: column;
   padding-top: 20px;
   padding-bottom: 0;
-  height: 320px;
+  height: 350px;
 }
 
 .grid-container1 {
