@@ -67,4 +67,18 @@ jobs:
 
             # Executa o servidor Vue em segundo plano
             nohup npm run dev --host 0.0.0.0 > app.log 2>&1 &
+
+            # Aguarda até a porta 5173 estar escutando (timeout de 10s)
+            for i in {1..10}; do
+              if lsof -i :5173 > /dev/null 2>&1; then
+                echo "✅ Vite server está rodando na porta 5173."
+                exit 0
+              fi
+              echo "⏳ Aguardando Vite subir... ($i)"
+              sleep 1
+            done
+
+            echo "❌ Vite não subiu na porta 5173."
+            exit 1
+
           EOF
