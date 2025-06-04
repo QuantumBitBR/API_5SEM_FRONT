@@ -56,8 +56,11 @@ jobs:
           
             cd /home/ubuntu/apps/API_5SEM_FRONT/Stratify
 
+            
             git checkout $(git rev-parse --abbrev-ref HEAD)
             git pull origin $(git rev-parse --abbrev-ref HEAD)
+
+            sed -i 's|http://localhost:8080|http://167.234.238.40:8080|g' src/services/apiConfig.ts
 
             # Instala dependências
             npm install
@@ -66,7 +69,7 @@ jobs:
             fuser -k 5173/tcp || true
 
             # Executa o servidor Vue em segundo plano
-            nohup npm run dev --host 0.0.0.0 > app.log 2>&1 &
+            nohup npm run dev -- --host 0.0.0.0 > app.log 2>&1 &
 
             # Aguarda até a porta 5173 estar escutando (timeout de 10s)
             for i in {1..10}; do
