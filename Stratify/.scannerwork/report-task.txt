@@ -1,0 +1,7 @@
+organization=quantumbitbr
+projectKey=quantumbitbr
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.64232
+dashboardUrl=https://sonarcloud.io/dashboard?id=quantumbitbr
+ceTaskId=AZdCg46MwRHgiZ_vSrVz
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZdCg46MwRHgiZ_vSrVz
