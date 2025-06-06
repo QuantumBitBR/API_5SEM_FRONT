@@ -28,29 +28,28 @@ jobs:
         run: npm run build
         working-directory: Stratify
 
-  # ← Aqui começa o job que fará o SonarCloud Scan
-  sonar:
+    sonar:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      # 1) Baixa o código (mesmo passo do build)
+      # 1) Baixa o código
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      # 2) Configura Node.js (mesma versão do build, para gerar cobertura)
+      # 2) Configura Node.js
       - name: Setup Node.js 20.x
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      # 3) Instala as dependências (para gerar cobertura via Vitest)
+      # 3) Instala as dependências em Stratify (troquei npm ci por npm install)
       - name: Instalar dependências (para testar)
-        run: npm ci
+        run: npm install
         working-directory: Stratify
 
-      # 4) Executa testes e gera o relatório de cobertura (vitest → coverage/lcov.info)
+      # 4) Executa testes e gera o relatório de cobertura
       - name: Run tests with coverage
         run: npm run test:coverage
         working-directory: Stratify
@@ -59,9 +58,10 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectBaseDir: Stratify   # Ponto de entrada: onde está o sonar-project.properties
+          projectBaseDir: Stratify
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   
   deploy-vue:
     name: Deploy Vue App
