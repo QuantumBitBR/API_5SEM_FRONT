@@ -43,7 +43,7 @@ jobs:
           node-version: '20'
 
       - name: Instalar dependências (para SonarCloud)
-        run: npm install
+        run: npm install -D @vitest/coverage-v8
         working-directory: Stratify
 
       - name: Run tests with coverage
