@@ -2,8 +2,7 @@
   <div class="sprints-container">
     <div class="sprints-header">
       <h4 class="sprints-title">Quantidade de Cards por Sprint</h4>
-      <div class="sprints-filters">
-      </div>
+      <CSVButton v-if="sprintsData.length != 0" exportType="cardsporsprint" :projectId="selectedProject?.id" :userId="selectedUser?.idUsuario"/>  
     </div>
 
     <div class="sprints-chart">
@@ -42,6 +41,7 @@ import { defineComponent, ref, watch, computed, type PropType } from 'vue';
 import Select from 'primevue/select';
 import ProgressSpinner from 'primevue/progressspinner';
 import UserStoryService from '@/services/userStoryService';
+import CSVButton from './CSVButton.vue';
 
 interface QuantidadeCardsPorSprintDTO {
   sprint: string;
@@ -52,7 +52,8 @@ export default defineComponent({
   name: 'SprintsChart',
   components: {
     Select,
-    ProgressSpinner
+    ProgressSpinner,
+    CSVButton
   },
   props: {
     selectedProject: {
@@ -169,9 +170,10 @@ export default defineComponent({
 
 .sprints-header {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 15px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .sprints-title {
@@ -241,7 +243,7 @@ export default defineComponent({
 }
 
 .sprint-value {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   color: white;
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);

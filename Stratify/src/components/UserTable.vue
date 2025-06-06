@@ -1,8 +1,7 @@
 <template>
-  <img v-if="loading" src="/loading.gif" alt="Carregando..." class="loading"/>
-  <div v-if="!loading" class="tabela">
+  <div class="tabela">
     <Toast />
-    <DataTable :value="usuarios" class="tabela-src" removableSort showGridlines stripedRows selectionMode="single"
+    <DataTable :value="usuariosOrdenados" class="tabela-src" removableSort showGridlines stripedRows selectionMode="single"
       :selection="selectedUsuario" @selection-change="onSelection" scrollable scrollHeight="calc(100vh - 160px)">
       <Column field="nome" header="Nome" sortable>
         <template #body="{ data }">
@@ -16,7 +15,7 @@
       <Column field="cargo" header="Cargo" sortable>
         <template #body="{ data }">
           <Dropdown v-model="data.cargo" :options="cargos" optionLabel="label" optionValue="value" class="w-full"
-            @change="handleRole(data)" />
+            @change="(val) => handleRole(data, val)" />
         </template>
       </Column>
 
@@ -24,16 +23,10 @@
         <template #body="{ data }">
           <template v-if="data.cargo === 'OPERADOR'">
             <b>Atual: </b>{{ data.gestor }}
-            <Dropdown v-model="data.gestor" :value="data.gestor" :options="gestores" optionLabel="label"
-              optionValue="value" class="w-full" @update:modelValue="val => {
-                atribuirGestor(data.id, val);
-                const selectedGestor = gestores.find(g => g.value === val);
-                if (selectedGestor) {
-                  data.gestor = selectedGestor.label;
-                }
-              }" />
+            <Dropdown v-model="data.gestor" :options="gestoresDisponiveis" optionLabel="label"
+              optionValue="value" class="w-full" @update:modelValue="val => atribuirGestor(data.id, val)" />
           </template>
-          <template v-if="data.cargo === 'ADMIN' || data.cargo === 'GESTOR'">
+          <template v-else>
             <b>N/A</b>
           </template>
         </template>
@@ -57,158 +50,147 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import ManagementService from '@/services/ManagementService';
+<script setup>
+import ManagementService from '../services/ManagementService';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
 import Toast from 'primevue/toast';
 import ToggleButton from 'primevue/togglebutton';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
-import type { UsuarioInfo } from '../services/userService';
+import { onMounted,ref, computed, watch } from 'vue';
 import userService from '../services/userService';
+// import type { UsuarioInfo } from '../services/userService';
 
 const toast = useToast();
+const props = defineProps({
+  usuarios: {
+    type: Array,
+    required: true
+  }
+});
 
-// opções de cargo, já com label "Funcionário" para USER
+const emit = defineEmits(['refresh']);
+
+// Opções de cargo
 const cargos = [
   { label: 'Admin', value: 'ADMIN' },
   { label: 'Gestor', value: 'GESTOR' },
   { label: 'Funcionário', value: 'OPERADOR' }
 ];
 
-const loading = ref(true);
-
-const usuarios = ref<UsuarioInfo[]>([]);
-const selectedUsuario = ref<UsuarioInfo | null>(null);
-const gestores = ref<{ label: string; value: number }[]>([]);
-
-async function handleRole(data: any) {
-  try {
-    const res = await ManagementService.setNewRole(data.id, data.cargo);
-    if (res) {
-      toast.add({ severity: 'success', summary: 'Role changed', detail: 'User role changed successfully', life: 3000 });
-    } else {
-      toast.add({ severity: 'warn', summary: 'Atenção', detail: 'Não foi possível alterar o cargo.', life: 3000 });
-    }
-  } catch (error) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Error to change role', life: 3000 });
-    console.error(error);
-  }
-}
-
-async function fetchUsuarios() {
-  try {
-    const data = await userService.listarUsuarios();
-    usuarios.value = data.map(u => ({
-      ...u,
-      cargo: u.role,
-      gestor: u.gestorNome,
-      habilitado: u.isEnable
-    } as any));
-
-    usuarios.value.forEach(u => {
-      const gestorEncontrado = gestores.value.find(g => g.label === u.gestorNome);
-      if (gestorEncontrado) {
-        u.gestorNome = gestorEncontrado.label;
-      }
-    });
+const selectedUsuario = ref(null);
+const internalUsuarios = ref([]);
 
 
-    console.log('Usuários:', usuarios.value);
-    loading.value = false;
-
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
-    console.error('Erro ao carregar usuários:', err);
-  }
-}
-
-async function fetchGestores() {
-  try {
-    const data = await userService.listarGestores();
-    // mapear usuários e construir lista de gestores
-    gestores.value = data.map(u => ({
-      ...u,
-      label: u.nome,
-      value: u.id
-    } as any));
-
-
-    console.log('Gestores:', gestores.value);
-
-
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários', life: 3000 });
-    console.error('Erro ao carregar usuários:', err);
-  }
-}
-
-async function atribuirGestor(userId: number, newGestorId: number) {
-  try {
-    await userService.atribuirGestor(userId, newGestorId);
-    fetchUsuarios();
-
-    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Gestor atualizado', life: 3000 });
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao atualizar gestor', life: 3000 });
-    console.error('Erro ao atualizar gestor:', err);
-  }
-}
-
-async function onToggleStatus(user: { id: number; habilitado: boolean }, val: boolean) {
-  const previous = user.habilitado;
-  user.habilitado = val;
-  try {
-    if (val) {
-      await userService.ativarUsuario(user.id);
-      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Usuário ativado', life: 3000 });
-    } else {
-      await userService.desativarUsuario(user.id);
-      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Usuário desativado', life: 3000 });
-    }
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível alterar status', life: 3000 });
-    console.error('Erro ao alterar status do usuário:', err);
-    user.habilitado = previous;
-  }
-}
-
-async function resetarSenha(userId: number) {
-  try {
-    await userService.resetarSenha(userId);
-    toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Senha resetada', life: 3000 });
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao resetar senha', life: 3000 });
-    console.error('Erro ao resetar senha:', err);
-  }
-}
-
-function onSelection(event: { value: UsuarioInfo }) {
-  selectedUsuario.value = event.value;
-}
-
-onMounted(async () => {
-  await fetchGestores();
-  await fetchUsuarios();
+const usuariosOrdenados = computed(() => {
+  return [...internalUsuarios.value].sort((a, b) => a.nome.localeCompare(b.nome));
 });
 
+
+const gestoresDisponiveis = computed(() => {
+  return internalUsuarios.value
+    .filter(u => u.cargo === 'GESTOR')
+    .sort((a, b) => a.nome.localeCompare(b.nome))
+    .map(u => ({
+      label: u.nome,
+      value: u.id
+    }));
+});
+
+
+watch(() => props.usuarios, (newUsuarios) => {
+  internalUsuarios.value = newUsuarios.map(u => ({
+    ...u,
+    cargo: u.role,
+    gestor: u.gestorNome,
+    habilitado: u.isEnable
+  }));
+}, { immediate: true, deep: true });
+
+async function handleRole(data, newRole) {
+  const res = await ManagementService.setNewRole(data.id, newRole.value);
+
+  if (res) {
+    toast.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Cargo alterado com sucesso',
+      life: 3000
+    });
+    emit('refresh');
+  }
+}
+
+async function atribuirGestor(userId, newGestorId) {
+  try {
+    await userService.atribuirGestor(userId, newGestorId);
+
+    toast.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Gestor atribuído com sucesso',
+      life: 3000
+    });
+
+    emit('refresh');
+  } catch (err) {
+    console.error('Falha na atribuição de gestor:', err);
+
+    const errorDetail = err.response?.data?.message
+      ? `Falha: ${err.response.data.message}`
+      : 'Falha ao atualizar gestor. Tente novamente.';
+
+    toast.add({
+      severity: 'error',
+      summary: 'Erro',
+      detail: errorDetail,
+      life: 3000
+    });
+  }
+}
+
+
+    // // Se encontrou, atualiza o objeto usuário mantendo a estrutura original
+    // if (gestorEncontrado) {
+    //   // Mantemos todas as propriedades originais e apenas atualizamos o que existe
+    //   Object.assign(u, {
+    //     ...u,
+    //     gestorNome: gestorEncontrado.label
+    //   });
+    // };
+
+function mostrarSucesso(mensagem) {
+  toast.add({ severity: 'success', summary: 'Sucesso', detail: mensagem, life: 3000 });
+}
+
+function mostrarErro(mensagem) {
+  toast.add({ severity: 'error', summary: 'Erro', detail: mensagem, life: 3000 });
+  console.error(mensagem);
+}
+
+// Inicialização (mantendo a mesma lógica)
+onMounted(async () => {
+  try {
+    // await fetchGestores();
+    // await fetchUsuarios();
+  } catch (err) {
+    mostrarErro('Falha ao carregar dados iniciais');
+    console.error('Erro ao carregar dados iniciais:', err);
+  }
+});
 </script>
 
 <style scoped>
 .tabela {
-  padding: 40px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 10px 21px;
 }
 
 .tabela-src {
-  width: 100%;
   border: 1px solid #5739b4;
-  border-radius: 12px;
+  border-radius: 13px;
   background-color: #fff;
+  padding: 5px;
 }
 
 ::v-deep(.p-datatable-scrollable-header) {
@@ -233,13 +215,5 @@ onMounted(async () => {
 
 b {
   font-weight: bold;
-}
-
-.loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
 }
 </style>
