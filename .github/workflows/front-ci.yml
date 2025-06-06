@@ -108,4 +108,5 @@ jobs:
 
             echo "❌ Vite não subiu na porta 5173."
             exit 1
+
           EOF
