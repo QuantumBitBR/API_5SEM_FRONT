@@ -1,0 +1,111 @@
+name: Continuous Integration - Stratify Frontend
+
+on:
+  push:
+    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
+  pull_request:
+    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Usar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm install
+        working-directory: Stratify
+
+      - name: Build do projeto
+        run: npm run build
+        working-directory: Stratify
+
+  sonar:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências (para SonarCloud)
+        run: npm install -D @vitest/coverage-v8
+        working-directory: Stratify
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+        working-directory: Stratify
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: Stratify
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy-vue:
+    name: Deploy Vue App
+    runs-on: ubuntu-latest
+    needs: [build, sonar]
+
+    steps:
+      - name: Configure SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add Remote Server to Known Hosts
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+        run: |
+          ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts
+
+      - name: Git Pull and Run Vue App on Remote Server
+        run: |
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install 20
+            nvm use 20
+
+            cd /home/ubuntu/apps/API_5SEM_FRONT/Stratify
+            git checkout "$(git rev-parse --abbrev-ref HEAD)"
+            git pull origin "$(git rev-parse --abbrev-ref HEAD)"
+            sed -i 's|http://localhost:8080|http://167.234.238.40:8080|g' src/services/apiConfig.ts
+
+            # Instala dependências
+            npm install
+
+            # Encerra qualquer processo anterior na porta 5173 (Vite, por ex.)
+            fuser -k 5173/tcp || true
+
+            # Executa o servidor Vue em segundo plano
+            nohup npm run dev -- --host 0.0.0.0 > app.log 2>&1 &
+
+            # Aguarda até a porta 5173 estar escutando (timeout de 10s)
+            for i in {1..10}; do
+              if lsof -i :5173 > /dev/null 2>&1; then
+                echo "✅ Vite server está rodando na porta 5173."
+                exit 0
+              fi
+              echo "⏳ Aguardando Vite subir... ($i)"
+              sleep 1
+            done
+
+            echo "❌ Vite não subiu na porta 5173."
+            exit 1
+          EOF
