@@ -30,6 +30,7 @@ jobs:
   unit-tests:
     name: Teste Unitários
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout do código
@@ -52,7 +53,7 @@ jobs:
   sonar:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
-    needs: build
+    needs: unit-tests
 
     steps:
       - name: Checkout do código
@@ -81,7 +82,7 @@ jobs:
   deploy-vue:
     name: Deploy Vue App
     runs-on: ubuntu-latest
-    needs: [build, sonar]
+    needs: [build, unit-tests, sonar]
 
     steps:
       - name: Configure SSH
