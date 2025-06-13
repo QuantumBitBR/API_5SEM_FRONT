@@ -28,7 +28,7 @@ jobs:
         run: npm run build
         working-directory: Stratify
   unit-tests:
-    name: Testes Unitários
+    name: Unit Tests
     runs-on: ubuntu-latest
     needs: build
 
