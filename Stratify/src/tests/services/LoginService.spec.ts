@@ -22,7 +22,7 @@ describe('LoginService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
-
+//
   it('deve fazer login com email e senha válidos', async () => {
     const mockToken = 'abc123token'
     const mockResponse = { data: { token: mockToken }, status: 200 }
