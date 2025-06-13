@@ -46,7 +46,7 @@ jobs:
         working-directory: Stratify
 
       - name: Build do projeto
-        run: npm run build
+        run: npm run test
         working-directory: Stratify        
         
 
