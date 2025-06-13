@@ -2,9 +2,9 @@ name: Continuous Integration - Stratify Frontend
 
 on:
   push:
-    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
+    branches: [ "main", "sprint-*"]
   pull_request:
-    branches: [ "main", "sprint-1", "sprint-2", "sprint-3" ]
+    branches: [ "main", "sprint-*" ]
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
         run: npm run build
         working-directory: Stratify
   unit-tests:
-    name: Teste Unitários
+    name: Testes Unitários
     runs-on: ubuntu-latest
     needs: build
 
